@@ -1,12 +1,14 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { registerUser } from './userController.js';
+import {login} from './userController.js';
 
 const app = express();
 app.use(bodyParser.json());
 
 // Register route
 app.post('/register', registerUser);
+app.post('/login',login)
 
 // Start the server
 const PORT = process.env.PORT || 3000;

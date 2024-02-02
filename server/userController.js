@@ -3,8 +3,8 @@ import { connectToDb } from './db.js';
 export async function registerUser(req, res) {
   try {
     const db = await connectToDb();
-    const { firstName, lastName, dOB, gender, email, password } = req.body;
-    if (!email || !password || !firstName || !lastName || !dOB || !gender) {
+    const { firstName, lastName, email, password, province, city, areaCode } = req.body;
+    if (!email || !password || !firstName || !lastName || !province || !city || !areaCode) {
       return res.json({ message: "Please provide all required fields" });
     }
 
@@ -13,7 +13,7 @@ export async function registerUser(req, res) {
       return res.json({ message: "User already exists" });
     }
     else{
-      const result = await db.collection('users').insertOne({ firstName, lastName, dOB, gender, email, password });
+      const result = await db.collection('users').insertOne({ firstName, lastName, email, password, province, city, areaCode });
       return res.json({ message: "User registered successfully", user: result });
     }    
   } 
@@ -21,4 +21,10 @@ export async function registerUser(req, res) {
     console.error('Error registering user:', error);
     res.status(500).json({ message: "Internal Server Error" });
   }
+}
+
+export async function login(req,res){
+
+
+
 }
