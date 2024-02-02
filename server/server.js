@@ -6,7 +6,7 @@ import {login} from './userController.js';
 const app = express();
 app.use(bodyParser.json());
 
-// Register route
+// API End-points
 app.post('/register', registerUser);
 app.post('/login',login)
 
