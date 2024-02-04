@@ -1,0 +1,16 @@
+.Input {
+  display: flex;
+  gap: 10px;
+  width: 90%;
+  flex-direction: column;
+}
+.Input label {
+  font-weight: 700;
+}
+.Input input {
+  border: 2px solid #f28b50;
+  border-radius: 0.4rem;
+  display: inline-flex;
+  width: 80%;
+  height: 2rem;
+}
