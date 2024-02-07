@@ -21,30 +21,29 @@ export async function registerUser(req, res) {
       'Nunavut',
       'Yukon'
     ];
-    
     //Required field validation
     if (!email || !password || !firstName || !lastName || !province || !city || !areaCode) {
       return res.json({ message: "Please provide all required fields" });
     }
 
-    if(!isNaN(firstName)){
-      return res.json({message: "Enter valid first name"})
-    }    
-    if(!isNaN(lastName)){
-      return res.json({message: "Enter valid last name"})
-    }    
-    if(!canadianProvinces.includes(province)){
-      return res.json({message: "Enter valid province"})
-    }    
-    if(!isNaN(city)){
-      return res.json({message: "Enter valid city"})
+    if (!isNaN(firstName)) {
+      return res.json({ message: "Enter valid first name" })
     }
-    if(!isValidEmail(email)){
-      return res.json({message : "Invalid email format"})
+    if (!isNaN(lastName)) {
+      return res.json({ message: "Enter valid last name" })
+    }
+    if (!canadianProvinces.includes(province)) {
+      return res.json({ message: "Enter valid province" })
+    }
+    if (!isNaN(city)) {
+      return res.json({ message: "Enter valid city" })
+    }
+    if (!isValidEmail(email)) {
+      return res.json({ message: "Invalid email format" })
     }
 
-    if(!isValidPassword(password)){
-      return res.json({message : "Password should be at least 8 characters long and contain a combination of letters, numbers, and special characters"})
+    if (!isValidPassword(password)) {
+      return res.json({ message: "Password should be at least 8 characters long and contain a combination of letters, numbers, and special characters" })
     }
 
     //Check user with email before registration
@@ -56,17 +55,17 @@ export async function registerUser(req, res) {
     //hashing password before storing it
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const result = await db.collection('users').insertOne({ 
-      firstName, 
-      lastName, 
-      email, 
+    const result = await db.collection('users').insertOne({
+      firstName,
+      lastName,
+      email,
       password: hashedPassword,
-      province, 
-      city, 
-      areaCode 
+      province,
+      city,
+      areaCode
     });
     return res.json({ message: "User registered successfully", user: result });
-  } 
+  }
   catch (error) {
     console.error('Error registering user:', error);
     res.json({ message: "Internal Server Error" });
