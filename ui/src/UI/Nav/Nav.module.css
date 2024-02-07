@@ -1,0 +1,57 @@
+.Nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  height: 10vh;
+  width: 100%;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.Logo {
+  margin: 1rem 3rem;
+  width: 200px;
+}
+
+.items {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+}
+
+.items li a {
+  font-weight: 600;
+  color: black;
+  text-decoration: none;
+}
+
+.search {
+  width: 26vw;
+  position: relative;
+  border: 1px solid lightgray;
+  padding: 0.5rem;
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-container::after {
+  content: "Search";
+  display: flex;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+  width: 6rem;
+  color: white;
+  background: linear-gradient(45deg, #f21616, #f28b50);
+}
+
+.search-button {
+  position: absolute;
+  right: 10px;
+}
