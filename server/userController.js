@@ -21,7 +21,6 @@ export async function registerUser(req, res) {
       'Nunavut',
       'Yukon'
     ];
-    console.log(req.body);
     //Required field validation
     if (!email || !password || !firstName || !lastName || !province || !city || !areaCode) {
       return res.json({ message: "Please provide all required fields" });
