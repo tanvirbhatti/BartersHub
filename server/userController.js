@@ -23,33 +23,33 @@ export async function registerUser(req, res) {
     ];
     //Required field validation
     if (!email || !password || !firstName || !lastName || !province || !city || !areaCode) {
-      return res.json({ message: "Please provide all required fields" });
+      return res.json({ error: "Please provide all required fields" });
     }
 
     if (!isNaN(firstName)) {
-      return res.json({ message: "Enter valid first name" })
+      return res.json({ error: "Enter valid first name" })
     }
     if (!isNaN(lastName)) {
-      return res.json({ message: "Enter valid last name" })
+      return res.json({ error: "Enter valid last name" })
     }
     if (!canadianProvinces.includes(province)) {
-      return res.json({ message: "Enter valid province" })
+      return res.json({ error: "Enter valid province" })
     }
     if (!isNaN(city)) {
-      return res.json({ message: "Enter valid city" })
+      return res.json({ error: "Enter valid city" })
     }
     if (!isValidEmail(email)) {
-      return res.json({ message: "Invalid email format" })
+      return res.json({ error: "Invalid email format" })
     }
 
     if (!isValidPassword(password)) {
-      return res.json({ message: "Password should be at least 8 characters long and contain a combination of letters, numbers, and special characters" })
+      return res.json({ error: "Password should be at least 8 characters long and contain a combination of letters, numbers, and special characters" })
     }
 
     //Check user with email before registration
     const existingUser = await db.collection('users').findOne({ email: email });
     if (existingUser) {
-      return res.json({ message: "User already exists" });
+      return res.json({ error: "User already exists" });
     }
 
     //hashing password before storing it
@@ -88,7 +88,7 @@ export async function login(req, res) {
     const foundUser = await db.collection('users').findOne({ email });
 
     if (!foundUser) {
-      return res.json({ error: "User not found." });
+      return res.json({ error: "User not found Enter valid E-mail" });
     }
 
     // Compare hashed password with provided password
