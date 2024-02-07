@@ -106,11 +106,11 @@ const Signup = () => {
             "areaCode": "M5V 2L7",
           }
         })
-      console.log(response);
-      if (response.status === 200) {
-        alert("User registered successfully");
-      } else {
-        alert("Registration failed");
+      if(response.data.error){
+        alert(response.data.error)
+      }
+      else{
+        alert("Successfully registered")
       }
     } else {
       setErrors({});

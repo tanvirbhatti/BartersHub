@@ -41,12 +41,13 @@ const Login = () => {
             "password": password
           }
         })
-      console.log(response);
-      if (response.status === 200) {
-        alert("Login successful");
-      } else {
-        alert("Login failed");
-      }
+        if(response.data.message){
+          alert(response.data.message)
+        }
+        else{
+          alert(response.data.error)
+        }
+      
     } else {
       for (const err of result.error.issues) {
         setErrors((prev) => ({
