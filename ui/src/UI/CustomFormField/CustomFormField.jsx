@@ -6,10 +6,12 @@ const CustomFormField = ({
   label,
   placeHolder,
   type,
+  className,
+  error,
   onChange,
 }) => {
   return (
-    <div className={styles.Input}>
+    <div className={`${className} ${styles.Input}`}>
       <label htmlFor={name}>{label}</label>
       <input
         type={type}
@@ -19,6 +21,7 @@ const CustomFormField = ({
         placeholder={placeHolder}
         onChange={(e) => onChange(name, e.target.value)}
       />
+      <div className={styles.errors}>{error}</div>
     </div>
   );
 };

@@ -22,7 +22,9 @@ const Nav = () => {
           <a href="/">Listing</a>
         </li>
         <li>
-          <GradientButton rounded={false} text="Login" />
+          <a href="/login">
+            <GradientButton rounded={false} text="Login" />
+          </a>
         </li>
       </ul>
     </nav>
