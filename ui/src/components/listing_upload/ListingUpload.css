@@ -1,0 +1,117 @@
+body{
+    background-color: white;
+}
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.product-ad-form h2 {
+    text-align: center;
+}
+
+.product-ad-form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.product-ad-form input[type="text"],
+.product-ad-form input[type="number"],
+.product-ad-form select,
+.product-ad-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #999999;
+    border-radius: 10px;
+}
+
+.image-upload-container {
+    background-color: white;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.error{
+    color: #F21616;
+}
+
+.images-preview {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.image-upload-box {
+    width: 30%;
+    height: 100px; /* Set the desired height */
+    border: 1px dashed #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-upload-box img {
+    max-width: 100%; /* Ensure the image doesn't exceed the box */
+    max-height: 100%; /* Ensure the image doesn't exceed the box */
+}
+
+.upload-btn {
+    background: transparent linear-gradient(84deg, #F21616 0%, #F28B50 100%) 0% 0% no-repeat padding-box;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+}
+
+.select-btn {
+    border: 1px solid #F28B50;
+    background-color: white;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    margin-right: 20px;
+}
+
+.contact-information {
+    border: 0;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.contact-info-input{
+    display: flex;
+    margin-top: 20px;
+}
+
+.contact-info-input label{
+    width: 30%;
+}
+
+.contact-info-input input{
+    border: 1px solid #999999;
+    border-radius: 10px;
+}
+
+.submit-btn {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    width: 100%;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .images-preview {
+        flex-direction: column;
+    }
+    .image-upload-box {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

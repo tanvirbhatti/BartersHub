@@ -1,5 +1,7 @@
 import Productcard from "../../UI/Cards/Productcard.jsx";
 import "./Product_listing.css"
+import { Link } from 'react-router-dom';
+
 
 const products = [
     {
@@ -67,6 +69,9 @@ const Product_Listing = () => {
                 <div className="Posting_section_div">
                     <h1>List your product and get it sold Today! with Barters Hub</h1>
                     <p>Your one-stop marketplace for seamless transactions</p>
+                    <button type="button" className="upload-btn">
+                        <Link to="/ListingsUpload" className="Listinglink">Post Your Listing here</Link>
+                    </button>
                 </div>
             </header>
 
