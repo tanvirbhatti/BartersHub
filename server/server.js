@@ -11,7 +11,8 @@ app.use(bodyParser.json());
 
 // API End-points
 app.post('/register', registerUser);
-app.post('/login',login);
+app.post('/login',login)
+
 
 
 app.post('/addProduct', addProduct);
