@@ -51,7 +51,7 @@ export async function addProduct(req, res) {
     
         const newProduct = new Product({ userId, title, description, category, image, price, phoneNumber, email });
         await newProduct.save();
-        res.json({ message: 'Product added successfully', product: newProduct });
+        return res.json({ message: 'Product added successfully', product: newProduct });
   
 
 
@@ -65,7 +65,7 @@ export async function addProduct(req, res) {
 export async function deleteProduct(req, res) {
     try {
         await Product.findByIdAndDelete(productId);
-        res.json({ message: 'Product deleted successfully' });
+        return res.json({ message: 'Product deleted successfully' });
     } catch (error) {
         console.error("Error during delete product:", error);
         return res.json({ error: "Internal server error." });
@@ -85,8 +85,21 @@ export async function updatedProduct(req, res) {
     }
 
     await Product.findByIdAndUpdate(productId, { userId, title, description, category, image, price, phoneNumber, email });
-    res.json({ message: 'Product updated successfully' });
+    return res.json({ message: 'Product updated successfully' });
     } catch (error) {
-      res.status(500).json({ message: 'Error updating product', error: error.message });
+        return res.status(500).json({ message: 'Error updating product', error: error.message });
     }
+}
+
+export async function getProduct(req, res) {
+        const { userId } = req.params;
+        if (!userId) {
+            return res.status(400).json({ message: 'User Id is required ', error: 'UserIdNotFound' });
+        }
+      try {
+        const products = await Product.find({userId : req.params.userId});
+        return res.json(products);
+      } catch (error) {
+        return res.status(500).json({ message: 'Error get product', error: error.message });
+      }
 }

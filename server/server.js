@@ -4,7 +4,7 @@ import { registerUser } from './userController.js';
 import {login} from './userController.js';
 
 
-import { addProduct, updatedProduct } from './product.js'
+import { addProduct, updatedProduct, getProduct } from './product.js'
 
 const app = express();
 app.use(bodyParser.json());
@@ -17,7 +17,8 @@ app.post('/login',login)
 
 app.post('/addProduct', addProduct);
 app.put('/update-product', updatedProduct);
-app.delete('/delete-product', deleteProduct)
+app.delete('/delete-product', deleteProduct);
+app.get('/getProducts', getProduct)
 
 
 // Start the server
