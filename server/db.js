@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+const { MongoClient } = require('mongodb');
 
 const url = 'mongodb+srv://admin:admin@cluster0.g4lqotk.mongodb.net/BartersHub';
 let db;
@@ -22,4 +22,4 @@ const getDb = () => {
   return db;
 };
 
-export { connectToDb, getDb };
+module.exports = { connectToDb, getDb };
