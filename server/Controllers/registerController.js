@@ -1,4 +1,4 @@
-import { connectToDb } from './db.js';
+import { connectToDb } from '../db.js';
 import bcrypt from 'bcrypt';
 
 export async function registerUser(req, res) {
@@ -72,38 +72,6 @@ export async function registerUser(req, res) {
   }
 }
 
-//login function
-export async function login(req, res) {
-  try {
-
-    const db = await connectToDb();
-
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.json({ error: "Email and password are required." });
-    }
-
-    // Find user by email
-    const foundUser = await db.collection('users').findOne({ email });
-
-    if (!foundUser) {
-      return res.json({ error: "User not found Enter valid E-mail" });
-    }
-
-    // Compare hashed password with provided password
-    const passwordMatch = await bcrypt.compare(password, foundUser.password);
-
-    if (passwordMatch) {
-      return res.json({ message: "Login successful." });
-    } else {
-      return res.json({ error: "Incorrect password." });
-    }
-  } catch (error) {
-    console.error("Error during login:", error);
-    return res.json({ error: "Internal server error." });
-  }
-}
 
 // Helper functions for server-side validation
 function isValidEmail(email) {
