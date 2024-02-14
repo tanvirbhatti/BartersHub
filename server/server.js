@@ -4,12 +4,23 @@ import { registerUser } from './userController.js';
 import { login } from './userController.js';
 import cors from 'cors';
 
+
+import { addProduct, updatedProduct, getProduct } from './product.js'
+
 const app = express();
 app.use(cors({ origin: 'http://localhost:3000', credentials: true, methods: ["GET", 'POST', 'PUT', 'DELETE'], },))
 app.use(bodyParser.json());
 // API End-points
 app.post('/register', registerUser);
 app.post('/login', login)
+
+
+
+app.post('/addProduct', addProduct);
+app.put('/update-product', updatedProduct);
+app.delete('/delete-product', deleteProduct);
+app.get('/getProducts', getProduct)
+
 
 // Start the server
 const PORT = process.env.PORT || 8000;

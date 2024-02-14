@@ -1,5 +1,7 @@
 import { connectToDb } from './db.js';
-
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const { Product } = require('./Model/product.js');
 
 export async function addProduct(req, res) {
     try {
@@ -38,25 +40,66 @@ export async function addProduct(req, res) {
         if (!email) {
             return res.json({ error: "Phone Number is required." });
         }
-        const result = await db.collection('product').insertOne({
-            userId, // User ID that user upload product
-            title,
-            description,
-            category,
-            imge, // Product URL
-            price,
-            phoneNumber,
-            email
-        });
 
-        return res.json({ message: "Product Uploaded successfully", product: result });
+        // const { userId, title, description, category, image, price, phoneNumber, email } = req.body;
+
+        // Check if the user exists before adding the product
+        const userExists = await User.exists({ _id: userId });
+        if (!userExists) {
+          return res.status(400).json({ message: 'User does not exist', error: 'UserNotFound' });
+        }
+    
+        const newProduct = new Product({ userId, title, description, category, image, price, phoneNumber, email });
+        await newProduct.save();
+        return res.json({ message: 'Product added successfully', product: newProduct });
+  
+
 
     } catch (error) {
-        console.error("Error during login:", error);
+        console.error("Error during add product:", error);
         return res.json({ error: "Internal server error." });
     }
 }
 
+// delete product 
+export async function deleteProduct(req, res) {
+    try {
+        await Product.findByIdAndDelete(productId);
+        return res.json({ message: 'Product deleted successfully' });
+    } catch (error) {
+        console.error("Error during delete product:", error);
+        return res.json({ error: "Internal server error." });
+    }
+}
 
+export async function updatedProduct(req, res) {
+    const productId = req.params.productId;
 
+    try {
+        const { userId, title, description, category, image, price, phoneNumber, email } = req.body;
 
+    // Check if the user exists before updating the product
+    const userExists = await User.exists({ _id: userId });
+    if (!userExists) {
+      return res.status(400).json({ message: 'User does not exist', error: 'UserNotFound' });
+    }
+
+    await Product.findByIdAndUpdate(productId, { userId, title, description, category, image, price, phoneNumber, email });
+    return res.json({ message: 'Product updated successfully' });
+    } catch (error) {
+        return res.status(500).json({ message: 'Error updating product', error: error.message });
+    }
+}
+
+export async function getProduct(req, res) {
+        const { userId } = req.params;
+        if (!userId) {
+            return res.status(400).json({ message: 'User Id is required ', error: 'UserIdNotFound' });
+        }
+      try {
+        const products = await Product.find({userId : req.params.userId});
+        return res.json(products);
+      } catch (error) {
+        return res.status(500).json({ message: 'Error get product', error: error.message });
+      }
+}
