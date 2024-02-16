@@ -1,7 +1,7 @@
-const { connectToDb } = require("../db.js");
-const bcrypt = require("bcrypt");
+import { connectToDb }  from "../db";
+import bcrypt from "bcrypt";
 
-async function registerUser(req, res) {
+export default async function registerUser(req, res) {
   try {
     const db = await connectToDb();
     const { firstName, lastName, email, password, province, city, areaCode } =
@@ -106,5 +106,3 @@ function isValidPassword(password) {
 function isValidAreacode(areaCode) {
   return areaCode && areaCode.match(/[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]\d/);
 }
-
-module.exports = registerUser;

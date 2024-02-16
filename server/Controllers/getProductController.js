@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 const secretKey = "abcd"
 
-export async function getProducts(req,res){
+export default async function getProducts(req,res){
     const token = req.session.token
     if(!token){
         res.json({err:"Unauthorized access no token"})

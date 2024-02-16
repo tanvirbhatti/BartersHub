@@ -1,7 +1,7 @@
 import { connectToDb } from '../db.js';
 
 
-export async function addProduct(req, res) {
+export default async function addProduct(req, res) {
     try {
 
         const db = await connectToDb();
