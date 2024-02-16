@@ -1,4 +1,4 @@
-import { connectToDb } from '../db.js';
+import { connectToDb } from '../../db.js';
 import bcrypt from 'bcrypt';
 
 export async function registerUser(req, res) {

@@ -1,14 +1,14 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { registerUser } from './Controllers/registerController.js';
-import { login } from './Controllers/loginController.js';
-import {getProducts} from './Controllers/getProductController.js'
-import { addProduct } from './Controllers/addProductController.js'
+import { registerUser } from './Controllers/Authentication/register.js';
+import { login } from './Controllers/Authentication/login.js';
+import { addProduct } from './Controllers/Products/add.js';
+import { getProducts } from './Controllers/Products/get.js';
+import { editProductDetails } from './Controllers/Products/update.js';
+import { deleteProduct } from './Controllers/Products/delete.js';
 import cors from 'cors';
 import session from 'express-session';
 
-
-import { addProduct, updatedProduct, getProduct } from './product.js'
 
 const app = express();
 app.use(cors({ origin: 'http://localhost:3000', credentials: true, methods: ["GET", 'POST', 'PUT', 'DELETE'], },))
@@ -21,16 +21,11 @@ app.use(session({
 
 // API End-points
 app.post('/register', registerUser);
-app.post('/login', login)
-app.get('/products',getProducts);
-app.post('/addProduct', addProduct);
-
-
-
-app.post('/addProduct', addProduct);
-app.put('/update-product', updatedProduct);
-app.delete('/delete-product', deleteProduct);
-app.get('/getProducts', getProduct)
+app.post('/login', login);
+app.post('/add-product', addProduct);
+app.get('/get-products', getProducts)
+app.put('/edit-product/:productId', editProductDetails);
+app.delete('/delete-product/:productId', deleteProduct);
 
 
 // Start the server
