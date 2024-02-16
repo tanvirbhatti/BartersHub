@@ -1,10 +1,10 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const { registerUser } = require('./Controllers/registerController.js');
-const { login } =  require('./Controllers/loginController.js');
-const {getProducts} = require('./Controllers/getProductController.js');
-const cors = require('cors');
-const session = require('express-session');
+import express from 'express';
+import bodyParser from 'body-parser';
+import { registerUser } from './Controllers/registerController';
+import { login } from './Controllers/loginController';
+import { getProducts } from './Controllers/getProductController';
+import cors from 'cors';
+import session from 'express-session';
 
 const app = express();
 app.use(cors({ origin: 'http://localhost:3000', credentials: true, methods: ["GET", 'POST', 'PUT', 'DELETE'], },))
