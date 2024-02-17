@@ -5,7 +5,7 @@ import { connectToDb } from '../../db.js';
 const secretKey = "abcd"
 
 //login function
-export async function login(req, res) {
+export default async function login(req, res) {
     try {
   
       const db = await connectToDb();
