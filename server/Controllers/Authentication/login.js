@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { connectToDb } from '../db.js';
+import { connectToDb } from '../../db.js';
 
 const secretKey = "abcd"
 
