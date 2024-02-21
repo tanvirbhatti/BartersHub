@@ -30,7 +30,7 @@ export async function addProduct(req, res) {
             }
             else{
                 
-                const { title, description, category, image, price, phoneNumber} = req.body;
+                const { title, description, category, image, price, phoneNumber, email} = req.body;
     
                 //Required field validation
                 if (!title || !description || !category || !image || !price || !phoneNumber || !email) {

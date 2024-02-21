@@ -22,4 +22,4 @@ const getDb = () => {
   return db;
 };
 
-module.exports = { connectToDb, getDb };
+export { connectToDb, getDb };

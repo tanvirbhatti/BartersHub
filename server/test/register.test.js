@@ -1,4 +1,4 @@
-import registerUser  from '../Controllers/registerController'
+import registerUser  from '../Controllers/Authentication/register'
 
 test('rejects request with missing all required fields', async () => {
   const req = { body: {} };
@@ -6,7 +6,7 @@ test('rejects request with missing all required fields', async () => {
 
   await registerUser(req, res);
 
-  expect(res.json).toHaveBeenCalledWith({errors:[{ error: 'Please provide all required fields' }]});
+  expect(res.json).toHaveBeenCalledWith([{ error: 'Please provide all required fields' }]);
 });
 
 
@@ -16,11 +16,10 @@ test('rejects request with numeric values in firstName field', async () => {
 
   await registerUser(req, res);
 
-  expect(res.json).toHaveBeenCalledWith({
-    errors: [
+  expect(res.json).toHaveBeenCalledWith(
+    [
       { error: 'Enter valid first name' }
-    ],
-  });
+    ]);
 });
 
 test('rejects request with numeric values in lastName field', async () => {
@@ -29,11 +28,10 @@ test('rejects request with numeric values in lastName field', async () => {
 
   await registerUser(req, res);
 
-  expect(res.json).toHaveBeenCalledWith({
-    errors: [
+  expect(res.json).toHaveBeenCalledWith(
+    [
       { error: 'Enter valid last name' }
-    ],
-  });
+    ]);
 });
 
 
@@ -43,7 +41,7 @@ test('rejects request with invalid province', async () => {
 
   await registerUser(req, res);
 
-  expect(res.json).toHaveBeenCalledWith({ errors: [{ error: 'Enter valid province' }] });
+  expect(res.json).toHaveBeenCalledWith( [{ error: 'Enter valid province' }] );
 });
 
 test('rejects request with numeric value in city field', async () => {
@@ -52,7 +50,7 @@ test('rejects request with numeric value in city field', async () => {
 
   await registerUser(req, res);
 
-  expect(res.json).toHaveBeenCalledWith({ errors: [{ error: 'Enter valid city' }] });
+  expect(res.json).toHaveBeenCalledWith( [{ error: 'Enter valid city' }]);
 });
 
 test('rejects request with invalid email format', async () => {
@@ -61,7 +59,7 @@ test('rejects request with invalid email format', async () => {
 
   await registerUser(req, res);
 
-  expect(res.json).toHaveBeenCalledWith({ errors: [{ error: 'Invalid email format' }] });
+  expect(res.json).toHaveBeenCalledWith( [{ error: 'Invalid email format' }] );
 });
 
 test('rejects request with invalid area code format', async () => {
@@ -70,7 +68,7 @@ test('rejects request with invalid area code format', async () => {
 
   await registerUser(req, res);
 
-  expect(res.json).toHaveBeenCalledWith({ errors: [{ error: 'Invalid area code format' }] });
+  expect(res.json).toHaveBeenCalledWith( [{ error: 'The Area code format must be like this A1A 1A1' }] );
 });
 
 test('rejects request with password less than 8 characters', async () => {
@@ -79,7 +77,7 @@ test('rejects request with password less than 8 characters', async () => {
 
   await registerUser(req, res);
 
-  expect(res.json).toHaveBeenCalledWith({errors:[{error:"Password should be at least 8 characters long and contain a combination of letters, numbers, and special characters"}]})
+  expect(res.json).toHaveBeenCalledWith([{error:"Password should be at least 8 characters long and contain a combination of letters, numbers, and special characters"}])
 });
 
 jest.mock('../db.js', () => ({

@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { registerUser } from './Controllers/Authentication/register.js';
+import registerUser from './Controllers/Authentication/register.js';
 import { login } from './Controllers/Authentication/login.js';
 import { addProduct } from './Controllers/Products/add.js';
 import { getProducts } from './Controllers/Products/get.js';
