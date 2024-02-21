@@ -9,7 +9,6 @@ import { deleteProduct } from './Controllers/Products/delete.js';
 import cors from 'cors';
 import session from 'express-session';
 
-
 const app = express();
 app.use(cors({ origin: 'http://localhost:3000', credentials: true, methods: ["GET", 'POST', 'PUT', 'DELETE'], },))
 app.use(bodyParser.json());
