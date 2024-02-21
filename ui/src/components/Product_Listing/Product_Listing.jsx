@@ -1,68 +1,22 @@
+import { useState, useEffect } from 'react';
 import Productcard from "../../UI/Cards/Productcard.jsx";
 import "./Product_listing.css"
 import { Link } from 'react-router-dom';
 
-
-const products = [
-    {
-        id: 1,
-        imageUrl: 'https://scontent.fyzd1-2.fna.fbcdn.net/v/t39.30808-6/426363056_318321994502750_6901872494291580893_n.jpg?stp=dst-jpg_p720x720&_nc_cat=102&ccb=1-7&_nc_sid=6b907e&_nc_ohc=frhweBZ7HPsAX-dDq9M&_nc_ht=scontent.fyzd1-2.fna&oh=00_AfDTVQ2J7WRc-Jy9qMjHFBCsN9QZKMEf9gYak8kuNddmxw&oe=65C99ECC',
-        price: '$1800.00',
-        description: '2 BHK house for rent',
-        location: 'waterloo'
-    },
-    {
-        id: 2,
-        imageUrl: 'https://scontent.fyzd1-2.fna.fbcdn.net/v/t39.30808-6/426363056_318321994502750_6901872494291580893_n.jpg?stp=dst-jpg_p720x720&_nc_cat=102&ccb=1-7&_nc_sid=6b907e&_nc_ohc=frhweBZ7HPsAX-dDq9M&_nc_ht=scontent.fyzd1-2.fna&oh=00_AfDTVQ2J7WRc-Jy9qMjHFBCsN9QZKMEf9gYak8kuNddmxw&oe=65C99ECC',
-        price: '$1800.00',
-        description: '2 BHK house for rent',
-        location: 'waterloo'
-    },
-    {
-        id: 3,
-        imageUrl: 'https://scontent.fyzd1-2.fna.fbcdn.net/v/t39.30808-6/426363056_318321994502750_6901872494291580893_n.jpg?stp=dst-jpg_p720x720&_nc_cat=102&ccb=1-7&_nc_sid=6b907e&_nc_ohc=frhweBZ7HPsAX-dDq9M&_nc_ht=scontent.fyzd1-2.fna&oh=00_AfDTVQ2J7WRc-Jy9qMjHFBCsN9QZKMEf9gYak8kuNddmxw&oe=65C99ECC',
-        price: '$1800.00',
-        description: '2 BHK house for rent',
-        location: 'waterloo'
-    },
-    {
-        id: 4,
-        imageUrl: 'https://scontent.fyzd1-2.fna.fbcdn.net/v/t39.30808-6/426363056_318321994502750_6901872494291580893_n.jpg?stp=dst-jpg_p720x720&_nc_cat=102&ccb=1-7&_nc_sid=6b907e&_nc_ohc=frhweBZ7HPsAX-dDq9M&_nc_ht=scontent.fyzd1-2.fna&oh=00_AfDTVQ2J7WRc-Jy9qMjHFBCsN9QZKMEf9gYak8kuNddmxw&oe=65C99ECC',
-        price: '$1800.00',
-        description: '2 BHK house for rent',
-        location: 'waterloo'
-    },
-    {
-        id: 5,
-        imageUrl: 'https://scontent.fyzd1-2.fna.fbcdn.net/v/t39.30808-6/426363056_318321994502750_6901872494291580893_n.jpg?stp=dst-jpg_p720x720&_nc_cat=102&ccb=1-7&_nc_sid=6b907e&_nc_ohc=frhweBZ7HPsAX-dDq9M&_nc_ht=scontent.fyzd1-2.fna&oh=00_AfDTVQ2J7WRc-Jy9qMjHFBCsN9QZKMEf9gYak8kuNddmxw&oe=65C99ECC',
-        price: '$1800.00',
-        description: '2 BHK house for rent',
-        location: 'waterloo'
-    },
-    {
-        id: 6,
-        imageUrl: 'https://scontent.fyzd1-2.fna.fbcdn.net/v/t39.30808-6/426363056_318321994502750_6901872494291580893_n.jpg?stp=dst-jpg_p720x720&_nc_cat=102&ccb=1-7&_nc_sid=6b907e&_nc_ohc=frhweBZ7HPsAX-dDq9M&_nc_ht=scontent.fyzd1-2.fna&oh=00_AfDTVQ2J7WRc-Jy9qMjHFBCsN9QZKMEf9gYak8kuNddmxw&oe=65C99ECC',
-        price: '$1800.00',
-        description: '2 BHK house for rent',
-        location: 'waterloo'
-    },
-    {
-        id: 7,
-        imageUrl: 'https://scontent.fyzd1-2.fna.fbcdn.net/v/t39.30808-6/426363056_318321994502750_6901872494291580893_n.jpg?stp=dst-jpg_p720x720&_nc_cat=102&ccb=1-7&_nc_sid=6b907e&_nc_ohc=frhweBZ7HPsAX-dDq9M&_nc_ht=scontent.fyzd1-2.fna&oh=00_AfDTVQ2J7WRc-Jy9qMjHFBCsN9QZKMEf9gYak8kuNddmxw&oe=65C99ECC',
-        price: '$1800.00',
-        description: '2 BHK house for rent',
-        location: 'waterloo'
-    },
-    {
-        id: 8,
-        imageUrl: 'https://scontent.fyzd1-2.fna.fbcdn.net/v/t39.30808-6/426363056_318321994502750_6901872494291580893_n.jpg?stp=dst-jpg_p720x720&_nc_cat=102&ccb=1-7&_nc_sid=6b907e&_nc_ohc=frhweBZ7HPsAX-dDq9M&_nc_ht=scontent.fyzd1-2.fna&oh=00_AfDTVQ2J7WRc-Jy9qMjHFBCsN9QZKMEf9gYak8kuNddmxw&oe=65C99ECC',
-        price: '$1800.00',
-        description: '2 BHK house for rent',
-        location: 'waterloo'
-    },
-];
-
 const Product_Listing = () => {
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        // Fetch data from the API
+        fetch("http://localhost:8000/get-products")
+            .then(response => response.json())
+            .then(data => {
+                // Assuming your response data structure is { "list of products": [...] }
+                setProducts(data["list of products"]);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
+
     return (
         <div className="marketplace">
             <header className="Posting_section">
@@ -85,7 +39,7 @@ const Product_Listing = () => {
 
                 <section className="products">
                     {products.map(product => (
-                        <Productcard key={product.id} product={product} />
+                        <Productcard key={product._id} product={product} />
                     ))}
                 </section>
             </div>

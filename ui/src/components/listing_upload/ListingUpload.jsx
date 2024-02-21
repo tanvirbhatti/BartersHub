@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import './ListingUpload.css';
+import axios from "axios";
 
 const ListingUpload = () => {
     const [formData, setFormData] = useState({
-        productTitle: '',
-        productDescription: '',
-        productCategory: 'category1', // Default category
-        productPrice: '',
+        title: '',
+        description: '',
+        category: 'category1', // Default category
+        price: '',
         phoneNumber: '',
         email: ''
     });
 
-    const [selectedImages, setSelectedImages] = useState([]);
+    const [selectedImage, setSelectedImage] = useState(null);
     const [errors, setErrors] = useState({});
 
     const handleInputChange = (e) => {
@@ -20,23 +21,22 @@ const ListingUpload = () => {
     };
 
     const handleImageSelect = (e) => {
-        const files = Array.from(e.target.files).slice(0, 3); // Limit to 3 images
-        const selectedImagePreviews = files.map(file => URL.createObjectURL(file));
-        setSelectedImages(selectedImagePreviews);
+        const file = e.target.files[0];
+        setSelectedImage(file);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = {};
-    
-        if (!formData.productTitle || formData.productTitle.trim() === '') {
-            validationErrors.productTitle = 'Product Title is required';
+
+        if (!formData.title || formData.title.trim() === '') {
+            validationErrors.title = 'Product Title is required';
         }
-        if (!formData.productDescription || formData.productDescription.trim() === '') {
-            validationErrors.productDescription = 'Product Description is required';
+        if (!formData.description || formData.description.trim() === '') {
+            validationErrors.description = 'Product Description is required';
         }
-        if (!formData.productPrice || formData.productPrice.trim() === '') {
-            validationErrors.productPrice = 'Price is required';
+        if (!formData.price || formData.price.trim() === '') {
+            validationErrors.price = 'Price is required';
         }
         if (!formData.phoneNumber || formData.phoneNumber.trim() === '') {
             validationErrors.phoneNumber = 'Phone Number is required';
@@ -46,45 +46,38 @@ const ListingUpload = () => {
         if (!formData.email || formData.email.trim() === '') {
             validationErrors.email = 'Email is required';
         }
-    
+        if (!selectedImage) {
+            validationErrors.image = 'Please select an image';
+        }
+
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
         } else {
-            submitForm();
-            // Clear the form after successful submission
-            setFormData({
-                productTitle: '',
-                productDescription: '',
-                productCategory: 'category1',
-                productPrice: '',
-                phoneNumber: '',
-                email: ''
-            });
-            setSelectedImages([]);
-            setErrors({});
-        }
-    };
-    
-    const submitForm = () => {
-        const dataToSend = new FormData();
-        Object.entries(formData).forEach(([key, value]) => {
-            dataToSend.append(key, value);
-        });
-        selectedImages.forEach((image, index) => {
-            dataToSend.append(`image${index + 1}`, image);
-        });
+                const dataToSend = {
+                    title: formData.title,
+                    description: formData.description,
+                    category: formData.category,
+                    price: formData.price,
+                    phoneNumber: formData.phoneNumber,
+                    email: formData.email,
+                    image: selectedImage.name // Just send the image name/path here
+                };
 
-        alert("Listing added! ")
-
-        // Send data to API here
-        fetch('', {
-            method: 'POST',
-            body: dataToSend
-        })
-        .then(response => {
-        })
-        .catch(error => {
-        });
+                const response =await axios.post("http://localhost:8000/add-product", dataToSend);
+                alert(response.body.message)
+                // Clear the form after successful submission
+                setFormData({
+                    title: '',
+                    description: '',
+                    category: 'category1',
+                    price: '',
+                    phoneNumber: '',
+                    email: ''
+                });
+                setSelectedImage(null);
+                setErrors({});
+            } 
+        
     };
 
     return (
@@ -92,16 +85,16 @@ const ListingUpload = () => {
             <form className="product-ad-form" onSubmit={handleSubmit}>
                 <h2>Post Product Ad</h2>
 
-                <label htmlFor="productTitle">Product Title</label>
-                <input type="text" id="productTitle" name="productTitle" value={formData.productTitle} onChange={handleInputChange} />
-                {errors.productTitle && <span className="error">{errors.productTitle}</span>}
+                <label htmlFor="title">Product Title</label>
+                <input type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} />
+                {errors.title && <span className="error">{errors.title}</span>}
 
-                <label htmlFor="productDescription">Product Description</label>
-                <textarea id="productDescription" name="productDescription" value={formData.productDescription} onChange={handleInputChange}></textarea>
-                {errors.productDescription && <span className="error">{errors.productDescription}</span>}
+                <label htmlFor="description">Product Description</label>
+                <textarea id="description" name="description" value={formData.description} onChange={handleInputChange}></textarea>
+                {errors.description && <span className="error">{errors.description}</span>}
 
-                <label htmlFor="productCategory">Select a Category</label>
-                <select id="productCategory" name="productCategory" value={formData.productCategory} onChange={handleInputChange}>
+                <label htmlFor="category">Select a Category</label>
+                <select id="category" name="category" value={formData.category} onChange={handleInputChange}>
                     <option value="category1">Category 1</option>
                     <option value="category2">Category 2</option>
                 </select>
@@ -110,19 +103,13 @@ const ListingUpload = () => {
                     <label>Add photos to attract customers to your ad post</label>
                     <hr />
                     <br />
-                    <div className="images-preview">
-                        {selectedImages.map((image, index) => (
-                            <div key={index} className="image-upload-box">
-                                <img src={image} alt={`Image ${index + 1}`} />
-                            </div>
-                        ))}
-                    </div>
-                    <input type="file" accept="image/*" onChange={handleImageSelect} multiple />
+                    <input type="file" accept="image/*" onChange={handleImageSelect} />
+                    {errors.image && <span className="error">{errors.image}</span>}
                 </div>
 
-                <label htmlFor="productPrice">Price</label>
-                <input type="number" id="productPrice" name="productPrice" value={formData.productPrice} onChange={handleInputChange} />
-                {errors.productPrice && <span className="error">{errors.productPrice}</span>}
+                <label htmlFor="price">Price</label>
+                <input type="number" id="price" name="price" value={formData.price} onChange={handleInputChange} />
+                {errors.price && <span className="error">{errors.price}</span>}
 
                 <fieldset className="contact-information">
                     <legend>Contact Information</legend>
@@ -139,7 +126,6 @@ const ListingUpload = () => {
                         {errors.email && <span className="error">{errors.email}</span>}
                     </div>
                 </fieldset>
-
                 <button type="submit" className="submit-btn">Add Product</button>
             </form>
         </div>

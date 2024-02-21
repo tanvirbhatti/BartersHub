@@ -11,26 +11,30 @@ export async function addProduct(req, res) {
         let userId;
         // Verify and decode the token
         const token = req.session.token;
-        if(!token){
-            res.json({error:"login error please login before you add the product"})
-        }
-        else{
-            jwt.verify(token, secretKey, (err, decoded) => {
-                if (err) {
-                    // Handle verification error
-                    console.error('Token verification failed:', err);
-                } else {
-                    // Extract userId from decoded token
-                    userId = decoded.userId;
-                }
-            });
+        // if(!token){
+        //     res.json({error:"login error please login before you add the product"})
+        // }
+        // else{
+        //     jwt.verify(token, secretKey, (err, decoded) => {
+        //         if (err) {
+        //             // Handle verification error
+        //             console.error('Token verification failed:', err);
+        //         } else {
+        //             // Extract userId from decoded token
+        //             userId = decoded.userId;
+        //         }
+        //     });
             
-            if(!userId){
-                res.json({error:"token is not trusted try login again"});
-            }
-            else{
+        //     if(!userId){
+        //         res.json({error:"token is not trusted try login again"});
+        //     }
+        //     else{
                 
-                const { title, description, category, image, price, phoneNumber} = req.body;
+                
+    
+        //     }
+        console.log(req.body)
+            const { title, description, category, price,phoneNumber,email, image } = req.body;
     
                 //Required field validation
                 if (!title || !description || !category || !image || !price || !phoneNumber || !email) {
@@ -59,7 +63,7 @@ export async function addProduct(req, res) {
         
                 const newProduct = await db.collection('products').insertOne(
                     { 
-                        userId, 
+                        // userId, 
                         title, 
                         description, 
                         category, 
@@ -69,9 +73,7 @@ export async function addProduct(req, res) {
                         email 
                     });
                 return res.json({ message: 'Product added successfully', product: newProduct });
-    
-            }
-        }
+        // }
     } catch (error) {
         console.error("Error during add product:", error);
         return res.json({ error: "Internal server error." });
