@@ -64,7 +64,7 @@ const ListingUpload = () => {
                 };
 
                 const response =await axios.post("http://localhost:8000/add-product", dataToSend);
-                alert(response.body.message)
+                alert(response.data.message)
                 // Clear the form after successful submission
                 setFormData({
                     title: '',
