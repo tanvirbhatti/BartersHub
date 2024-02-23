@@ -34,8 +34,8 @@ export async function addProduct(req, res) {
     
         //     }
         console.log(req.body)
-            const { title, description, category, price,phoneNumber,email, image } = req.body;
-    
+            const { title, description, category, price,phoneNumber,email } = req.body;
+            const image = req.file?.firebaseUrl;    
                 //Required field validation
                 if (!title || !description || !category || !image || !price || !phoneNumber || !email) {
                     return res.json({ message: "Please provide all required fields" });

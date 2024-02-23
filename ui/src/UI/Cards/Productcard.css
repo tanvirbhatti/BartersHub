@@ -8,6 +8,7 @@
 }
 
 .product-card img {
+  height: 200px;
   width: 100%;
   display: block;
   /* Ensure the image covers the container */
