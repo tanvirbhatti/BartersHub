@@ -3,12 +3,11 @@
 }
 
 .product-card .image-container {
-  height: 200px; /* Set the desired height */
   overflow: hidden; /* Ensure overflow doesn't affect layout */
 }
 
 .product-card img {
-  height: 200px;
+  height: 300px;
   width: 100%;
   display: block;
   /* Ensure the image covers the container */

@@ -13,18 +13,35 @@ const ListingUpload = () => {
     });
 
     const [selectedImage, setSelectedImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null); // New state for image preview
     const [errors, setErrors] = useState({});
     const [isUploading, setIsUploading] = useState(false);
 
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        // Remove error when input is corrected
+        if (errors[name]) {
+            const updatedErrors = { ...errors };
+            delete updatedErrors[name];
+            setErrors(updatedErrors);
+        }
         setFormData({ ...formData, [name]: value });
     };
 
     const handleImageSelect = (e) => {
         const file = e.target.files[0];
-        setSelectedImage(file);
+        if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
+            setSelectedImage(file);
+            setImagePreview(URL.createObjectURL(file));
+            // Remove image error if previously added
+            if (errors.image) {
+                const updatedErrors = { ...errors };
+                delete updatedErrors.image;
+                setErrors(updatedErrors);
+            }
+        } else {
+            setErrors({ ...errors, image: 'Please upload a valid JPG or PNG image.' });
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -50,6 +67,9 @@ const ListingUpload = () => {
         }
         if (!selectedImage) {
             validationErrors.image = 'Please select an image';
+        }
+        if (formData.price < 0) {
+            validationErrors.price = 'Price cannot be negative.';
         }
 
         if (Object.keys(validationErrors).length > 0) {
@@ -89,9 +109,10 @@ const ListingUpload = () => {
                 setErrors({});
             } catch (error) {
                 console.error('Error submitting the form', error);
-                // Handle errors here, e.g., set error messages in state
             } finally {
-                setIsUploading(false); // Finish uploading
+                setIsUploading(false);
+                setSelectedImage(null);
+                setImagePreview(null);
             }
 
         }
@@ -112,12 +133,13 @@ const ListingUpload = () => {
                 <h2>Post Product Ad</h2>
 
                 <label htmlFor="title">Product Title</label>
-                <input type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} />
-                {errors.title && <span className="error">{errors.title}</span>}
+                <input className="input_text" type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} />
+
+                {errors.title && <div className="error-message">{errors.title}</div>}
 
                 <label htmlFor="description">Product Description</label>
-                <textarea id="description" name="description" value={formData.description} onChange={handleInputChange}></textarea>
-                {errors.description && <span className="error">{errors.description}</span>}
+                <textarea className="input_text" id="description" name="description" value={formData.description} onChange={handleInputChange}></textarea>
+                {errors.description && <div className="error-message">{errors.description}</div>}
 
                 <label htmlFor="category">Select a Category</label>
                 <select id="category" name="category" value={formData.category} onChange={handleInputChange}>
@@ -126,19 +148,26 @@ const ListingUpload = () => {
                 </select>
 
                 <div className="image-upload-container">
-                    <label>Add photos to attract customers to your ad post</label>
+                    <label>Add photos of your product <span className="required-indicator">*</span></label>
                     <hr />
                     <br />
-                    <input type="file" accept="image/*" onChange={handleImageSelect} />
-                    {errors.image && <span className="error">{errors.image}</span>}
+                    <input type="file" accept="image/jpeg, image/png" onChange={handleImageSelect} />
+                    {errors.image && <div className="error-message" style={{marginTop:"10px"}}>{errors.image}</div>}
+                    
+                    {imagePreview && (
+                        <div className="image-preview-container">
+                            <img src={imagePreview} alt="Preview" />
+                        </div>
+                    )}
                 </div>
 
+
                 <label htmlFor="price">Price</label>
-                <input type="number" id="price" name="price" value={formData.price} onChange={handleInputChange} />
+                <input className="input_text" type="number" id="price" name="price" value={formData.price} onChange={handleInputChange} />
                 {errors.price && <span className="error">{errors.price}</span>}
 
                 <fieldset className="contact-information">
-                    <legend>Contact Information</legend>
+                    <p>Contact Information</p>
                     <hr />
                     <div className='contact-info-input'>
                         <label htmlFor="phoneNumber">Phone Number:</label>
@@ -152,7 +181,7 @@ const ListingUpload = () => {
                         {errors.email && <span className="error">{errors.email}</span>}
                     </div>
                 </fieldset>
-                <button type="submit" className="submit-btn">Add Product</button>
+                <button type="submit" className="submit-btn" disabled={Object.keys(errors).length > 0 || isUploading}>Add Product</button>
             </form>
         </div>
     );

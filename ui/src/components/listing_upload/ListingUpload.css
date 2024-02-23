@@ -2,9 +2,11 @@ body{
     background-color: white;
 }
 .form-container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
-    padding: 20px;
+}
+.input_text{
+    width: 97.6% !important;
 }
 
 .product-ad-form h2 {
@@ -14,6 +16,50 @@ body{
 .product-ad-form label {
     display: block;
     margin: 10px 0 5px;
+}
+
+/* Existing CSS... */
+
+.image-preview-container img {
+    width: 100%; /* Adjust as needed */
+    height: 300px; /* Adjust for a consistent height, or use 'auto' for natural aspect ratio */
+    object-fit: contain;
+    margin-bottom: 20px;
+}
+
+.contact-info-input input {
+width: 70%; 
+}
+
+
+/* Adjustments for responsive design */
+@media (max-width: 768px) {
+.contact-info-input input {
+width: 100%; 
+}
+}
+
+/* Style for displaying validation errors under input fields */
+.error-message {
+color: #F21616;
+margin-top: -15px;
+margin-bottom: 10px;
+font-size: 0.9em;
+}
+
+/* Disable button style */
+.submit-btn:disabled {
+background-color: #ccc;
+cursor: not-allowed;
+}
+
+.required-indicator {
+    color: red;
+}
+
+/* Adjust the description field height */
+.product-ad-form textarea {
+    height: 150px;  
 }
 
 .product-ad-form input[type="text"],
@@ -112,6 +158,7 @@ body{
     border: none;
     border-radius: 10px;
     width: 100%;
+    margin-bottom:20px;
 }
 
 /* Responsive styles */
