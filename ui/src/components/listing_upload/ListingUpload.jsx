@@ -14,6 +14,8 @@ const ListingUpload = () => {
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [errors, setErrors] = useState({});
+    const [isUploading, setIsUploading] = useState(false);
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -53,18 +55,27 @@ const ListingUpload = () => {
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
         } else {
-                const dataToSend = {
-                    title: formData.title,
-                    description: formData.description,
-                    category: formData.category,
-                    price: formData.price,
-                    phoneNumber: formData.phoneNumber,
-                    email: formData.email,
-                    image: selectedImage.name // Just send the image name/path here
-                };
-
-                const response =await axios.post("http://localhost:8000/add-product", dataToSend);
-                alert(response.data.message)
+            // Create a FormData object
+            const formDataToSend = new FormData();
+            // Append form fields to the FormData object
+            formDataToSend.append('title', formData.title);
+            formDataToSend.append('description', formData.description);
+            formDataToSend.append('category', formData.category);
+            formDataToSend.append('price', formData.price);
+            formDataToSend.append('phoneNumber', formData.phoneNumber);
+            formDataToSend.append('email', formData.email);
+            // Check if image is selected and append it to the FormData object
+            if (selectedImage) {
+                formDataToSend.append('image', selectedImage);
+            }
+            setIsUploading(true);
+            try {
+                const response = await axios.post("http://localhost:8000/add-product", formDataToSend, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                alert(response.data.message);
                 // Clear the form after successful submission
                 setFormData({
                     title: '',
@@ -76,12 +87,27 @@ const ListingUpload = () => {
                 });
                 setSelectedImage(null);
                 setErrors({});
-            } 
-        
+            } catch (error) {
+                console.error('Error submitting the form', error);
+                // Handle errors here, e.g., set error messages in state
+            } finally {
+                setIsUploading(false); // Finish uploading
+            }
+
+        }
     };
+
 
     return (
         <div className="form-container">
+            {isUploading && (
+                <div className="uploading-indicator">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Uploading...</span>
+                    </div>
+                </div>
+            )}
+
             <form className="product-ad-form" onSubmit={handleSubmit}>
                 <h2>Post Product Ad</h2>
 

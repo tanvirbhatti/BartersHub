@@ -27,6 +27,15 @@ body{
     border-radius: 10px;
 }
 
+.uploading-indicator {
+    position: fixed; /* or absolute */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Add more styling as needed */
+}
+
+
 .image-upload-container {
     background-color: white;
     margin-bottom: 20px;
