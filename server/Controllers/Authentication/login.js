@@ -10,45 +10,45 @@ export async function login(req, res) {
   
       const db = await connectToDb();
   
-      const { email, password } = req.body;
-  
-      if (!email || !password) {
-        return res.json({ error: "Email and password are required." });
-      }
-  
-      // Find user by email
-      const foundUser = await db.collection('users').findOne({ email });
-  
-      if (!foundUser) {
-        return res.json({ error: "User not found." });
-      }
-      else{
-        // Compare hashed password with provided password
-        const passwordMatch = await bcrypt.compare(password, foundUser.password);
+      const { email, password } = req.body || '';
+
+      if(email && password){
+        // Find user by email
+        const foundUser = await db.collection('users').findOne({ email });
     
-        if (passwordMatch) {
+        if (!foundUser) {
+          return res.json({ error: "User not found." });
+        }
+        else{
+          // Compare hashed password with provided password
+          const passwordMatch = await bcrypt.compare(password, foundUser.password);
+          if (passwordMatch) {
             try
             {   
-                const token = jwt.sign({ userId: foundUser._id, firstName : foundUser.firstName }, secretKey, { expiresIn: '1h' });
-                if(token){
-
-                    req.session.token = token
-                    return res.redirect('/products')
-                }
-                else{
-                    return res.json({err:"token undefiner unauthorized access"})
-                }
+              const token = jwt.sign({ userId: foundUser._id, firstName : foundUser.firstName }, secretKey, { expiresIn: '1h' });
+              if(token){
                 
+                req.session.token = token
+                return res.json({message:"Successfully logedIn",token}) 
+              }
+              else{
+                return res.json({err:"token undefiner unauthorized access"})
+              }
+              
             }
             catch(err){
-                console.log("error during token generation",err)
-                return res.json({error:`Error during token generation -> ${err}`})
+              console.log("error during token generation",err)
+              return res.json({error:`Error during token generation -> ${err}`})
             }
-        } else {
+          } else {
             return res.json({ error: "Incorrect password." });
+          }
         }
       }
-  
+      else{
+        return res.json({ error: "Email and password both are required." });
+      }
+      
       
     } catch (error) {
       console.error("Error during login:", error);
