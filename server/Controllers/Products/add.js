@@ -30,7 +30,7 @@ export async function addProduct(req, res) {
         //     }
         //     else{
                 
-                
+
     
         //     }
         console.log(req.body)
