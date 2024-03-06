@@ -21,7 +21,6 @@ const Home = () => {
             </BrowserRouter>
             <Footer />
         </React.Fragment>
-
     )
 }
 
