@@ -5,6 +5,8 @@ import styles from "./Signup.module.css";
 import GradientButton from "../../UI/GradientButton/GradientButton";
 import { z } from "zod";
 import axios from "axios";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const schema = z.object({
   firstName: z.string({ required_error: "First name is required" })
@@ -91,8 +93,8 @@ const Signup = () => {
     const result = schema.safeParse({ firstName, lastName, email, password, province, city });
 
     if (result.success) {
-      const response = await
-        axios({
+      try{
+        const response = await axios({
           method: 'post',
           url: "http://localhost:8000/register",
           withCredentials: false,
@@ -106,12 +108,17 @@ const Signup = () => {
             "areaCode": "M5V 2L7",
           }
         })
-      if(response.data.error){
-        alert(response.data.error)
+        toast.success(response.data.message)
       }
-      else{
-        alert("Successfully registered")
+      catch(error){
+        if (error.response && error.response.status === 400) {
+          const errorArray = error.response.data.errors
+          errorArray.forEach(e=>toast.error(e.message))
+        } else {
+          console.error('Request failed:', error);
+        }
       }
+      
     } else {
       setErrors({});
       for (const err of result.error.issues) {
