@@ -1,21 +1,20 @@
-import './Productcard.css';
+import "./Productcard.css"
 
 const Productcard = ({product}) => {
-    const { imageUrl, price, description, location } = product;
+  const { image, price, description, location,title } = product;
 
   return (
-    <div className="product-card">
-      <img src={imageUrl} alt={description} />
-      <div className="product-info">
-        <h2>{price}</h2>
-        <p>{description}</p>
-        <span>{location}</span>
+      <div className="product-card">
+          <div className="image-container">
+              <img src={image} alt={description} />
+          </div>
+          <div className="product-info">
+              <h2>{title}</h2>
+              <p>${price}</p>
+              <span>{location}</span>
+          </div>
       </div>
-      <div className='col-md-6'>
-        <button className='btn  view_button'>View Product</button>
-      </div>
-    </div>
   );
 }
 
-export default Productcard
+export default Productcard;

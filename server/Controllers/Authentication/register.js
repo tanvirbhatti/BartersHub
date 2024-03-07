@@ -33,40 +33,35 @@ export default async function registerUser(req, res) {
       !city ||
       !areaCode
     ) {
-      errors.push({ error: "Please provide all required fields" });
+      errors.push({ code: "MISSING_FIELDS", message: "Please provide all required fields" });
     } else {
       if (!isNaN(firstName)) {
-        errors.push({ error: "Enter valid first name" });
+        errors.push({ code: "INVALID_FIRSTNAME", message: "Enter valid first name" });
       }
       if (!isNaN(lastName)) {
-        errors.push({ error: "Enter valid last name" });
+        errors.push({ code: "INVALID_LASTNAME", message: "Enter valid last name" });
       }
       if (!canadianProvinces.includes(province)) {
-        errors.push({ error: "Enter valid province" });
+        errors.push({ code: "INVALID_PROVINCE", message: "Enter valid province" });
       }
       if (!isNaN(city)) {
-        errors.push({ error: "Enter valid city" });
+        errors.push({ code: "INVALID_CITY", message: "Enter valid city" });
       }
       if (!isValidEmail(email)) {
-        errors.push({ error: "Invalid email format" });
+        errors.push({ code: "INVALID_EMAIL", message: "Invalid email format" });
       }
 
       if (!isValidPassword(password)) {
-        errors.push({
-          error:
-            "Password should be at least 8 characters long and contain a combination of letters, numbers, and special characters",
-        });
+        errors.push({ code: "INVALID_PASSWORD", message: "Password should be at least 8 characters long and contain a combination of letters, numbers, and special characters" });
       }
 
       if (!isValidAreaCode(areaCode)) {
-        errors.push({
-          error: "The Area code format must be like this A1A 1A1",
-        });
+        errors.push({ code: "INVALID_AREA_CODE", message: "The Area code format must be like this A1A 1A1" });
       }
     }
 
     if (errors.length > 0) {
-      return res.json(errors);
+      return res.status(400).json({ errors });
     } else {
       //Check user with email before registration
       try {
@@ -75,10 +70,10 @@ export default async function registerUser(req, res) {
           .findOne({ email: email });
 
         if (existingUser) {
-          return res.json({ error: "User already exists" });
+          return res.status(400).json({ errors: [{ code: "USER_ALREADY_EXISTS", message: "User already exists" }] });
         }
       } catch (err) {
-        return res.json({ error: err });
+        return res.status(500).json({ errors: [{ code: "INTERNAL_SERVER_ERROR", message: "Internal server error" }] });
       }
 
       //hashing password before storing it
@@ -99,8 +94,7 @@ export default async function registerUser(req, res) {
       });
     }
   } catch (error) {
-    console.log(error);
-    res.json({ message: "Internal Server Error", error });
+    res.status(500).json({ errors: [{ code: "INTERNAL_SERVER_ERROR", message: "Internal server error" }] });
   }
 }
 

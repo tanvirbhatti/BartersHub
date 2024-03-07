@@ -1,42 +1,61 @@
 import React, { useState } from 'react';
 import './ListingUpload.css';
+import axios from "axios";
 
 const ListingUpload = () => {
     const [formData, setFormData] = useState({
-        productTitle: '',
-        productDescription: '',
-        productCategory: 'category1', // Default category
-        productPrice: '',
+        title: '',
+        description: '',
+        category: 'category1', // Default category
+        price: '',
         phoneNumber: '',
         email: ''
     });
 
-    const [selectedImages, setSelectedImages] = useState([]);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null); // New state for image preview
     const [errors, setErrors] = useState({});
+    const [isUploading, setIsUploading] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        // Remove error when input is corrected
+        if (errors[name]) {
+            const updatedErrors = { ...errors };
+            delete updatedErrors[name];
+            setErrors(updatedErrors);
+        }
         setFormData({ ...formData, [name]: value });
     };
 
     const handleImageSelect = (e) => {
-        const files = Array.from(e.target.files).slice(0, 3); // Limit to 3 images
-        const selectedImagePreviews = files.map(file => URL.createObjectURL(file));
-        setSelectedImages(selectedImagePreviews);
+        const file = e.target.files[0];
+        if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
+            setSelectedImage(file);
+            setImagePreview(URL.createObjectURL(file));
+            // Remove image error if previously added
+            if (errors.image) {
+                const updatedErrors = { ...errors };
+                delete updatedErrors.image;
+                setErrors(updatedErrors);
+            }
+        } else {
+            setErrors({ ...errors, image: 'Please upload a valid JPG or PNG image.' });
+        }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = {};
-    
-        if (!formData.productTitle || formData.productTitle.trim() === '') {
-            validationErrors.productTitle = 'Product Title is required';
+
+        if (!formData.title || formData.title.trim() === '') {
+            validationErrors.title = 'Product Title is required';
         }
-        if (!formData.productDescription || formData.productDescription.trim() === '') {
-            validationErrors.productDescription = 'Product Description is required';
+        if (!formData.description || formData.description.trim() === '') {
+            validationErrors.description = 'Product Description is required';
         }
-        if (!formData.productPrice || formData.productPrice.trim() === '') {
-            validationErrors.productPrice = 'Price is required';
+        if (!formData.price || formData.price.trim() === '') {
+            validationErrors.price = 'Price is required';
         }
         if (!formData.phoneNumber || formData.phoneNumber.trim() === '') {
             validationErrors.phoneNumber = 'Phone Number is required';
@@ -46,86 +65,109 @@ const ListingUpload = () => {
         if (!formData.email || formData.email.trim() === '') {
             validationErrors.email = 'Email is required';
         }
-    
+        if (!selectedImage) {
+            validationErrors.image = 'Please select an image';
+        }
+        if (formData.price < 0) {
+            validationErrors.price = 'Price cannot be negative.';
+        }
+
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
         } else {
-            submitForm();
-            // Clear the form after successful submission
-            setFormData({
-                productTitle: '',
-                productDescription: '',
-                productCategory: 'category1',
-                productPrice: '',
-                phoneNumber: '',
-                email: ''
-            });
-            setSelectedImages([]);
-            setErrors({});
+            // Create a FormData object
+            const formDataToSend = new FormData();
+            // Append form fields to the FormData object
+            formDataToSend.append('title', formData.title);
+            formDataToSend.append('description', formData.description);
+            formDataToSend.append('category', formData.category);
+            formDataToSend.append('price', formData.price);
+            formDataToSend.append('phoneNumber', formData.phoneNumber);
+            formDataToSend.append('email', formData.email);
+            // Check if image is selected and append it to the FormData object
+            if (selectedImage) {
+                formDataToSend.append('image', selectedImage);
+            }
+            setIsUploading(true);
+            try {
+                const response = await axios.post("http://localhost:8000/add-product", formDataToSend, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                alert(response.data.message);
+                // Clear the form after successful submission
+                setFormData({
+                    title: '',
+                    description: '',
+                    category: 'category1',
+                    price: '',
+                    phoneNumber: '',
+                    email: ''
+                });
+                setSelectedImage(null);
+                setErrors({});
+            } catch (error) {
+                console.error('Error submitting the form', error);
+            } finally {
+                setIsUploading(false);
+                setSelectedImage(null);
+                setImagePreview(null);
+            }
+
         }
     };
-    
-    const submitForm = () => {
-        const dataToSend = new FormData();
-        Object.entries(formData).forEach(([key, value]) => {
-            dataToSend.append(key, value);
-        });
-        selectedImages.forEach((image, index) => {
-            dataToSend.append(`image${index + 1}`, image);
-        });
 
-        alert("Listing added! ")
-
-        // Send data to API here
-        fetch('', {
-            method: 'POST',
-            body: dataToSend
-        })
-        .then(response => {
-        })
-        .catch(error => {
-        });
-    };
 
     return (
         <div className="form-container">
+            {isUploading && (
+                <div className="uploading-indicator">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Uploading...</span>
+                    </div>
+                </div>
+            )}
+
             <form className="product-ad-form" onSubmit={handleSubmit}>
                 <h2>Post Product Ad</h2>
 
-                <label htmlFor="productTitle">Product Title</label>
-                <input type="text" id="productTitle" name="productTitle" value={formData.productTitle} onChange={handleInputChange} />
-                {errors.productTitle && <span className="error">{errors.productTitle}</span>}
+                <label htmlFor="title">Product Title</label>
+                <input className="input_text" type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} />
 
-                <label htmlFor="productDescription">Product Description</label>
-                <textarea id="productDescription" name="productDescription" value={formData.productDescription} onChange={handleInputChange}></textarea>
-                {errors.productDescription && <span className="error">{errors.productDescription}</span>}
+                {errors.title && <div className="error-message">{errors.title}</div>}
 
-                <label htmlFor="productCategory">Select a Category</label>
-                <select id="productCategory" name="productCategory" value={formData.productCategory} onChange={handleInputChange}>
+                <label htmlFor="description">Product Description</label>
+                <textarea className="input_text" id="description" name="description" value={formData.description} onChange={handleInputChange}></textarea>
+                {errors.description && <div className="error-message">{errors.description}</div>}
+
+                <label htmlFor="category">Select a Category</label>
+                <select id="category" name="category" value={formData.category} onChange={handleInputChange}>
                     <option value="category1">Category 1</option>
                     <option value="category2">Category 2</option>
                 </select>
 
                 <div className="image-upload-container">
-                    <label>Add photos to attract customers to your ad post</label>
+                    <label>Add photos of your product <span className="required-indicator">*</span></label>
                     <hr />
                     <br />
-                    <div className="images-preview">
-                        {selectedImages.map((image, index) => (
-                            <div key={index} className="image-upload-box">
-                                <img src={image} alt={`Image ${index + 1}`} />
-                            </div>
-                        ))}
-                    </div>
-                    <input type="file" accept="image/*" onChange={handleImageSelect} multiple />
+                    <input type="file" accept="image/jpeg, image/png" onChange={handleImageSelect} />
+                    {errors.image && <div className="error-message" style={{marginTop:"10px"}}>{errors.image}</div>}
+                    
+                    {imagePreview && (
+                        <div className="image-preview-container">
+                            <img src={imagePreview} alt="Preview" />
+                        </div>
+                    )}
                 </div>
 
-                <label htmlFor="productPrice">Price</label>
-                <input type="number" id="productPrice" name="productPrice" value={formData.productPrice} onChange={handleInputChange} />
-                {errors.productPrice && <span className="error">{errors.productPrice}</span>}
+
+                <label htmlFor="price">Price</label>
+                <input className="input_text" type="number" id="price" name="price" value={formData.price} onChange={handleInputChange} />
+                {errors.price && <span className="error">{errors.price}</span>}
 
                 <fieldset className="contact-information">
-                    <legend>Contact Information</legend>
+                    <p>Contact Information</p>
                     <hr />
                     <div className='contact-info-input'>
                         <label htmlFor="phoneNumber">Phone Number:</label>
@@ -139,8 +181,7 @@ const ListingUpload = () => {
                         {errors.email && <span className="error">{errors.email}</span>}
                     </div>
                 </fieldset>
-
-                <button type="submit" className="submit-btn">Add Product</button>
+                <button type="submit" className="submit-btn" disabled={Object.keys(errors).length > 0 || isUploading}>Add Product</button>
             </form>
         </div>
     );

@@ -4,10 +4,13 @@ import registerUser from './Controllers/Authentication/register.js';
 import { login } from './Controllers/Authentication/login.js';
 import { addProduct } from './Controllers/Products/add.js';
 import { getProducts } from './Controllers/Products/get.js';
-import { editProductDetails } from './Controllers/Products/update.js';
 import { deleteProduct } from './Controllers/Products/delete.js';
 import {getTestimonials} from './Controllers/Testimonials/get.js';
 import { addTestimonial } from './Controllers/Testimonials/add.js';
+import { editProductDetails } from './Controllers/Products/update.js';
+import { firebaseUploadMiddleware } from './Controllers/Products/storageBucket.js';
+import {userProfile, getAllUsers} from './Controllers/userProfile/UserProfileController.js';
+
 import cors from 'cors';
 import session from 'express-session';
 
@@ -24,12 +27,14 @@ app.use(session({
 // API End-points
 app.post('/register', registerUser);
 app.post('/login', login);
-app.post('/add-product', addProduct);
+app.post('/add-product',firebaseUploadMiddleware, addProduct);
 app.get('/get-products', getProducts)
 app.put('/edit-product/:productId', editProductDetails);
 app.delete('/delete-product/:productId', deleteProduct);
 app.get('/get-testimonials',getTestimonials)
 app.post('/add-testimonial',addTestimonial)
+app.get('/userprofile/:id', userProfile)
+app.get('/allusers', getAllUsers)
 
 // Start the server
 const PORT = process.env.PORT || 8000;

@@ -1,31 +1,37 @@
-.product-card{
-    border: 0;
+.product-card {
+  border: 0;
 }
-  
-  .product-card img {
-    width: 100%;
-    display: block;
-  }
-  
-  .product-info {
-    padding: 15px;
-    text-align: left;
-    border: 0;
-  }
-  
-  .product-info h2 {
-    margin: 0;
-    color: #333;
-  }
-  
-  .product-info p {
-    margin: 5px 0;
-  }
-  
-  .product-info span {
-    font-size: 0.9em;
-    color: #666;
-  }
-  
-  /* Include the responsive styles from the previous example here */
-  
+
+.product-card .image-container {
+  overflow: hidden; /* Ensure overflow doesn't affect layout */
+}
+
+.product-card img {
+  height: 300px;
+  width: 100%;
+  display: block;
+  /* Ensure the image covers the container */
+  object-fit: cover;
+  /* Center the image vertically if it's smaller than its container */
+  object-position: center;
+}
+
+.product-info {
+  padding: 15px;
+  text-align: left;
+  border: 0;
+}
+
+.product-info h2 {
+  margin: 0;
+  color: #333;
+}
+
+.product-info p {
+  margin: 5px 0;
+}
+
+.product-info span {
+  font-size: 0.9em;
+  color: #666;
+}
