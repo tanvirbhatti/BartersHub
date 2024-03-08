@@ -10,7 +10,8 @@ import { addTestimonial } from './Controllers/Testimonials/add.js';
 import { editProductDetails } from './Controllers/Products/update.js';
 import { firebaseUploadMiddleware } from './Controllers/Products/storageBucket.js';
 import {userProfile, getAllUsers} from './Controllers/userProfile/UserProfileController.js';
-
+import { addFeaturedProduct } from './Controllers/Featured Products/add.js';
+import { getFeaturedProducts } from './Controllers/Featured Products/get.js';
 import cors from 'cors';
 import session from 'express-session';
 
@@ -35,7 +36,8 @@ app.get('/get-testimonials',getTestimonials)
 app.post('/add-testimonial',addTestimonial)
 app.get('/userprofile/:id', userProfile)
 app.get('/allusers', getAllUsers)
-
+app.post('/add-featured-product',addFeaturedProduct)
+app.get('/get-featured-products',getFeaturedProducts)
 // Start the server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
