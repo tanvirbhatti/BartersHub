@@ -10,8 +10,8 @@ import { addTestimonial } from './Controllers/Testimonials/add.js';
 import { editProductDetails } from './Controllers/Products/update.js';
 import { firebaseUploadMiddleware } from './Controllers/Products/storageBucket.js';
 import {userProfile, getAllUsers} from './Controllers/userProfile/UserProfileController.js';
-import { addFeaturedProduct } from './Controllers/Featured Products/add.js';
-import { getFeaturedProducts } from './Controllers/Featured Products/get.js';
+import { addFeaturedProduct } from './Controllers/FeaturedProducts/add.js';
+import { getFeaturedProducts } from './Controllers/FeaturedProducts/get.js';
 import cors from 'cors';
 import session from 'express-session';
 
