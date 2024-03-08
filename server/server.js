@@ -1,18 +1,19 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import registerUser from './Controllers/Authentication/register.js';
-import { login } from './Controllers/Authentication/login.js';
+import { login, logout } from './Controllers/Authentication/login.js';
 import { addProduct } from './Controllers/Products/add.js';
 import { getProducts } from './Controllers/Products/get.js';
 import { deleteProduct } from './Controllers/Products/delete.js';
 import {getTestimonials} from './Controllers/Testimonials/get.js';
 import { addTestimonial } from './Controllers/Testimonials/add.js';
 import { editProductDetails } from './Controllers/Products/update.js';
-import { firebaseUploadMiddleware } from './Controllers/Products/storageBucket.js';
-import {userProfile, getAllUsers} from './Controllers/userProfile/UserProfileController.js';
+import { firebaseUploadMiddleware } from './Middleware/storageBucket.js';
+import {userProfile, getAllUsers, getUserListings, deleteListing, updateListing} from './Controllers/userProfile/UserProfileController.js';
 
 import cors from 'cors';
 import session from 'express-session';
+import checkUser from './Middleware/checkUser.js';
 
 
 const app = express();
@@ -25,16 +26,28 @@ app.use(session({
 }))
 
 // API End-points
+
+//Authentication endpionts
 app.post('/register', registerUser);
 app.post('/login', login);
-app.post('/add-product',firebaseUploadMiddleware, addProduct);
+app.post('/logout', logout);
+
+//product endpoints
+app.post('/add-product',checkUser,firebaseUploadMiddleware, addProduct);
 app.get('/get-products', getProducts)
-app.put('/edit-product/:productId', editProductDetails);
-app.delete('/delete-product/:productId', deleteProduct);
+
+
+//Home page endpoints
 app.get('/get-testimonials',getTestimonials)
 app.post('/add-testimonial',addTestimonial)
+
+//User data endpoints
 app.get('/userprofile/:id', userProfile)
 app.get('/allusers', getAllUsers)
+app.get('/user-listings',checkUser,getUserListings)
+app.post('/edit-product',checkUser, updateListing);
+app.delete('/delete-product/:id',checkUser, deleteListing);
+
 
 // Start the server
 const PORT = process.env.PORT || 8000;

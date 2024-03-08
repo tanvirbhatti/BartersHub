@@ -4,10 +4,10 @@ import Footer from '../../UI/Footer/Footer'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Signup from '../Signup/Signup.jsx';
 import Login from '../Login/Login.jsx';
-import Product_Listing from '../ProductListing/ProductListing.jsx';
 import ListingUpload from '../listing_upload/ListingUpload.jsx';
 import UserProfile from '../UserPage/User_profile.jsx';
 import ProductHome from '../Product_HomePage/index.js';
+import Product_Listing from '../Product_Listing/Product_Listing.jsx';
 
 const Home = () => {
     return (

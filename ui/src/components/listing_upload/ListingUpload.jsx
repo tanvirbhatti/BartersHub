@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ListingUpload.css';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom'; 
 
 const ListingUpload = () => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        category: 'category1', // Default category
+        category: 'category1', 
         price: '',
         phoneNumber: '',
         email: ''
@@ -16,6 +17,16 @@ const ListingUpload = () => {
     const [imagePreview, setImagePreview] = useState(null); // New state for image preview
     const [errors, setErrors] = useState({});
     const [isUploading, setIsUploading] = useState(false);
+
+    const navigate = useNavigate(); // Create navigate function
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert("Login required for uploading listings");
+            navigate('/login'); // Redirect to login
+        }
+    }, [navigate]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -90,9 +101,13 @@ const ListingUpload = () => {
             }
             setIsUploading(true);
             try {
+                const token = localStorage.getItem('token');
+
+                // Add an Authorization header with the token to your axios request
                 const response = await axios.post("http://localhost:8000/add-product", formDataToSend, {
                     headers: {
-                        'Content-Type': 'multipart/form-data'
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}` 
                     }
                 });
                 alert(response.data.message);

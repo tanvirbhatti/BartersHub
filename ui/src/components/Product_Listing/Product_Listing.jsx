@@ -12,6 +12,7 @@ const Product_Listing = () => {
         fetch("http://localhost:8000/get-products")
             .then(response => response.json())
             .then(data => {
+                console.log(data)
                 // Assuming your response data structure is { "list of products": [...] }
                 setProducts(data["list of products"]);
             })
