@@ -3,7 +3,7 @@ import React from "react";
 export default function Testimonials() {
     return (
         <>
-            <div className="row d-flex justify-content-center position-relative">
+            <div className="d-flex justify-content-center position-relative">
                 <div className="col-md-8">
                     <div className="card shadow p-1 mb-5 bg-light rounded">
                         <div className="card-body m-0">

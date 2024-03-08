@@ -32,3 +32,7 @@
     background: transparent linear-gradient(84deg, #F21616 0%, #F28B50 100%) 0% 0% no-repeat padding-box;
     color: white;
   }
+
+  .no_gutter{
+    --bs-gutter-x: 0rem !important;
+   }

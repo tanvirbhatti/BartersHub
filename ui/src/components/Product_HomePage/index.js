@@ -71,7 +71,7 @@ const _items = [
 const ProductHome = () => {
     return (
         <>
-            <div className="row p-5 align-items-center">
+            <div className="row p-5 align-items-center no_gutter">
                 <div className="col-md-6">
                     <p className='text-dark'><b>"Empower your exchanges, cultivate connections, thrive with Barters Hub today!"</b></p>
                     <div className="d-flex gap-2">
@@ -83,9 +83,9 @@ const ProductHome = () => {
                 </div>
             </div>
 
-            <div className="row p-5 align-items-center">
+            <div className="row p-5 align-items-center no_gutter">
                 <h3><b>Categories: </b></h3>
-                <div className="col-md-12">
+                <div className="col-md-8">
                     <button type="button" className="btn btn-secondary mr-10px">
                         All Categories
                     </button>
