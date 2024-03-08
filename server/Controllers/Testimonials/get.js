@@ -10,7 +10,7 @@ export async function getTestimonials(req, res) {
     if (foundTestimonials.length <= 0) {
       return res.json({ error: "couldn't find any testimonials" });
     }
-    return res.status(200).json({"list of testimonials": foundTestimonials});
+    return res.status(200).json(foundTestimonials);
   
   } catch (err) {
     console.log(err)
