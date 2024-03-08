@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CustomFormField from "../../UI/CustomFormField/CustomFormField";
 import Hero from "./LogIn.png";
 import styles from "./Login.module.css";
@@ -21,7 +21,20 @@ const Login = () => {
   const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
+  useEffect(() => {
+    const rememberMeValue = localStorage.getItem('rememberMe');
+    if (rememberMeValue === 'true') {
+      const storedEmail = localStorage.getItem('email');
+      const storedPassword = localStorage.getItem('password');
+      if (storedEmail && storedPassword) {
+        setEmail(storedEmail);
+        setPassword(storedPassword);
+      }
+    }
+  }, []);
+  
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -33,6 +46,7 @@ const Login = () => {
     })
     e.preventDefault();
     const result = schema.safeParse({ email, password });
+    
     if (result.success) {
       const response = await
         axios({
@@ -46,6 +60,15 @@ const Login = () => {
         })
         if(response.data.message){
           toast.success(response.data.message);
+          if (rememberMe) {
+            localStorage.setItem('rememberMe', 'true');
+            localStorage.setItem('email', email);
+            localStorage.setItem('password', password);
+          } else {
+            localStorage.removeItem('rememberMe');
+            localStorage.removeItem('email');
+            localStorage.removeItem('password');
+          }
           navigate('/');
         }
         else{
@@ -74,6 +97,10 @@ const Login = () => {
       default:
         break;
     }
+  };
+
+  const handleRememberMeChange = () => {
+    setRememberMe(!rememberMe);
   };
 
   return (
@@ -105,8 +132,8 @@ const Login = () => {
             />
 
             <div className={styles.remember}>
-              <input type="checkbox" name="remember" id="" />
-              Remember me
+              <input type="checkbox" name="remember" id="remeber" checked={rememberMe} onChange={handleRememberMeChange} />
+              <label> &nbsp; Remember Me</label>
             </div>
             <GradientButton className={styles.button} text="Login" rounded={true} />
             <div className={styles.register} >Don&apos;t have an account?<span ><a href="/signup">Register Here</a> </span></div>

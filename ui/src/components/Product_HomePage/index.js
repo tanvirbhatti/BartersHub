@@ -85,7 +85,7 @@ const ProductHome = () => {
 
             <div className="row p-5 align-items-center no_gutter">
                 <h3><b>Categories: </b></h3>
-                <div className="col-md-8">
+                <div>
                     <button type="button" className="btn btn-secondary mr-10px">
                         All Categories
                     </button>

@@ -7,6 +7,7 @@ import { z } from "zod";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useNavigate} from 'react-router-dom'
 
 const schema = z.object({
   firstName: z.string({ required_error: "First name is required" })
@@ -34,6 +35,7 @@ const provincesList = [
 ];
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -108,7 +110,8 @@ const Signup = () => {
             "areaCode": "M5V 2L7",
           }
         })
-        toast.success(response.data.message)
+        toast.success(response.data.message+`\n Login Now!`);
+        navigate('/login')
       }
       catch(error){
         if (error.response && error.response.status === 400) {
