@@ -1,6 +1,7 @@
-import React from 'react'
+import React,{useEffect, useState} from 'react'
 import "./Product_Home.css"
 import Testimonials from './Testimonials';
+
 
 const _items = [
     {
@@ -69,6 +70,19 @@ const _items = [
 ];
 
 const ProductHome = () => {
+    const [products,setProducts] = useState([])
+    useEffect(() => {
+        // Fetch data from the API
+        
+        fetch("http://localhost:8000/get-featured-products")
+            .then(response => response.json())
+            .then(data => {
+                // Assuming your response data structure is { "list of products": [...] }
+                setProducts(data);
+                console.log(products.featuredProducts)
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
     return (
         <>
             <div className="row p-5 align-items-center no_gutter">
@@ -121,21 +135,22 @@ const ProductHome = () => {
             </div>
 
             <div>
-
                 <div className="product-list-container p-5">
                     <h3><b>Featured Product: </b></h3>
                     <div className="scrolling-wrapper">
-                        {_items.map((product) => (
-                            <div key={product.id} className="product-card border-0 shadow-none">
-                                <img src={product.imageUrl} alt={product.title} style={{ width: '100%', height: '200px' }} />
-                                <div className="card-body">
-                                    <h5 className="card-title">{product.title}</h5>
-                                    <p className="card-text">{product.description}</p>
-                                    <p className="card-text">{product.price}</p>
-                                    <button className='btn btn-sm view_button'>View Product</button>
+                    {products.featuredProducts && products.featuredProducts.map((product,index)=>{
+                            return(
+                                <div key={index} className="product-card border-0 shadow-none">
+                                    <img src={product.product.image} alt={product.product.title} style={{ width: '100%', height: '200px' }} />
+                                    <div className="card-body">
+                                        <h5 className="card-title">{product.product.title}</h5>
+                                        <p className="card-text">{product.product.description}</p>
+                                        <p className="card-text">{product.product.price}</p>
+                                        <button className='btn btn-sm view_button'>View Product</button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            )
+                        })}
                     </div>
                 </div>
 
