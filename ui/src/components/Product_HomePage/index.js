@@ -155,14 +155,12 @@ const ProductHome = () => {
                         ))}
                        
                     </div>
-                    <h3 className=' pt-5'><b>Testimonials:</b></h3>
+                    <h3 className='pt-5 pb-3'><b>Testimonials:</b></h3>
                     {
                 <Testimonials />
             }
                 </div>
-               
             </div>
-            
         </>
     )
 }

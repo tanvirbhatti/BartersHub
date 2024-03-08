@@ -19,40 +19,36 @@ export default function Testimonials() {
 
     return (
         <>
-            <div className="row d-flex justify-content-center position-relative">
-                <div>
-                    {testimonials.map((testimonial,index) => (
-                        <div key={index} className="row d-flex justify-content-center position-relative">                        
-                            <div className="col-md-8">
-                                <div className="card shadow p-1 mb-5 bg-light rounded">
-                                    <div className="card-body m-0">
-                                        <div className="row">
-                                            <div className="col-lg-12">
-                                                <p className="text-muted fw-light">{testimonial.testimonialText}</p>
-                                                <div>
-                                                    <p className="mb-0 text-muted">{testimonial.testimonialProduct}</p>
-                                                    <p className="text-end fw-bold mb-0 text-muted">{testimonial.user.firstName}</p>
-                                                </div>
-                                            </div>
+            {testimonials.map((testimonial,index) => (
+                <div key={index} className="row d-flex justify-content-start position-relative">                        
+                    <div className="col-md-8">
+                        <div className="card shadow p-1 mb-5 bg-light rounded">
+                            <div className="card-body m-0">
+                                <div className="row">
+                                    <div className="col-lg-12">
+                                        <p className="text-muted fw-light">{testimonial.testimonialText}</p>
+                                        <div>
+                                            <p className="mb-0 text-muted">{testimonial.testimonialProduct}</p>
+                                            <p className="text-end fw-bold mb-0 text-muted">{testimonial.user.firstName}</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-md-1">
-                                <div className="position-relative">
-                                    <img
-                                    src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20%2810%29.webp"
-                                        className="rounded-circle shadow"
-                                        alt="avatar"
-                                        width="75"
-                                        height="75"
-                                    />
-                                </div>
-                            </div>
                         </div>
-                    ))}            
+                    </div>
+                    <div className="col-md-1">
+                        <div className="position-relative">
+                            <img
+                            src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20%2810%29.webp"
+                                className="rounded-circle shadow"
+                                alt="avatar"
+                                width="75"
+                                height="75"
+                            />
+                        </div>
+                    </div>
                 </div>
-            </div>
+            ))}            
         </>
     );
 }
