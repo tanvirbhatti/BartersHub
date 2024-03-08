@@ -5,6 +5,8 @@ import styles from "./Login.module.css";
 import GradientButton from "../../UI/GradientButton/GradientButton";
 import { z } from "zod";
 import axios from 'axios';
+import {toast} from 'react-toastify';
+import {useNavigate} from 'react-router-dom';
 
 const schema = z.object({
   email: z.string({ required_error: "email is required" })
@@ -16,6 +18,7 @@ const schema = z.object({
 })
 
 const Login = () => {
+  const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -42,10 +45,11 @@ const Login = () => {
           }
         })
         if(response.data.message){
-          alert(response.data.message)
+          toast.success(response.data.message);
+          navigate('/');
         }
         else{
-          alert(response.data.error)
+          toast.error(response.data.error)
         }
       
     } else {
