@@ -1,5 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
+import session from 'express-session';
 import registerUser from './Controllers/Authentication/register.js';
 import { login } from './Controllers/Authentication/login.js';
 import { addProduct } from './Controllers/Products/add.js';
@@ -12,8 +14,7 @@ import { firebaseUploadMiddleware } from './Controllers/Products/storageBucket.j
 import {userProfile, getAllUsers} from './Controllers/userProfile/UserProfileController.js';
 import { addFeaturedProduct } from './Controllers/FeaturedProducts/add.js';
 import { getFeaturedProducts } from './Controllers/FeaturedProducts/get.js';
-import cors from 'cors';
-import session from 'express-session';
+import { getRecentlyListedProducts } from './Controllers/RecentlyAddedProducts/get.js';
 
 
 const app = express();
@@ -38,6 +39,8 @@ app.get('/userprofile/:id', userProfile)
 app.get('/allusers', getAllUsers)
 app.post('/add-featured-product',addFeaturedProduct)
 app.get('/get-featured-products',getFeaturedProducts)
+app.get('/get-recently-products',getRecentlyListedProducts)
+
 // Start the server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
