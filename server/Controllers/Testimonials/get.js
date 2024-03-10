@@ -4,7 +4,7 @@ export async function getTestimonials(req, res) {
   const db = await connectToDb();
 
   try {
-    const cursor = db.collection("testimonials").find().limit(3);
+    const cursor = db.collection("testimonials").find().limit(5);
     const foundTestimonials = await cursor.toArray();
 
     if (foundTestimonials.length <= 0) {
