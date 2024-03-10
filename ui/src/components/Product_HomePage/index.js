@@ -113,10 +113,13 @@ const ProductHome = () => {
                             )
                         }
                     </div>
-                    <h3 className='pt-5 pb-3'><b>Testimonials:</b></h3>
-                    {
-                <Testimonials />
-            }
+                </div>
+
+                <div className="product-list-container p-5">
+                        <h3 className='pt-5 pb-3'><b>Testimonials:</b></h3>
+                        {
+                            <Testimonials />
+                        }
                 </div>
             </div>
         </>

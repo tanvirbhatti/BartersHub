@@ -4,6 +4,9 @@
     margin-top: 10px;
   }
   
+.card{
+  height: 450px!important;
+}
   .scrolling-wrapper {
     display: flex;
     flex-wrap: nowrap;
