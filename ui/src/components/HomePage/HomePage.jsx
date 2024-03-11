@@ -115,12 +115,13 @@ const ProductHome = () => {
                     </div>
                 </div>
 
-                <div className="product-list-container p-5">
-                        <h3 className='pt-5 pb-3'><b>Testimonials:</b></h3>
+                <div className="product-list-container pt-5 pb-5">
+                        <h3 className='p-5 pb-3'><b>Testimonials:</b></h3>
                         {
-                            <Testimonials />
+                            <Testimonials/>
                         }
                 </div>
+                
             </div>
         </>
     )

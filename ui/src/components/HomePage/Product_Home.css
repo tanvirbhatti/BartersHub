@@ -39,3 +39,7 @@
   .no_gutter{
     --bs-gutter-x: 0rem !important;
    }
+
+  .myImage{
+    width : 100px;
+  }
