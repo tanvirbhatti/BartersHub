@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ListingUpload.css';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom'; 
+import { toast } from 'react-toastify';
 
 const ListingUpload = () => {
     const [formData, setFormData] = useState({
@@ -23,7 +24,7 @@ const ListingUpload = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
-            alert("Login required for uploading listings");
+            toast.error("Login required for uploading listings");
             navigate('/login'); // Redirect to login
         }
     }, [navigate]);
@@ -110,7 +111,7 @@ const ListingUpload = () => {
                         'Authorization': `Bearer ${token}` 
                     }
                 });
-                alert(response.data.message);
+                toast.success(response.data.message);
                 // Clear the form after successful submission
                 setFormData({
                     title: '',
