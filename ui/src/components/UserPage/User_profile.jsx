@@ -5,6 +5,7 @@ import GradientButton from '../../UI/GradientButton/GradientButton';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from "axios";
+import { toast } from "react-toastify";
 
 
 const UserProfile = () => {
@@ -72,10 +73,10 @@ const UserProfile = () => {
             if (response.ok) {
                 setUser(null);
                 localStorage.removeItem('token');
-                alert("Logout successful");
+                toast.success("Logout successful");
                 window.location.href = '/'; // Redirect to home page
             } else {
-                alert('Logout failed!');
+                toast.error('Logout failed!');
             }
         } catch (error) {
             console.error("Error during logout:", error);
@@ -85,7 +86,7 @@ const UserProfile = () => {
     const handleDelete = async (productId) => {
         const token = localStorage.getItem('token');
         if (!token) {
-            alert('You must be logged in to delete listings.');
+            toast.error('You must be logged in to delete listings.');
             return;
         }
 
@@ -99,10 +100,10 @@ const UserProfile = () => {
                 });
 
                 if (response.ok) {
-                    alert('Listing deleted successfully.');
+                    toast.success('Listing deleted successfully.');
                     fetchListings(token); // Refresh listings after deletion
                 } else {
-                    alert('Failed to delete listing.');
+                    toast.error('Failed to delete listing.');
                 }
             } catch (error) {
                 console.error("Error during delete:", error);
@@ -122,7 +123,7 @@ const UserProfile = () => {
     const handleUpdateListing = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
-            alert('You must be logged in to update listings.');
+            toast.error('You must be logged in to update listings.');
             return;
         }
 
@@ -147,11 +148,11 @@ const UserProfile = () => {
             });
 
             if (response.ok) {
-                alert('Listing updated successfully.');
+                toast.success('Listing updated successfully.');
                 setShowModal(false);
                 fetchListings(token); // Refresh the listings
             } else {
-                alert('Failed to update listing.');
+                toast.error('Failed to update listing.');
             }
         } catch (error) {
             console.error("Error during update:", error);
