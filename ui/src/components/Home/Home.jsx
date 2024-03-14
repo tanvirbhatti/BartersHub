@@ -4,10 +4,10 @@ import Footer from '../../UI/Footer/Footer'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Signup from '../Signup/Signup.jsx';
 import Login from '../Login/Login.jsx';
-import Product_Listing from '../ProductListing/ProductListing.jsx';
+import ProductListing from '../ProductListing/ProductListing.jsx';
 import ListingUpload from '../listing_upload/ListingUpload.jsx';
 import UserProfile from '../UserPage/User_profile.jsx';
-import ProductHome from '../HomePage/HomePage.jsx';
+import HomePage from '../HomePage/HomePage.jsx';
 
 const Home = () => {
     return (
@@ -17,10 +17,10 @@ const Home = () => {
                 <Routes>
                     <Route path='signup' element={<Signup />} />
                     <Route path='login' element={<Login />} />
-                    <Route path='productListings' element={<Product_Listing/>} />
+                    <Route path='productListings' element={<ProductListing/>} />
                     <Route path='ListingsUpload' element={<ListingUpload/>} />
                     <Route path='user' element={<UserProfile/>} />
-                    <Route path='/' element={<ProductHome/>} />
+                    <Route path='/' element={<HomePage/>} />
                 </Routes>
             </BrowserRouter>
             <Footer />
