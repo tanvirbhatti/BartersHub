@@ -1,6 +1,8 @@
 import React,{useEffect, useState} from 'react'
 import "./Product_Home.css"
 import Testimonials from './Testimonials';
+import Hero from "./heroImage.png";
+
 
 const ProductHome = () => {
     const [products,setProducts] = useState([])
@@ -26,18 +28,18 @@ const ProductHome = () => {
     return (
         <>
             <div className="row p-5 align-items-center no_gutter">
-                <div className="col-md-6">
-                    <p className='text-dark'><b>"Empower your exchanges, cultivate connections, thrive with Barters Hub today!"</b></p>
-                    <div className="d-flex gap-2">
+                <div className="col-md-7">
+                    <h4 className='text-dark'><b>Empower your exchanges, cultivate connections, thrive with Barters Hub today!</b></h4>
+                    <div className='pt-3'>
                         <a href="/productListings" className="btn view_button btn-outline-dark">Add Your Product</a>
                     </div>
                 </div>
-                <div className="col-md-6 text-center">
-                    <img src="https://images.pexels.com/photos/18662650/pexels-photo-18662650/free-photo-of-orange-lens-in-the-dark.png" class="img-fluid rounded-circle w-50" alt="" />
+                <div className="col-md-5 text-center">
+                    <img src={Hero} class="img-fluid w-100" alt="" />
                 </div>
             </div>
 
-            <div className="row p-5 align-items-center no_gutter">
+            <div className="row p-5 pt-0 align-items-center no_gutter">
                 <h3><b>Categories: </b></h3>
                 <div>
                     <button type="button" className="btn btn-secondary mr-10px">
@@ -75,7 +77,7 @@ const ProductHome = () => {
             </div>
 
             <div>
-                <div className="product-list-container p-5">
+                <div className="product-list-container p-5 pt-0">
                     <h3><b>Featured Product: </b></h3>
                     <div className="scrolling-wrapper">
                     {products.featuredProducts && products.featuredProducts.map((product,index)=>{
@@ -94,7 +96,7 @@ const ProductHome = () => {
                     </div>
                 </div>
 
-                <div className="product-list-container p-5">
+                <div className="product-list-container p-5 pt-0">
                     <h3><b>Recently Listed:</b></h3>
                     <div className="scrolling-wrapper">
                         {
@@ -115,8 +117,8 @@ const ProductHome = () => {
                     </div>
                 </div>
 
-                <div className="product-list-container pt-5 pb-5">
-                        <h3 className='p-5 pb-3'><b>Testimonials:</b></h3>
+                <div className="product-list-container pt-0">
+                        <h3 className='p-5 pt-0 pb-0'><b>Testimonials:</b></h3>
                         {
                             <Testimonials/>
                         }
