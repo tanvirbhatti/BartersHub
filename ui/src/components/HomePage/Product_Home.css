@@ -4,6 +4,9 @@
     margin-top: 10px;
   }
   
+.card{
+  height: 450px!important;
+}
   .scrolling-wrapper {
     display: flex;
     flex-wrap: nowrap;
@@ -18,7 +21,7 @@
   }
   
   .product-card img {
-    max-width: 100%;
+    width: 100%;
     height: auto;
   }
   
@@ -36,3 +39,7 @@
   .no_gutter{
     --bs-gutter-x: 0rem !important;
    }
+
+  .myImage{
+    width : 100px;
+  }

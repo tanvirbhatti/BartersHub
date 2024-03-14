@@ -6,8 +6,8 @@ import Signup from '../Signup/Signup.jsx';
 import Login from '../Login/Login.jsx';
 import ListingUpload from '../listing_upload/ListingUpload.jsx';
 import UserProfile from '../UserPage/User_profile.jsx';
-import ProductHome from '../Product_HomePage/index.js';
-import Product_Listing from '../Product_Listing/Product_Listing.jsx';
+import ProductListing from '../ProductListing/ProductListing.jsx';
+import HomePage from '../HomePage/HomePage.jsx';
 
 const Home = () => {
     return (
@@ -17,10 +17,10 @@ const Home = () => {
                 <Routes>
                     <Route path='signup' element={<Signup />} />
                     <Route path='login' element={<Login />} />
-                    <Route path='productListings' element={<Product_Listing/>} />
+                    <Route path='productListings' element={<ProductListing/>} />
                     <Route path='ListingsUpload' element={<ListingUpload/>} />
                     <Route path='user' element={<UserProfile/>} />
-                    <Route path='/' element={<ProductHome/>} />
+                    <Route path='/' element={<HomePage/>} />
                 </Routes>
             </BrowserRouter>
             <Footer />

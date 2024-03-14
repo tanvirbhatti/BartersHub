@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import Productcard from "../../UI/Cards/Productcard.jsx";
-import "./Product_listing.css"
+import "./Productlisting.css"
 import { Link } from 'react-router-dom';
 
-const Product_Listing = () => {
+const ProductListing = () => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
@@ -49,4 +49,4 @@ const Product_Listing = () => {
     );
 }
 
-export default Product_Listing;
+export default ProductListing;

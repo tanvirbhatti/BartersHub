@@ -1,6 +1,6 @@
 import { connectToDb } from '../../db.js';
 import  jwt from 'jsonwebtoken';
-
+import { ObjectId } from 'mongodb';
 
 export async function addTestimonial(req, res) {
     try {
@@ -40,13 +40,13 @@ export async function addTestimonial(req, res) {
                     return res.json({ error: "Please provide all required fields" });
                 }
 
+                const user = await db.collection('users').findOne({_id: new ObjectId(userId)});
                 const timeStamp = new Date();
                 const newTestimonial = await db.collection('testimonials').insertOne(
                     { 
-                        userId, testimonialText, rating, userConsent, testimonialProduct, timeStamp
+                        testimonialText, rating, userConsent, testimonialProduct, timeStamp, user
                     });
-                return res.status(200).json({ message: 'Product added successfully', newTestimonial });
-    
+                return res.status(200).json({ message: 'Testimonial Added Successfully', newTestimonial });
             }
         }
     } catch (error) {
