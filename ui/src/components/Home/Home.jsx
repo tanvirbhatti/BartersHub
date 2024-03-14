@@ -4,9 +4,9 @@ import Footer from '../../UI/Footer/Footer'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Signup from '../Signup/Signup.jsx';
 import Login from '../Login/Login.jsx';
-import ProductListing from '../ProductListing/ProductListing.jsx';
 import ListingUpload from '../listing_upload/ListingUpload.jsx';
 import UserProfile from '../UserPage/User_profile.jsx';
+import ProductListing from '../ProductListing/ProductListing.jsx';
 import HomePage from '../HomePage/HomePage.jsx';
 
 const Home = () => {

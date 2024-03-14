@@ -8,7 +8,6 @@ export async function editProductDetails(req, res) {
         const secretKey = "abcd";
 
         let userId;
-        // Verify and decode the token
         const token = req.session.token;
         if (!token) {
             res.json({

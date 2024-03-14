@@ -1,6 +1,6 @@
 import multer from 'multer';
 import admin from 'firebase-admin';
-import serviceAccount from './bartershub-ce704-firebase-adminsdk-xteoa-7eb3778243.json' assert { type: 'json' };;
+import serviceAccount from '../Controllers/Products/bartershub-ce704-firebase-adminsdk-xteoa-7eb3778243.json' assert { type: 'json' };;
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),

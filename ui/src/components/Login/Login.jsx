@@ -59,6 +59,7 @@ const Login = () => {
           }
         })
         if(response.data.message){
+          
           toast.success(response.data.message);
           if (rememberMe) {
             localStorage.setItem('rememberMe', 'true');
@@ -69,6 +70,7 @@ const Login = () => {
             localStorage.removeItem('email');
             localStorage.removeItem('password');
           }
+          localStorage.setItem('token', response.data.token)
           navigate('/');
         }
         else{
