@@ -40,7 +40,7 @@ export async function login(req, res) {
             );
             if (token) {
               req.session.token = token;
-              return res.json({ message: "Successfully logedIn", token });
+              return res.json({ message: "Successfully loggedIn", token });
             } else {
               return res.json({ err: "token undefiner unauthorized access" });
             }
