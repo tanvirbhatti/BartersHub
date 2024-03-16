@@ -1,0 +1,27 @@
+.CardMargin {
+    margin-right: 20px;
+}
+.Btn {
+    box-sizing: border-box;
+    background-color: white;
+    padding: 0.5rem 2.4rem;
+    border: none;
+    font-family: inherit;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+    width:90%
+  }
+
+.Btn:hover{
+    border : 1px solid black !important;
+}
+
+.Btn.active{
+    border : 1px solid black !important;
+    border-left: 20px solid #f21616 !important;
+}
+
+.hadingUnderLiner{
+    border-bottom: 2px solid #f21616;
+}
