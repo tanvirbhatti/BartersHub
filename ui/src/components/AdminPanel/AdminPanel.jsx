@@ -37,8 +37,11 @@ export const AdminPanel = () =>{
                         }
                     </div>
                 </div>
-                <div className='shadow rounded' style={{width:"85%"}}>
+                <div className='shadow rounded p-3' style={{width:"85%"}}>
                     {/* render active component */}
+                    <h3 className='pb-0 hadingUnderLiner col-lg-2'>
+                        {activeComponent}
+                    </h3>
                     {renderComponent()}
                 </div>
             </div>

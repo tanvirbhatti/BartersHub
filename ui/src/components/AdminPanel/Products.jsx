@@ -12,9 +12,8 @@ export const Products = () => {
     },[]);
     if(products)   {products.forEach((e)=>{console.log(e)})}
    return ( 
-   <div className="p-3">
-        <h5 className="hadingUnderLiner col-md-1">Products</h5>
-        <thead className="row thead-dark align-items-center text-center">
+   <div className="p-3 w-100">
+        <thead className="row bg-dark text-white align-items-center text-center p-2">
                 <th className="col-md-1">Image</th>
                 <th className="col-md-2">Title</th>
                 <th className="col-md-3">Featured Product</th>
@@ -25,9 +24,9 @@ export const Products = () => {
         </thead>
         {products && products.map((product,index)=>{
             return(
-                <div className="row p-2 align-items-center text-center" key={index}>
+                <div className="row p-2 align-items-center text-center border-bottom" key={index}>
                     <div className="col-md-1 p-0">
-                        <img src={product.image} alt={product.title} style={{width : '100%', height:'80px'}} />
+                        <img src={product.image} alt={product.title} style={{width : '100%', height:'70px'}} />
                     </div>
                     <div className="col-md-2">{product.title}</div>
                     <div className="col-md-3 justify-content-center d-flex">Featured Product <ToggleButton/>
