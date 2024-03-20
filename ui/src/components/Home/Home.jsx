@@ -8,6 +8,7 @@ import ListingUpload from '../listing_upload/ListingUpload.jsx';
 import UserProfile from '../UserPage/User_profile.jsx';
 import ProductListing from '../ProductListing/ProductListing.jsx';
 import HomePage from '../HomePage/HomePage.jsx';
+import {AdminPanel} from '../AdminPanel/AdminPanel.jsx'
 
 const Home = () => {
     return (
@@ -21,6 +22,7 @@ const Home = () => {
                     <Route path='ListingsUpload' element={<ListingUpload/>} />
                     <Route path='user' element={<UserProfile/>} />
                     <Route path='/' element={<HomePage/>} />
+                    <Route path='admin' element={<AdminPanel/>} />
                 </Routes>
             </BrowserRouter>
             <Footer />
