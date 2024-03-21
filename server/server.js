@@ -11,7 +11,7 @@ import {getTestimonials} from './Controllers/Testimonials/get.js';
 import { addTestimonial } from './Controllers/Testimonials/add.js';
 import { editProductDetails } from './Controllers/Products/update.js';
 import { firebaseUploadMiddleware } from './Middleware/storageBucket.js';
-import { userProfile, getAllUsers, getUserListings, deleteListing, updateListing, disableUser, deleteUser } from './Controllers/userProfile/UserProfileController.js';
+import { userProfile, getAllUsers, getUserListings, deleteListing, updateListing, disableUser, deleteUser, fetchAllUsers } from './Controllers/userProfile/UserProfileController.js';
 
 import checkUser from './Middleware/checkUser.js';
 import { addFeaturedProduct } from './Controllers/FeaturedProducts/add.js';
@@ -57,6 +57,16 @@ app.get('/get-recently-products',getRecentlyListedProducts);
 
 router.put('/users/:userId/disable', disableUser); // Endpoint to disable a user
 router.delete('/users/:userId', deleteUser); // Endpoint to delete a user
+
+// Route to fetch all users
+router.get('/users', async (req, res) => {
+  try {
+      await fetchAllUsers(req, res);
+  } catch (error) {
+      console.error('Error fetching all users:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 // Start the server
