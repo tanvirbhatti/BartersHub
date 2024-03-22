@@ -35,7 +35,7 @@ const ProductHome = () => {
                     </div>
                 </div>
                 <div className="col-md-5 text-center">
-                    <img src={Hero} class="img-fluid w-100" alt="" />
+                    <img src={Hero} className="img-fluid w-100" alt="" />
                 </div>
             </div>
 
