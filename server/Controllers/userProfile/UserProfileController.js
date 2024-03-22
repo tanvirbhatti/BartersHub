@@ -87,13 +87,14 @@ export async function deleteListing(req, res) {
 export async function updateListing(req, res) {
   try {
       const db = await connectToDb();
-      const listingId = req.params.id;
+      const listingId = req.body._id;
       const userId = req.user.userId;
       const listingUpdates = req.body;
-      console.log(listingId)
-      console.log('Update Data:', req.body);
+      console.log(listingId, "listing ID")
+      console.log('Update Data:', listingUpdates);
 
       const listingObjectId = new ObjectId(listingId);
+      // console.log(listingObjectId)
 
       const existingListing = await db.collection('products').findOne({ _id: listingObjectId });
       if (!existingListing) {
