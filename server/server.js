@@ -6,6 +6,10 @@ import multer from 'multer';
 
 
 
+import multer from 'multer';
+
+
+
 import registerUser from './Controllers/Authentication/register.js';
 import { login, logout } from './Controllers/Authentication/login.js';
 import { addProduct } from './Controllers/Products/add.js';
@@ -15,7 +19,7 @@ import { getTestimonials } from './Controllers/Testimonials/get.js';
 import { addTestimonial } from './Controllers/Testimonials/add.js';
 import { editProductDetails } from './Controllers/Products/update.js';
 import { firebaseUploadMiddleware } from './Middleware/storageBucket.js';
-import { userProfile, getAllUsers, getUserListings, deleteListing, updateListing, disableUser, deleteUser, fetchAllUsers } from './Controllers/userProfile/UserProfileController.js';
+import { userProfile, getUserListings, deleteListing, updateListing, disableUser, deleteUser, fetchAllUsers, enableUser } from './Controllers/userProfile/UserProfileController.js';
 
 import checkUser from './Middleware/checkUser.js';
 import { addFeaturedProduct } from './Controllers/FeaturedProducts/add.js';
@@ -67,20 +71,14 @@ app.post('/add-featured-product', addFeaturedProduct)
 app.get('/get-featured-products', getFeaturedProducts)
 app.get('/get-recently-products', getRecentlyListedProducts);
 
-<<<<<<< Updated upstream
-const router = Router();
-router.put('/users/:userId/disable', disableUser); // Endpoint to disable a user
-router.delete('/users/:userId', deleteUser); // Endpoint to delete a user
-=======
 app.put('/users/:userId/disable', disableUser); // Endpoint to disable a user
 
 app.put('/users/:userId/enable',enableUser);//Endpoint to enable a user
 
 app.delete('/users/:userId', deleteUser); // Endpoint to delete a user
->>>>>>> Stashed changes
 
 // Route to fetch all users
-router.get('/users', async (req, res) => {
+app.get('/users', async (req, res) => {
   try {
     await fetchAllUsers(req, res);
   } catch (error) {
