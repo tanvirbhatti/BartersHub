@@ -19,20 +19,6 @@ export async function userProfile(req, res) {
     }
   }
 
-
-  export async function getAllUsers(req, res) {
-    try {
-      const db = await connectToDb();
-      const users = await db.collection('users').find().toArray();
-      res.status(200).json({ message: 'All users fetched successfully', users });
-    } catch (error) {
-      console.error('Error fetching users:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  }
-
-
-
 export async function getUserListings(req, res) {
     try {
         const db = await connectToDb();
@@ -146,11 +132,57 @@ export async function disableUser(req, res) {
           return res.status(400).json({ error: 'User ID is required' });
         } else {
           const result = await db.collection('users').updateOne(
-            { _id: ObjectId(userToUpdateId) },
+            { _id: new ObjectId(userToUpdateId) },
             { $set: { disabled: true } }
           );
           if (result.modifiedCount === 1) {
             res.status(200).json({ message: 'User disabled successfully' });
+          } else {
+            res.status(404).json({ error: 'User not found' });
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error disabling user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+// Enable a user by updating their status
+export async function enableUser(req, res) {
+  try {
+    const db = await connectToDb();
+    let userId;
+    // Verify and decode the token
+    const token = req.session.token;
+    if (!token) {
+      return res.status(401).json({ error: 'Login error. Please log in before disabling the user.' });
+    } else {
+      jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+          // Handle verification error
+          console.error('Token verification failed:', err);
+          return res.status(401).json({ error: 'Token verification failed. Please log in again.' });
+        } else {
+          // Extract userId from decoded token
+          userId = decoded.userId;
+        }
+      });
+
+      if (!userId) {
+        return res.status(401).json({ error: 'Token is not trusted. Please try logging in again.' });
+      } else {
+        const userToUpdateId = req.params.userId;
+        if (!userToUpdateId) {
+          return res.status(400).json({ error: 'User ID is required' });
+        } else {
+          const result = await db.collection('users').updateOne(
+            { _id: new ObjectId(userToUpdateId) },
+            { $set: { disabled: false } }
+          );
+          if (result.modifiedCount === 1) {
+            res.status(200).json({ message: 'User enabled successfully' });
           } else {
             res.status(404).json({ error: 'User not found' });
           }
@@ -192,7 +224,7 @@ export async function deleteUser(req, res) {
         if (!userToDeleteId) {
           return res.status(400).json({ error: 'User ID is required' });
         } else {
-          const result = await db.collection('users').deleteOne({ _id: ObjectId(userToDeleteId) });
+          const result = await db.collection('users').deleteOne({ _id: new ObjectId(userToDeleteId) });
           if (result.deletedCount === 1) {
             res.status(200).json({ message: 'User deleted successfully' });
           } else {
