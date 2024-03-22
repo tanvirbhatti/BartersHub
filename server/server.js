@@ -11,7 +11,7 @@ import {getTestimonials} from './Controllers/Testimonials/get.js';
 import { addTestimonial } from './Controllers/Testimonials/add.js';
 import { editProductDetails } from './Controllers/Products/update.js';
 import { firebaseUploadMiddleware } from './Middleware/storageBucket.js';
-import { userProfile, getAllUsers, getUserListings, deleteListing, updateListing, disableUser, deleteUser, fetchAllUsers } from './Controllers/userProfile/UserProfileController.js';
+import { userProfile, getUserListings, deleteListing, updateListing, disableUser, deleteUser, fetchAllUsers, enableUser } from './Controllers/userProfile/UserProfileController.js';
 
 import checkUser from './Middleware/checkUser.js';
 import { addFeaturedProduct } from './Controllers/FeaturedProducts/add.js';
@@ -46,7 +46,6 @@ app.post('/add-testimonial',addTestimonial)
 
 //User data endpoints
 app.get('/userprofile/:id', userProfile)
-app.get('/allusers', getAllUsers)
 app.get('/user-listings',checkUser,getUserListings)
 app.post('/edit-product',checkUser, updateListing);
 app.delete('/delete-product/:id',checkUser, deleteListing);
@@ -55,11 +54,12 @@ app.post('/add-featured-product',addFeaturedProduct)
 app.get('/get-featured-products',getFeaturedProducts)
 app.get('/get-recently-products',getRecentlyListedProducts);
 
-router.put('/users/:userId/disable', disableUser); // Endpoint to disable a user
-router.delete('/users/:userId', deleteUser); // Endpoint to delete a user
+app.put('/users/:userId/disable', disableUser); // Endpoint to disable a user
+app.put('/users/:userId/enable',enableUser);//Endpoint to enable a user
+app.delete('/users/:userId', deleteUser); // Endpoint to delete a user
 
 // Route to fetch all users
-router.get('/users', async (req, res) => {
+app.get('/users', async (req, res) => {
   try {
       await fetchAllUsers(req, res);
   } catch (error) {
