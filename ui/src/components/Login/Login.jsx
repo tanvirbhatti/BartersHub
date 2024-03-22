@@ -59,7 +59,6 @@ const Login = () => {
           }
         })
         if(response.data.message){
-          
           toast.success(response.data.message);
           if (rememberMe) {
             localStorage.setItem('rememberMe', 'true');
@@ -70,11 +69,14 @@ const Login = () => {
             localStorage.removeItem('email');
             localStorage.removeItem('password');
           }
-          localStorage.setItem('token', response.data.token)
-          navigate('/');
-        }
-        else{
-          toast.error(response.data.error)
+          localStorage.setItem('token', response.data.token);
+          if (response.data.isAdmin) {
+            navigate('/admin');
+          } else {
+            navigate('/');
+          }
+        } else {
+          toast.error(response.data.error);
         }
       
     } else {
