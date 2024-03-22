@@ -14,6 +14,16 @@ const UserProfile = () => {
     const [showModal, setShowModal] = useState(false);
     const [currentListing, setCurrentListing] = useState(null);
     const [updatedListing, setUpdatedListing] = useState({});
+    const [errors, setErrors] = useState({
+        title: '',
+        description: '',
+        price: '',
+        phoneNumber: '',
+        email: '',
+        category: ''
+    });
+
+
 
 
     const navigate = useNavigate(); // Create navigate function
@@ -90,7 +100,7 @@ const UserProfile = () => {
             return;
         }
 
-        if (window.confirm('Are you sure you want to delete this listing?')) {
+        
             try {
                 const response = await fetch(`http://localhost:8000/delete-product/${productId}`, {
                     method: 'DELETE',
@@ -108,11 +118,12 @@ const UserProfile = () => {
             } catch (error) {
                 console.error("Error during delete:", error);
             }
-        }
+        
     };
 
     const handleShowModal = (listing) => {
         setCurrentListing(listing);
+        setUpdatedListing(listing);
         setShowModal(true);
     };
 
@@ -120,34 +131,77 @@ const UserProfile = () => {
         setShowModal(false);
     };
 
+    const validateFields = () => {
+        let isValid = true;
+        let newErrors = {};
+
+        // Title validation
+        if (!updatedListing.title) {
+            isValid = false;
+            newErrors.title = 'Title is required.';
+        }
+
+        // Description validation
+        if (!updatedListing.description) {
+            isValid = false;
+            newErrors.description = 'Description is required.';
+        }
+
+        // Price validation
+        if (!updatedListing.price || isNaN(updatedListing.price) || Number(updatedListing.price) <= 0) {
+            isValid = false;
+            newErrors.price = 'Price must be a positive number.';
+        }
+
+        // Phone number validation (10 digits check)
+        if (!updatedListing.phoneNumber || updatedListing.phoneNumber.length !== 10 || !/^\d{10}$/.test(updatedListing.phoneNumber)) {
+            isValid = false;
+            newErrors.phoneNumber = 'Phone number must be 10 digits.';
+        }
+
+        // Email validation (simple format check)
+        if (!updatedListing.email || !/\S+@\S+\.\S+/.test(updatedListing.email)) {
+            isValid = false;
+            newErrors.email = 'Email is invalid.';
+        }
+
+        // Category validation
+        if (!updatedListing.category) {
+            isValid = false;
+            newErrors.category = 'Category is required.';
+        }
+
+        setErrors(newErrors);
+        return isValid;
+    };
+
+
     const handleUpdateListing = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
             toast.error('You must be logged in to update listings.');
             return;
         }
+        if (!validateFields()) {
+            toast.error('Please correct the errors before submitting.');
+            return;
+        }
 
         try {
-            // updatedListing._id = currentListing._id
-            // updatedListing.userId = currentListing.userId
             const formData = new FormData();
-            formData.append('title', updatedListing.title);
-            formData.append('description', updatedListing.description);
-            formData.append('price', updatedListing.price);
-            formData.append('phoneNumber', updatedListing.phoneNumber);
-            formData.append('email', updatedListing.email);
-            formData.append('category', updatedListing.category);
-            formData.append('_id', currentListing._id);
-            formData.append('userId', currentListing.userId);
+            Object.keys(updatedListing).forEach(key => {
+                formData.append(key, updatedListing[key]);
+            });
             // console.log(updatedListing)
-            const response = await axios.post('http://localhost:8000/edit-product',formData, {
+            const response = await axios.post('http://localhost:8000/edit-product', formData, {
                 headers: {
-                    // 'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`
                 }
             });
 
-            if (response.ok) {
+            console.log(response)
+            if (response.data.message) {
                 toast.success('Listing updated successfully.');
                 setShowModal(false);
                 fetchListings(token); // Refresh the listings
@@ -198,12 +252,12 @@ const UserProfile = () => {
                             {listings.map((product, index) => (
                                 <div key={product.id} className="col-md-4 mb-4">
                                     <div className="card">
-                                        <img src={product.image} alt={product.title} className="card-img-top" />
+                                        <img src={product.image} alt={product.title} className="card-img-top product-img" />
                                         <div className="card-body">
                                             <h5 className="card-title">{product.title}</h5>
                                             <p className="card-text">${product.price}</p>
                                             <div className="d-flex justify-content-between ">
-                                                {/* <button className='btn btn-sm btn-primary view_button' onClick={() => handleShowModal(product)}>Update listing</button> */}
+                                                <button className='btn btn-sm btn-primary view_button' onClick={() => handleShowModal(product)}>Update listing</button>
 
                                                 <a onClick={() => handleDelete(product._id)}>
                                                     <i class="fa-solid fa-trash"></i>
@@ -229,59 +283,72 @@ const UserProfile = () => {
                                 type="text"
                                 name="title"
                                 defaultValue={currentListing?.title}
-                                onChange={handleFormChange} // Set the onChange handler
+                                onChange={handleFormChange}
                             />
+                            {errors.title && <div className="text-danger">{errors.title}</div>}
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Description</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 name="description"
                                 defaultValue={currentListing?.description}
-                                onChange={handleFormChange} // Set the onChange handler
+                                onChange={handleFormChange}
                             />
+                            {errors.description && <div className="text-danger">{errors.description}</div>}
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Price</Form.Label>
                             <Form.Control
                                 type="number"
                                 name="price"
                                 defaultValue={currentListing?.price}
-                                onChange={handleFormChange} // Set the onChange handler
+                                onChange={handleFormChange}
                             />
+                            {errors.price && <div className="text-danger">{errors.price}</div>}
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Phone Number</Form.Label>
                             <Form.Control
                                 type="tel"
                                 name="phoneNumber"
                                 defaultValue={currentListing?.phoneNumber}
-                                onChange={handleFormChange} // Set the onChange handler
+                                onChange={handleFormChange}
                             />
+                            {errors.phoneNumber && <div className="text-danger">{errors.phoneNumber}</div>}
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Email</Form.Label>
                             <Form.Control
                                 type="email"
                                 name="email"
                                 defaultValue={currentListing?.email}
-                                onChange={handleFormChange} // Set the onChange handler
+                                onChange={handleFormChange}
                             />
+                            {errors.email && <div className="text-danger">{errors.email}</div>}
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Category</Form.Label>
                             <Form.Select
                                 name="category"
                                 defaultValue={currentListing?.category}
-                                onChange={handleFormChange} // Set the onChange handler
+                                onChange={handleFormChange}
                             >
+                                {/* Options should be predefined or fetched */}
+                                <option value="">Select a category</option>
                                 <option value="category1">Category 1</option>
                                 <option value="category2">Category 2</option>
-                                {/* More options as needed */}
                             </Form.Select>
+                            {errors.category && <div className="text-danger">{errors.category}</div>}
                         </Form.Group>
+
                     </Form>
-                    ß
+
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowModal(false)}>
