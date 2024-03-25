@@ -1,6 +1,7 @@
 import { MongoClient } from 'mongodb';
 
 const url = 'mongodb+srv://admin:admin@cluster0.g4lqotk.mongodb.net/BartersHub';
+
 let db;
 
 export const connectToDb = () => {

@@ -15,3 +15,11 @@
     background: linear-gradient(84deg, #f21616 0%, #f28b50 100%) 0% 0% no-repeat padding-box;
     color: white;
 }
+
+.product-img{
+    height: 300px !important;
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}

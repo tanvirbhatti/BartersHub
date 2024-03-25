@@ -87,6 +87,8 @@ export default async function registerUser(req, res) {
         province,
         city,
         areaCode,
+        userType: "user"
+
       });
       return res.json({
         message: "User registered successfully",

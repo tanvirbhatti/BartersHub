@@ -34,32 +34,38 @@ export async function login(req, res) {
                 province: foundUser.province,
                 city: foundUser.city,
                 areaCode: foundUser.areaCode,
+                userType: foundUser.userType
               },
               secretKey,
               { expiresIn: "3h" }
             );
+
             if (token) {
               req.session.token = token;
-              return res.json({ message: "Successfully loggedIn", token });
+              if (foundUser.userType === "admin") {
+                return res.json({ message: "Successfully logged In as admin", token, isAdmin: true });
+              } else {
+                return res.json({ message: "Successfully logged In", token, isAdmin: false });
+              }
             } else {
-              return res.json({ err: "token undefiner unauthorized access" });
+              return res.status(500).json({ error: "Unauthorized access" });
             }
           } catch (err) {
             console.log("error during token generation", err);
-            return res.json({
+            return res.status(500).json({
               error: `Error during token generation -> ${err}`,
             });
           }
         } else {
-          return res.json({ error: "Incorrect password." });
+          return res.status(401).json({ error: "Incorrect password." });
         }
       }
     } else {
-      return res.json({ error: "Email and password both are required." });
+      return res.status(400).json({ error: "Email and password both are required." });
     }
   } catch (error) {
     console.error("Error during login:", error);
-    return res.json({ error: "Internal server error." });
+    return res.status(500).json({ error: "Internal server error." });
   }
 }
 
