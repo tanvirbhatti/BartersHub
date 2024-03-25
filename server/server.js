@@ -17,6 +17,7 @@ import checkUser from './Middleware/checkUser.js';
 import { addFeaturedProduct } from './Controllers/FeaturedProducts/add.js';
 import { getFeaturedProducts } from './Controllers/FeaturedProducts/get.js';
 import { getRecentlyListedProducts } from './Controllers/RecentlyAddedProducts/get.js';
+import { deleteFeaturedProduct } from './Controllers/FeaturedProducts/delete.js';
 
 
 const app = express();
@@ -55,6 +56,7 @@ app.delete('/delete-product/:id', checkUser, deleteListing);
 app.post('/add-featured-product', addFeaturedProduct)
 app.get('/get-featured-products', getFeaturedProducts)
 app.get('/get-recently-products', getRecentlyListedProducts);
+app.delete('/delete-featured-product', deleteFeaturedProduct);
 
 app.put('/users/:userId/disable', disableUser); // Endpoint to disable a user
 
