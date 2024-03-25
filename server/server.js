@@ -3,13 +3,6 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import session from 'express-session';
 import multer from 'multer';
-
-
-
-import multer from 'multer';
-
-
-
 import registerUser from './Controllers/Authentication/register.js';
 import { login, logout } from './Controllers/Authentication/login.js';
 import { addProduct } from './Controllers/Products/add.js';
@@ -20,7 +13,6 @@ import { addTestimonial } from './Controllers/Testimonials/add.js';
 import { editProductDetails } from './Controllers/Products/update.js';
 import { firebaseUploadMiddleware } from './Middleware/storageBucket.js';
 import { userProfile, getUserListings, deleteListing, updateListing, disableUser, deleteUser, fetchAllUsers, enableUser } from './Controllers/userProfile/UserProfileController.js';
-
 import checkUser from './Middleware/checkUser.js';
 import { addFeaturedProduct } from './Controllers/FeaturedProducts/add.js';
 import { getFeaturedProducts } from './Controllers/FeaturedProducts/get.js';
@@ -56,16 +48,9 @@ app.post('/add-testimonial', addTestimonial)
 
 //User data endpoints
 app.get('/userprofile/:id', userProfile)
-<<<<<<< Updated upstream
-app.get('/allusers', getAllUsers)
 app.get('/user-listings', checkUser, getUserListings)
 app.post('/edit-product', checkUser, updateListing);
 app.delete('/delete-product/:id', checkUser, deleteListing);
-=======
-app.get('/user-listings',checkUser,getUserListings)
-app.post('/edit-product',upload.none(),checkUser, updateListing);
-app.delete('/delete-product/:id',checkUser, deleteListing);
->>>>>>> Stashed changes
 
 app.post('/add-featured-product', addFeaturedProduct)
 app.get('/get-featured-products', getFeaturedProducts)
