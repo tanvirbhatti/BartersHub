@@ -6,10 +6,18 @@ export async function addFeaturedProduct(req,res){
     const productId = req.body.productId;
     if(productId){
         try {        
-            const addedFeaturedProduct =db.collection('featuredProducts').insertOne({"productId": new ObjectId(productId)})
+            const addedFeaturedProduct = await db.collection('featuredProducts').insertOne({"productId": new ObjectId(productId)})
+            
+            const updatedProduct = await db.collection('products').findOneAndUpdate(
+                {"_id":new ObjectId(productId)},
+                {$set:{"featuredProduct":true}},
+                {returnOriginal:false}
+            )
+            
             res.json({
                 message:"product added successfully in featured collection",
-                result : addedFeaturedProduct
+                result : addedFeaturedProduct,
+                result :updatedProduct.value
             })
         } catch (error) {
             res.json({

@@ -36,6 +36,7 @@ export async function addProduct(req, res) {
     price,
     phoneNumber,
     email,
+    featuredProduct:false
   });
 
   return res.json({
