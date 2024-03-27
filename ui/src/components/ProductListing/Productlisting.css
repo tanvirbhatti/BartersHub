@@ -55,16 +55,16 @@
     margin: 0 10px;
   }
   
-  .products {
+  /* .products {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
     justify-content: center;
-  }
+  } */
   
   .product-card {
-    width: calc(25% - 20px);
+    width: calc(20% - 20px);
     overflow: hidden;
   }
   
