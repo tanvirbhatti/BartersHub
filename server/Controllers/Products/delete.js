@@ -1,29 +1,11 @@
 import { ObjectId } from "mongodb";
 import { connectToDb } from "../../db.js";
-import jwt from 'jsonwebtoken';
-
-const db = await connectToDb();
 
 export async function deleteProduct(req, res) {
     try {
-        const secretKey = 'abcd'; 
-        
-        let userId;
-        // Verify and decode the token
-        const token = req.session.token;
-        if(!token){
-            res.json({error:"login error please, login before you delete the product"})
-        }
-        else{
-            jwt.verify(token, secretKey, (err, decoded) => {
-                if (err) {
-                    // Handle verification error
-                    console.error('Token verification failed:', err);
-                } else {
-                    // Extract userId from decoded token
-                    userId = decoded.userId;
-                }
-            });
+        const db = await connectToDb();
+
+        const userId = req.user.userId;
             
             if(!userId){
                 res.json({error:"token is not trusted try login again"});
@@ -45,7 +27,6 @@ export async function deleteProduct(req, res) {
                         return res.json({ message: 'Product deleted successfully',foundProduct});    
                     }
                 }
-            }
         }
             
     } catch (error) {

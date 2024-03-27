@@ -18,8 +18,10 @@
 }
 
 .Btn.active{
-    border : 1px solid black !important;
-    border-left: 20px solid #f21616 !important;
+    color: white;
+    background: linear-gradient(45deg, #f21616, #f28b50);
+    border: none;
+    padding: 0.5rem 2.4rem;
 }
 
 .hadingUnderLiner{

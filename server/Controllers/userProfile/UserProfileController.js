@@ -63,6 +63,7 @@ export async function deleteListing(req, res) {
       }
 
       await db.collection('products').deleteOne({ _id: listingObjectId });
+      await db.collection('featuredProducts').deleteOne({productId:listingObjectId})
       res.status(200).json({ message: 'Listing deleted successfully.' });
   } catch (error) {
       console.error('Error deleting the listing:', error);
@@ -108,22 +109,7 @@ export async function updateListing(req, res) {
 export async function disableUser(req, res) {
   try {
     const db = await connectToDb();
-    let userId;
-    // Verify and decode the token
-    const token = req.session.token;
-    if (!token) {
-      return res.status(401).json({ error: 'Login error. Please log in before disabling the user.' });
-    } else {
-      jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-          // Handle verification error
-          console.error('Token verification failed:', err);
-          return res.status(401).json({ error: 'Token verification failed. Please log in again.' });
-        } else {
-          // Extract userId from decoded token
-          userId = decoded.userId;
-        }
-      });
+    const userId = req.user.userId;
 
       if (!userId) {
         return res.status(401).json({ error: 'Token is not trusted. Please try logging in again.' });
@@ -142,7 +128,6 @@ export async function disableUser(req, res) {
             res.status(404).json({ error: 'User not found' });
           }
         }
-      }
     }
   } catch (error) {
     console.error('Error disabling user:', error);
@@ -154,27 +139,13 @@ export async function disableUser(req, res) {
 export async function enableUser(req, res) {
   try {
     const db = await connectToDb();
-    let userId;
+    const userId = req.user.userId;
     // Verify and decode the token
-    const token = req.session.token;
-    if (!token) {
-      return res.status(401).json({ error: 'Login error. Please log in before disabling the user.' });
-    } else {
-      jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-          // Handle verification error
-          console.error('Token verification failed:', err);
-          return res.status(401).json({ error: 'Token verification failed. Please log in again.' });
-        } else {
-          // Extract userId from decoded token
-          userId = decoded.userId;
-        }
-      });
-
       if (!userId) {
         return res.status(401).json({ error: 'Token is not trusted. Please try logging in again.' });
       } else {
         const userToUpdateId = req.params.userId;
+        console.log(userToUpdateId)
         if (!userToUpdateId) {
           return res.status(400).json({ error: 'User ID is required' });
         } else {
@@ -185,11 +156,12 @@ export async function enableUser(req, res) {
           if (result.modifiedCount === 1) {
             res.status(200).json({ message: 'User enabled successfully' });
           } else {
-            res.status(404).json({ error: 'User not found' });
+            res.status(404).json({ error: 'User not found',
+          result });
           }
         }
       }
-    }
+    
   } catch (error) {
     console.error('Error disabling user:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -200,23 +172,7 @@ export async function enableUser(req, res) {
 export async function deleteUser(req, res) {
   try {
     const db = await connectToDb();
-
-    let userId;
-    // Verify and decode the token
-    const token = req.session.token;
-    if (!token) {
-      return res.status(401).json({ error: 'Login error. Please log in before deleting the user.' });
-    } else {
-      jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-          // Handle verification error
-          console.error('Token verification failed:', err);
-          return res.status(401).json({ error: 'Token verification failed. Please log in again.' });
-        } else {
-          // Extract userId from decoded token
-          userId = decoded.userId;
-        }
-      });
+    const userId = req.user.userId;
 
       if (!userId) {
         return res.status(401).json({ error: 'Token is not trusted. Please try logging in again.' });
@@ -232,7 +188,6 @@ export async function deleteUser(req, res) {
             res.status(404).json({ error: 'User not found' });
           }
         }
-      }
     }
   } catch (error) {
     console.error('Error deleting user:', error);
