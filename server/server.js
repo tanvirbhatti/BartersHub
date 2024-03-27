@@ -58,11 +58,11 @@ app.get('/get-featured-products', getFeaturedProducts)
 app.get('/get-recently-products', getRecentlyListedProducts);
 app.delete('/delete-featured-product', deleteFeaturedProduct);
 
-app.put('/users/:userId/disable', disableUser); // Endpoint to disable a user
+app.put('/users/:userId/disable', checkUser, disableUser); // Endpoint to disable a user
 
-app.put('/users/:userId/enable',enableUser);//Endpoint to enable a user
+app.put('/users/:userId/enable', checkUser, enableUser);//Endpoint to enable a user
 
-app.delete('/users/:userId', deleteUser); // Endpoint to delete a user
+app.delete('/users/delete/:userId', checkUser, deleteUser); // Endpoint to delete a user
 
 // Route to fetch all users
 app.get('/users', async (req, res) => {
