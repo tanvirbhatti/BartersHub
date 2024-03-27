@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react'
 import "./Product_Home.css"
 import Testimonials from './Testimonials';
 import Hero from "./heroImage.png";
-
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const ProductHome = () => {
     const [products, setProducts] = useState([])
@@ -25,6 +27,14 @@ const ProductHome = () => {
             .catch(error => console.error('Error fetching data:', error));
     }, []);
 
+    const limitProductDescription = (productDescription)=>{
+        const descriptionLength = 100;
+    if (productDescription.length > descriptionLength) {
+        return productDescription.substring(0, descriptionLength) + "...";
+    } else {
+        return productDescription;
+    }
+    }
     return (
         <>
             <div className="row p-5 align-items-center no_gutter">
@@ -77,63 +87,59 @@ const ProductHome = () => {
             </div>
 
             <div>
-                <div className="product-list-container p-5 pt-0">
-                    <h3><b>Featured Product: </b></h3>
-                    <div className="scrolling-wrapper">
-                        {products.featuredProducts && products.featuredProducts.map((product, index) => {
-                            // Limiting description to 100 words
-                            const limitedDescription = product.product.description.split(' ').slice(0, 100).join(' ');
-                            // Adding "..." if description exceeds 100 words
-                            const truncatedDescription = product.product.description.length > 100 ? limitedDescription + "..." : limitedDescription;
-
-                            return (
-                                <div key={index} className="product-card border-0 shadow-none">
-                                    <img src={product.product.image} alt={product.product.title} style={{ width: '100%', height: '200px' }} />
-                                    <div className="card-body">
-                                        <h5 className="card-title">{product.product.title}</h5>
-                                        <p className="card-text">{truncatedDescription}</p>
-                                        <p className="card-text">{product.product.price}</p>
-                                        <button className='btn btn-sm view_button'>View Product</button>
-                                    </div>
-                                </div>
-                            )
-                        })}
+    <div className="product-list-container p-5 pt-0">
+        <h3><b>Featured Product: </b></h3>
+        <Slider
+            slidesToShow={4}
+            slidesToScroll={1}
+        >
+            {products.featuredProducts && products.featuredProducts.map((product, index) => {
+                const truncatedDescription = limitProductDescription(product.product.description)
+                return (
+                    <div key={index} className="product-card border-0 shadow-none">
+                        <img src={product.product.image} alt={product.product.title} style={{ width: '100%', height: '200px' }} />
+                        <div className="card-body">
+                            <h5 className="card-title">{product.product.title}</h5>
+                            <p className="card-text">{truncatedDescription}</p>
+                            <p className="card-text">{product.product.price}</p>
+                            <button className='btn btn-sm view_button'>View Product</button>
+                        </div>
                     </div>
-                </div>
+                )
+            })}
+        </Slider>
+    </div>
 
-                <div className="product-list-container p-5 pt-0">
-                    <h3><b>Recently Listed:</b></h3>
-                    <div className="scrolling-wrapper">
-                        {recentlyListedProducts && recentlyListedProducts.map((product, index) => {
-                            // Limiting description to 100 words
-                            const limitedDescription = product.description.split(' ').slice(0, 10).join(' ');
-                            // Adding "..." if description exceeds 100 words
-                            const truncatedDescription = product.description.length > 100 ? limitedDescription + "..." : limitedDescription;
-
-                            return (
-                                <div key={index} className="product-card border-0 shadow-none">
-                                    <img src={product.image} alt={product.title} style={{ width: '100%', height: '200px' }} />
-                                    <div className="card-body">
-                                        <h5 className="card-title">{product.title}</h5>
-                                        <p className="card-text">{truncatedDescription}</p>
-                                        <p className="card-text">{product.price}</p>
-                                        <button className='btn btn-sm view_button'>View Product</button>
-                                    </div>
-                                </div>
-                            )
-                        })}
+    <div className="product-list-container p-5 pt-0">
+        <h3><b>Recently Listed:</b></h3>
+        <Slider
+            slidesToShow={4}
+            slidesToScroll={1}
+            infinite={false}
+        >            {recentlyListedProducts && recentlyListedProducts.map((product, index) => {
+                const truncatedDescription = limitProductDescription(product.description)
+                return (
+                    <div key={index} className="product-card border-0 shadow-none">
+                        <img src={product.image} alt={product.title} style={{ width: '100%', height: '200px' }} />
+                        <div className="card-body">
+                            <h5 className="card-title">{product.title}</h5>
+                            <p className="card-text">{truncatedDescription}</p>
+                            <p className="card-text">{product.price}</p>
+                            <button className='btn btn-sm view_button'>View Product</button>
+                        </div>
                     </div>
-                </div>
+                )
+            })}
+        </Slider>
+    </div>
 
-
-                <div className="product-list-container pt-0">
-                    <h3 className='p-5 pt-0 pb-0'><b>Testimonials:</b></h3>
-                    {
-                        <Testimonials />
-                    }
-                </div>
-
-            </div>
+    <div className="product-list-container pt-0">
+        <h3 className='p-5 pt-0 pb-0'><b>Testimonials:</b></h3>
+        {
+            <Testimonials />
+        }
+    </div>
+</div>
         </>
     )
 }
