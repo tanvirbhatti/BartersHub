@@ -26,23 +26,20 @@ export default function Testimonials() {
     }, []);
 
     return (
-        <div className="bg-dark">
+        <div>
             <Carousel
                 swipeable={false}
                 responsive={responsive}
-                ssr={true} // means to render carousel on server-side.
                 infinite={true}
-                autoPlaySpeed={1000}
                 keyBoardControl={true}
                 containerClass="carousel-container"
                 removeArrowOnDeviceType={["tablet", "mobile"]}
                 dotListClass="custom-dot-list-style"
                 itemClass="carousel-item-padding-40-px"
-                className="h-100"
             >
                 {testimonials.map((testimonial, index) => (
-                    <div key={index} className="p-5">                        
-                            <div className="card shadow p-1 bg-light rounded">
+                    <div key={index} className="p-4">                        
+                            <div className="card shadow p-1 bg-secondary rounded">
                                 <div className="card-body m-0">
                                     <div className="row">
                                         <div className="col-lg-12 p-3 pt-0 pb-0">
@@ -55,13 +52,13 @@ export default function Testimonials() {
                                                             alt="avatar"
                                                         />
                                                     </div>
-                                                    <p className="text-center fw-bold mb-0 text-primary">{testimonial.user.firstName}</p>
+                                                    <p className="text-capitalize text-center text-light fw-bold mb-0 pt-2">{testimonial.user.firstName}</p>
                                                 </div>
                                             </div>
                                             <div className="row">
                                                 <div className="col-lg-12">
-                                                    <p className="text-center fw-light mb-0 pt-4 pb-2">"{testimonial.testimonialText}"</p>
-                                                    <p className="text-uppercase text-secondary text-center"><b>&nbsp;{testimonial.testimonialProduct}</b></p>
+                                                    <p className="text-center fw-light text-light mb-0 pt-1 pb-2">"{testimonial.testimonialText}"</p>
+                                                    <p className="text-center text-capitalize text-light"><b>&nbsp;{testimonial.testimonialProduct}</b></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -73,7 +70,7 @@ export default function Testimonials() {
                 
             </Carousel>
             <div className="row p-4 pt-0 justify-content-center no_gutter">
-                <a href="/" className="btn view_button btn-outline-dark col-md-2">Rate your experience with us!</a>
+                <a href="/" className="btn view_button btn-outline-dark">Check out the Products</a>
             </div>
         </div>
     );

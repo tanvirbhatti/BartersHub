@@ -6,6 +6,7 @@
   
 .card{
   height: 450px!important;
+  border:0
 }
   .scrolling-wrapper {
     display: flex;
@@ -34,6 +35,8 @@
   .view_button {
     background: transparent linear-gradient(84deg, #F21616 0%, #F28B50 100%) 0% 0% no-repeat padding-box;
     color: white;
+    border:0;
+    width:200px
   }
 
   .no_gutter{
@@ -43,3 +46,11 @@
   .myImage{
     width : 100px;
   }
+
+  .slick-slide {
+    padding: 11px;
+}
+
+.react-multi-carousel-item{
+  padding:0 10px
+}
