@@ -1,28 +1,28 @@
-import React,{useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Product_Home.css"
 import Testimonials from './Testimonials';
 import Hero from "./heroImage.png";
 
 
 const ProductHome = () => {
-    const [products,setProducts] = useState([])
+    const [products, setProducts] = useState([])
     const [recentlyListedProducts, setRecentlyListedProducts] = useState([])
 
     useEffect(() => {
         // Fetch data from the API
         fetch("http://localhost:8000/get-featured-products")
-        .then(response => response.json())
-        .then(data => {
-            setProducts(data);
-        })
-        .catch(error => console.error('Error fetching data:', error));
+            .then(response => response.json())
+            .then(data => {
+                setProducts(data);
+            })
+            .catch(error => console.error('Error fetching data:', error));
 
         fetch("http://localhost:8000/get-recently-products")
-        .then(response => response.json())
-        .then(data =>{
-            setRecentlyListedProducts(data);
-        })
-        .catch(error=>console.error('Error fetching data:',error));
+            .then(response => response.json())
+            .then(data => {
+                setRecentlyListedProducts(data);
+            })
+            .catch(error => console.error('Error fetching data:', error));
     }, []);
 
     return (
@@ -80,13 +80,18 @@ const ProductHome = () => {
                 <div className="product-list-container p-5 pt-0">
                     <h3><b>Featured Product: </b></h3>
                     <div className="scrolling-wrapper">
-                    {products.featuredProducts && products.featuredProducts.map((product,index)=>{
-                            return(
+                        {products.featuredProducts && products.featuredProducts.map((product, index) => {
+                            // Limiting description to 100 words
+                            const limitedDescription = product.product.description.split(' ').slice(0, 100).join(' ');
+                            // Adding "..." if description exceeds 100 words
+                            const truncatedDescription = product.product.description.length > 100 ? limitedDescription + "..." : limitedDescription;
+
+                            return (
                                 <div key={index} className="product-card border-0 shadow-none">
                                     <img src={product.product.image} alt={product.product.title} style={{ width: '100%', height: '200px' }} />
                                     <div className="card-body">
                                         <h5 className="card-title">{product.product.title}</h5>
-                                        <p className="card-text">{product.product.description}</p>
+                                        <p className="card-text">{truncatedDescription}</p>
                                         <p className="card-text">{product.product.price}</p>
                                         <button className='btn btn-sm view_button'>View Product</button>
                                     </div>
@@ -99,31 +104,35 @@ const ProductHome = () => {
                 <div className="product-list-container p-5 pt-0">
                     <h3><b>Recently Listed:</b></h3>
                     <div className="scrolling-wrapper">
-                        {
-                            recentlyListedProducts && recentlyListedProducts.map
-                            (
-                                (product,index)=>
+                        {recentlyListedProducts && recentlyListedProducts.map((product, index) => {
+                            // Limiting description to 100 words
+                            const limitedDescription = product.description.split(' ').slice(0, 10).join(' ');
+                            // Adding "..." if description exceeds 100 words
+                            const truncatedDescription = product.description.length > 100 ? limitedDescription + "..." : limitedDescription;
+
+                            return (
                                 <div key={index} className="product-card border-0 shadow-none">
-                                <img src={product.image} alt={product.title} style={{ width: '100%', height: '200px' }} />
-                                <div className="card-body">
-                                    <h5 className="card-title">{product.title}</h5>
-                                    <p className="card-text">{product.description}</p>
-                                    <p className="card-text">{product.price}</p>
-                                    <button className='btn btn-sm view_button'>View Product</button>
+                                    <img src={product.image} alt={product.title} style={{ width: '100%', height: '200px' }} />
+                                    <div className="card-body">
+                                        <h5 className="card-title">{product.title}</h5>
+                                        <p className="card-text">{truncatedDescription}</p>
+                                        <p className="card-text">{product.price}</p>
+                                        <button className='btn btn-sm view_button'>View Product</button>
+                                    </div>
                                 </div>
-                            </div>
                             )
-                        }
+                        })}
                     </div>
                 </div>
 
+
                 <div className="product-list-container pt-0">
-                        <h3 className='p-5 pt-0 pb-0'><b>Testimonials:</b></h3>
-                        {
-                            <Testimonials/>
-                        }
+                    <h3 className='p-5 pt-0 pb-0'><b>Testimonials:</b></h3>
+                    {
+                        <Testimonials />
+                    }
                 </div>
-                
+
             </div>
         </>
     )
