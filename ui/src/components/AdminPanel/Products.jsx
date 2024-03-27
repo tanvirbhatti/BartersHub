@@ -21,7 +21,7 @@ export const Products = () => {
         }
 
         if(window.confirm("are you sure you want to delete this product?")){
-            fetch(`http://localhost:8000/delete-product/${productId}`,{
+            fetch(`http://localhost:8000/admin/delete-product/${productId}`,{
                 method:"DELETE",
                 headers:{
                     "Authorization":`Bearer ${authToken}`
@@ -60,7 +60,7 @@ export const Products = () => {
     }
 
     const addToFeatured = (productId) => {
-        fetch("http://localhost:8000/add-featured-product", {
+        fetch("http://localhost:8000/admin/add-featured-product", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -73,7 +73,7 @@ export const Products = () => {
     }
 
     const removeFromFeatured = (productId) => {
-        fetch("http://localhost:8000/delete-featured-product", {
+        fetch("http://localhost:8000/admin/delete-featured-product", {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"

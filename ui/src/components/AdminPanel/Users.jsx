@@ -5,7 +5,7 @@ import {toast} from 'react-toastify';
 export const Users = () => {
     const [users,setUsers] = useState([])
     useEffect(()=>{
-        fetch('http://localhost:8000/users')
+        fetch('http://localhost:8000/admin/users')
         .then(res => res.json())
         .then(data=>{
             setUsers(data.users)
@@ -45,7 +45,7 @@ export const Users = () => {
         }
 
         if(window.confirm("are you sure you want to delete this user?")){
-            fetch(`http://localhost:8000/users/delete/${userId}`,{
+            fetch(`http://localhost:8000/admin/delete-user/${userId}`,{
                 method:"DELETE",
                 headers:{
                     "Authorization":`Bearer ${token}`
@@ -61,7 +61,7 @@ export const Users = () => {
     }
 
     const disableUser = (userId,token)=>{
-        fetch(`http://localhost:8000/users/${userId}/disable`, {
+        fetch(`http://localhost:8000/admin/disable-user/${userId}`, {
             method: "PUT",
             headers: {
                 'Authorization': `Bearer ${token}`, // Pass the token in the Authorization header
@@ -74,7 +74,7 @@ export const Users = () => {
     }
 
     const enableUser = (userId, token)=>{
-        fetch(`http://localhost:8000/users/${userId}/enable`, {
+        fetch(`http://localhost:8000/admin/enable-user/${userId}`, {
             method: "PUT",
             headers: {
                 'Authorization': `Bearer ${token}`, // Pass the token in the Authorization header
