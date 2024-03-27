@@ -6,11 +6,9 @@ import multer from 'multer';
 import registerUser from './Controllers/Authentication/register.js';
 import { login, logout } from './Controllers/Authentication/login.js';
 import { addProduct } from './Controllers/Products/add.js';
-import { getProducts } from './Controllers/Products/get.js';
-import { deleteProduct } from './Controllers/Products/delete.js';
+import { getProducts, getProductById } from './Controllers/Products/get.js';
 import { getTestimonials } from './Controllers/Testimonials/get.js';
 import { addTestimonial } from './Controllers/Testimonials/add.js';
-import { editProductDetails } from './Controllers/Products/update.js';
 import { firebaseUploadMiddleware } from './Middleware/storageBucket.js';
 import { userProfile, getUserListings, deleteListing, updateListing, disableUser, deleteUser, fetchAllUsers, enableUser } from './Controllers/userProfile/UserProfileController.js';
 import checkUser from './Middleware/checkUser.js';
@@ -41,6 +39,7 @@ app.post('/logout', logout);
 //product endpoints
 app.post('/add-product', checkUser, firebaseUploadMiddleware, addProduct);
 app.get('/get-products', getProducts)
+app.get('/get-product/:id', getProductById)
 
 
 //Home page endpoints

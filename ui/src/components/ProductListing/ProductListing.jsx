@@ -39,9 +39,9 @@ const ProductListing = () => {
                     </select>
                 </section>
 
-                <section className="products">
+                <section className="products d-flex row">
                     {products.map(product => (
-                        <Productcard key={product._id} product={product} />
+                        <Productcard className="col-3" key={product._id} product={product} />
                     ))}
                 </section>
             </div>

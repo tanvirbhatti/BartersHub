@@ -10,14 +10,14 @@
   height: 300px !important;
   width: 100%;
   display: block;
-  /* Ensure the image covers the container */
   object-fit: cover;
-  /* Center the image vertically if it's smaller than its container */
   object-position: center;
+  border-radius: 10px;
 }
 
 .product-info {
   padding: 15px;
+  padding-left: 0;
   text-align: left;
   border: 0;
 }
@@ -25,10 +25,12 @@
 .product-info h2 {
   margin: 0;
   color: #333;
+  font-size: 1.5em;
 }
 
 .product-info p {
   margin: 5px 0;
+  color: black;
 }
 
 .product-info span {

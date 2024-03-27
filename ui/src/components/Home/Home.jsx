@@ -9,6 +9,7 @@ import UserProfile from '../UserPage/User_profile.jsx';
 import ProductListing from '../ProductListing/ProductListing.jsx';
 import HomePage from '../HomePage/HomePage.jsx';
 import {AdminPanel} from '../AdminPanel/AdminPanel.jsx'
+import ProductDetails from '../ProductDetails/ProductDeatails.jsx';
 
 const Home = () => {
     return (
@@ -19,6 +20,7 @@ const Home = () => {
                     <Route path='signup' element={<Signup />} />
                     <Route path='login' element={<Login />} />
                     <Route path='productListings' element={<ProductListing/>} />
+                    <Route path='productdetails/:id' element = {<ProductDetails/>}></Route>
                     <Route path='ListingsUpload' element={<ListingUpload/>} />
                     <Route path='user' element={<UserProfile/>} />
                     <Route path='/' element={<HomePage/>} />
