@@ -63,6 +63,7 @@ export async function deleteListing(req, res) {
       }
 
       await db.collection('products').deleteOne({ _id: listingObjectId });
+      await db.collection('featuredProducts').deleteOne({productId:listingObjectId})
       res.status(200).json({ message: 'Listing deleted successfully.' });
   } catch (error) {
       console.error('Error deleting the listing:', error);
