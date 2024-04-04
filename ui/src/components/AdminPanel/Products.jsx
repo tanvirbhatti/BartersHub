@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import ToggleButton from "../../UI/ToggleButton/ToggleButton";
 import { toast } from 'react-toastify';
+import ConfirmationModal from "../../UI/BootstrapModal/ConfirmationModal"; // Import the new modal component
 
 export const Products = () => {
     const [products, setProducts] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [confirmAction, setConfirmAction] = useState(null);
+    const [confirmMessage, setConfirmMessage] = useState("");
 
     useEffect(() => {
         fetch("http://localhost:8000/get-products")
@@ -12,15 +16,16 @@ export const Products = () => {
             .catch(err => console.error("error fetching data", err));
     }, []);
 
-    const deleteProduct = (productId)=>{
+    const deleteProduct = (productId, productName)=>{
         const authToken = localStorage.getItem("token");
+        setConfirmMessage(`Are you sure you want to DELETE the Product ${productName}`);
 
         if(!authToken){
             toast.error("Authentication token not found. Please login again")
             return;
         }
 
-        if(window.confirm("are you sure you want to delete this product?")){
+        setConfirmAction(() => () => {
             fetch(`http://localhost:8000/admin/delete-product/${productId}`,{
                 method:"DELETE",
                 headers:{
@@ -31,31 +36,27 @@ export const Products = () => {
             .then(data => {
                 toast.success(data.message)
                 setProducts(prevProducts => prevProducts.filter(product => product._id !== productId));
+                setModalOpen(false)
             })
             .catch(err=>console.error("error deleteing the product",err));
-        }
+            setModalOpen(false);
+        });
+        setModalOpen(true);
     }
 
-    const handleToggleChange = (toggleState, productId) => {
-        // Update the products state with the new toggle state for the corresponding product
-        setProducts(prevProducts => prevProducts.map(product => {
-            if (product._id === productId) {
-                return { ...product, featuredProduct: toggleState };
-            }
-            return product;
-        }));
+    const handleToggleChange = (toggleState, productId, productName) => {
         
         // Handle the toggle state change according to the toggleState
         if (toggleState) {
             // If toggled on, ask for confirmation to add to featured collection
-            if (window.confirm("Are you sure you want to add it to the featured collection?")) {
-                addToFeatured(productId);
-            }
+            setConfirmAction(() => () => addToFeatured(productId));
+            setConfirmMessage(`Are you sure you want to ADD Product "${productName}" into featured collection ?`)
+            setModalOpen(true);
         } else {
             // If toggled off, ask for confirmation to remove from featured collection
-            if (window.confirm("Are you sure you want to remove it from the featured collection?")) {
-                removeFromFeatured(productId);
-            }
+            setConfirmAction(() => () => removeFromFeatured(productId));
+            setConfirmMessage(`Are you sure you want to REMOVE Product "${productName}" into featured collection ?`)
+            setModalOpen(true);
         }
     }
 
@@ -68,7 +69,10 @@ export const Products = () => {
             body: JSON.stringify({ productId })
         })
         .then(res => res.json())
-        .then(data => toast.success(data.message))
+        .then(data => {
+            toast.success(data.message);
+            setModalOpen(false);
+        })
         .catch(err => console.error("error adding to featured collection", err));
     }
 
@@ -81,51 +85,63 @@ export const Products = () => {
             body: JSON.stringify({ productId })
         })
         .then(res => res.json())
-        .then(data => toast.success(data.message))
+        .then(data => {
+            toast.success(data.message)
+            setModalOpen(false)
+        })
         .catch(err => console.error("error removing from featured collection", err));
     }
 
     return (
-        <table className="w-100 p-3">
-            <thead className="bg-dark text-white align-items-center text-center">
-                <tr className="row p-2 align-items-center text-center">
-                    <th className="col-md-1">Image</th>
-                    <th className="col-md-2">Title</th>
-                    <th className="col-md-3">Featured Product</th>
-                    <th className="col-md-3">User</th>
-                    <th className="col-md-1">City</th>
-                    <th className="col-md-1">Delete</th>
-                    <th className="col-md-1">View</th>
-                </tr>
-            </thead>
-            <tbody>
-                {products && products.map((product, index) => (
-                    <tr className="row p-2 align-items-center text-center border-bottom" key={index}>
-                        <td className="col-md-1 p-0">
-                            <img src={product.image} alt={product.title} style={{ width: '100%', height: '70px' }} />
-                        </td>
-                        <td className="col-md-2">{product.title}</td>
-                        <td className="col-md-3 justify-content-center d-flex">Featured Product
-                            <ToggleButton
-                                initialToggleState={product.featuredProduct}
-                                onToggle={(toggleState) => handleToggleChange(toggleState, product._id)}
-                            />
-                        </td>
-                        <td className="col-md-3">{product.email}</td>
-                        <td className="col-md-1">city</td>
-                        <td className="col-md-1">
-                            <button className="btn btn-primary" onClick={()=>deleteProduct(product._id)}>
-                                <i className="fa-solid fa-trash"></i>
-                            </button>
-                        </td>
-                        <td className="col-md-1">
-                            <a>
-                                <i className="fa-solid fa-eye"></i>
-                            </a>
-                        </td>
+        <div>
+            <ConfirmationModal
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                onConfirm={confirmAction}
+                message={confirmMessage}
+            />
+            <table className="w-100 p-3">
+                <thead className="bg-dark text-white align-items-center text-center">
+                    <tr className="row p-2 align-items-center text-center">
+                        <th className="col-md-1">Image</th>
+                        <th className="col-md-3">Title</th>
+                        <th className="col-md-2">Featured Product</th>
+                        <th className="col-md-3">User</th>
+                        <th className="col-md-1">City</th>
+                        <th className="col-md-1">Delete</th>
+                        <th className="col-md-1">View</th>
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {products && products.map((product, index) => (
+                        <tr className="row p-2 align-items-center text-center border-bottom" key={index}>
+                            <td className="col-md-1 p-0">
+                                <img src={product.image} alt={product.title} style={{ width: '100%', height: '70px' }} />
+                            </td>
+                            <td className="col-md-3">{product.title}</td>
+                            <td className="col-md-2">
+                                <ToggleButton
+                                    id={product._id}
+                                    initialToggleState={product.featuredProduct}
+                                    onToggle={(toggleState) => handleToggleChange(toggleState, product._id, product.title)}
+                                />
+                            </td>
+                            <td className="col-md-3">{product.email}</td>
+                            <td className="col-md-1">city</td>
+                            <td className="col-md-1">
+                                <button className="btn btn-primary" onClick={()=>deleteProduct(product._id, product.title)}>
+                                    <i className="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                            <td className="col-md-1">
+                                <a>
+                                    <i className="fa-solid fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 };
