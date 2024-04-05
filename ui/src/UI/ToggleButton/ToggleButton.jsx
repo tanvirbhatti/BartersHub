@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './ToggleButton.css'
+import './ToggleButton.css';
 
-function ToggleButton({initialToggleState,onToggle}) {
+function ToggleButton({ id, initialToggleState, onToggle }) {
   const [isToggled, setIsToggled] = useState(initialToggleState);
 
   const handleClick = () => {
@@ -13,11 +13,17 @@ function ToggleButton({initialToggleState,onToggle}) {
   };
 
   return (
-    <div className='d-flex align-items-center px-2'>
-        <button className={`rounded toggle-button p-0 ${isToggled? 'active' : ''}`} 
-        onClick={handleClick} style={{height:"18px", width:"40px"}}>
-            <div className='slider'/>
-        </button>
+    <div className="switch">
+      <input
+        id={id} // Use the id prop for input id
+        type="checkbox"
+        className="toggle-button"
+        checked={isToggled}
+        onChange={handleClick}
+      />
+      <label htmlFor={id}> {/* Use the id prop for label htmlFor */}
+        <div className={`slider ${isToggled ? 'active' : ''}`} />
+      </label>
     </div>
   );
 }

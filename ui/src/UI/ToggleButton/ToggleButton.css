@@ -1,27 +1,37 @@
+.switch {
+  display: inline-block;
+}
+
+.toggle-button:checked + label .slider {
+  background: linear-gradient(45deg, #f21616, #f28b50);
+}
+
+.toggle-button + label {
+  display: block;
+  width: 60px;
+  height: 30px;
+  padding: 3px;
+  border-radius: 15px;
+  border: 2px solid black;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.slider {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: black;
+  position: relative;
+  transition: 0.4s;
+}
+
+.slider.active {
+  transform: translateX(30px);
+}
+
 .toggle-button {
-    width: 40px;
-    height: 18px;
-    background-color: white;
-    border-radius: 15px !important;
-    position: relative;
-    cursor: pointer;
-  }
-  
-  .slider {
-    width: 15px ;
-    height: 15px ;
-    background: black;
-    border-radius: 50% ;
-    position: absolute ;
-    top: 0 ;
-    right: 0 ;
-    bottom:0 ;
-    left: 0 ;
-    transition: 0.4s ;
-  }
-  
-  .toggle-button.active .slider {
-    background: linear-gradient(45deg, #f21616, #f28b50);
-    transform: translateX(20px)!important;
-  }
-  
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
