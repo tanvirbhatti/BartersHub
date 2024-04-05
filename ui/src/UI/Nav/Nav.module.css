@@ -49,9 +49,19 @@
   width: 6rem;
   color: white;
   background: linear-gradient(45deg, #f21616, #f28b50);
+  border-radius: 0.4rem;
 }
 
-.search-button {
-  position: absolute;
+.searchBox {
+  position: relative;
   right: 10px;
+  border-radius: 0.4rem;
+  padding:0.5rem;
+  border: 1px solid lightgray;
+  width:400px;
+}
+
+.logout{
+  border-radius: 0.4rem;
+  padding: 0.7rem 0.8rem;
 }
