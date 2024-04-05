@@ -49,7 +49,6 @@ export const AdminPanel = () =>{
                     setUser(null);
                     localStorage.removeItem('token');
                     navigate('/'); // Redirect to home page
-                    console.log(response.message)
                     toast.success(response.message);
                     setModalOpen(false)
                 } else {
@@ -90,12 +89,12 @@ export const AdminPanel = () =>{
                                 (<>
                                     <img className="avatar img-fluid rounded-circle mb-3" src="https://media.istockphoto.com/id/1130884625/vector/user-member-vector-icon-for-ui-user-interface-or-profile-face-avatar-app-in-circle-design.jpg?s=1024x1024&w=is&k=20&c=K2vyMGGU4E4iSfkfTwOGNgG-x-WBadv2anHPFvONnOc=" alt="User Avatar" />
                                     <div  className='pb-3 h-100 w-100'>
-                                        <h5>firstName lastName</h5>
+                                        <h5>{user && user.firstName} {user && user.lastName}</h5>
                                         <p>Edit Profile</p>
-                                        <button className={`border mb-2 rounded-0 Btn ${(activeComponent=='Products')?'active':'' }`} name='products' onClick={() => setActiveComponent('Products')}>Products</button>
+                                        <button className={`border mb-2 rounded-2 Btn ${(activeComponent=='Products')?'active':'' }`} name='products' onClick={() => setActiveComponent('Products')}>Products</button>
                                         <br/>
-                                        <button className={`border mb-2 rounded-0 Btn ${(activeComponent=='Users')?'active':'' }`} name='users' onClick={() => setActiveComponent('Users')}>Users</button>
-                                        <button className={`border mb-2 rounded-0 Btn `} name='users' onClick={handleLogout}>Logout</button>
+                                        <button className={`border mb-2 rounded-2 Btn ${(activeComponent=='Users')?'active':'' }`} name='users' onClick={() => setActiveComponent('Users')}>Users</button>
+                                        <button className={`border mb-2 rounded-2 Btn `} name='users' onClick={handleLogout}>Logout</button>
                                     </div>
                                 </>)
                             }
