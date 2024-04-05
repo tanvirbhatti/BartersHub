@@ -115,9 +115,9 @@ export const Users = () => {
                 <tbody>
                     {users && users.map((user,index)=>{
                         return(
-                            <tr className="row p-2 align-items-center text-center border-bottom" key={index}>
-                                <td className="col-md-2 p-0">
-                                    <img src={user.image} alt={user.firstName} style={{width : '100%', height:'70px'}} />
+                            <tr className="d-flex py-2 align-items-center text-center border-bottom" key={index}>
+                            <td className="col-md-2 p-0">
+                                    <img src={user.image} alt={user.firstName} style={{width : '100%'}} />
                                 </td>
                                 <td className="col-md-2">{user.firstName}</td>
                                 <td className="col-md-2">{user.city}</td>
