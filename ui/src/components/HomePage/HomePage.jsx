@@ -1,5 +1,5 @@
 import React from 'react'
-import "./Product_Home.css"
+import "../../Assets/Stylesheets/Components/Product_Home.css"
 import Testimonials from './Testimonials';
 import Hero from "./heroImage.png";
 import FeaturedProducts from './FeaturedProducts';

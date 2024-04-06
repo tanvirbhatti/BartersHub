@@ -1,4 +1,4 @@
-import styles from "./GradientButton.module.css";
+import styles from "../../Assets/Stylesheets/UI/GradientButton.module.css";
 
 const GradientButton = ({ className, rounded, text, ...props }) => {
   const buttonClass = rounded ? styles.roundedButton : styles.Button;

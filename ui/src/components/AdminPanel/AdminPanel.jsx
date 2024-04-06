@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import './AdminPanel.css'
+import '../../Assets/Stylesheets/Components/AdminPanel.css'
 import { Users } from './Users';
 import { Products } from './Products';
 import { toast } from "react-toastify";

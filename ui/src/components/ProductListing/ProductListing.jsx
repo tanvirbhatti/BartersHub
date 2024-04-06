@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Productcard from "../../UI/Cards/Productcard.jsx";
-import "./Productlisting.css"
+import "../../Assets/Stylesheets/Components/Productlisting.css"
 import { Link } from 'react-router-dom';
 
 const ProductListing = () => {

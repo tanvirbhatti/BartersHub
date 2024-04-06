@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode"
-import './UserProfile.css';
+import '../../Assets/Stylesheets/Components/UserProfile.css';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from "axios";

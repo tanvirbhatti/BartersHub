@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './ListingUpload.css';
+import '../../Assets/Stylesheets/Components/ListingUpload.css';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom'; 
 import { toast } from 'react-toastify';

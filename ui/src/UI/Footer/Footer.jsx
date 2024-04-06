@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './Footer.module.css';
+import styles from '../../Assets/Stylesheets/UI/Footer.module.css';
 import Logo from '../Nav/BarterHub.png';
 const Footer = () => {
     return (
