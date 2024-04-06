@@ -1,0 +1,39 @@
+.product-card {
+  border: 0;
+}
+
+.product-card .image-container {
+  overflow: hidden; /* Ensure overflow doesn't affect layout */
+}
+
+.product-card img {
+  height: 300px !important;
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+}
+
+.product-info {
+  padding: 15px;
+  padding-left: 0;
+  text-align: left;
+  border: 0;
+}
+
+.product-info h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.5em;
+}
+
+.product-info p {
+  margin: 5px 0;
+  color: black;
+}
+
+.product-info span {
+  font-size: 0.9em;
+  color: #666;
+}

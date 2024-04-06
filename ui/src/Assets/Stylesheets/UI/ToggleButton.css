@@ -1,0 +1,37 @@
+.switch {
+  display: inline-block;
+}
+
+.toggle-button:checked + label .slider {
+  background: linear-gradient(45deg, #f21616, #f28b50);
+}
+
+.toggle-button + label {
+  display: block;
+  width: 60px;
+  height: 30px;
+  padding: 3px;
+  border-radius: 15px;
+  border: 2px solid black;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.slider {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: black;
+  position: relative;
+  transition: 0.4s;
+}
+
+.slider.active {
+  transform: translateX(30px);
+}
+
+.toggle-button {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
