@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import './AdminPanel.css'
+import { Users } from './Users';
 import { Products } from './Products';
-import {Users} from './Users';
 import { toast } from "react-toastify";
 import { useNavigate } from 'react-router';
 import { jwtDecode } from "jwt-decode";
 import ConfirmationModal from '../../UI/BootstrapModal/ConfirmationModal';
+import User from './User.png';
 
 export const AdminPanel = () =>{
     const [user, setUser] = useState(null);
@@ -87,7 +88,7 @@ export const AdminPanel = () =>{
                         <div className='text-center'>
                             {
                                 (<>
-                                    <img className="avatar img-fluid rounded-circle mb-3" src="https://media.istockphoto.com/id/1130884625/vector/user-member-vector-icon-for-ui-user-interface-or-profile-face-avatar-app-in-circle-design.jpg?s=1024x1024&w=is&k=20&c=K2vyMGGU4E4iSfkfTwOGNgG-x-WBadv2anHPFvONnOc=" alt="User Avatar" />
+                                    <img className="avatar img-fluid border rounded mb-3 mt-4" src={User} alt="User Avatar" />
                                     <div  className='pb-3 h-100 w-100'>
                                         <h5>{user && user.firstName} {user && user.lastName}</h5>
                                         <p>Edit Profile</p>
@@ -101,7 +102,7 @@ export const AdminPanel = () =>{
                         </div>
                     </div>
                     <div className='shadow rounded p-3' style={{width:"85%"}}>
-                        <h3 className='pb-0 hadingUnderLiner col-lg-2'>
+                        <h3 className='pb-0 fw-bold text-UpperCase col-lg-2'>
                             {activeComponent}
                         </h3>
                         {renderComponent()}
