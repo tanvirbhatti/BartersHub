@@ -5,15 +5,17 @@ import styles from "./Nav.module.css";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import ConfirmationModal from '../../UI/BootstrapModal/ConfirmationModal';
+import { useNavigate } from 'react-router-dom';
 
 const Nav = () => {
+  const navigate = useNavigate()
   const [user, setUser] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [confirmMessage, setConfirmMessage] = useState("");
 
+  const token = localStorage.getItem('token');
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if (token) {
       // Decode token and set user data
       const decoded = jwtDecode(token);
@@ -35,20 +37,30 @@ const Nav = () => {
         },
       })
         .then(response => {
-          if (response) {
-            setUser(null);
-            localStorage.removeItem('token');
-            toast.success(response.message);
-            setModalOpen(false)
+          if (response.ok) {
+            return response.json();
           } else {
-            toast.error('Logout failed!');
-            setModalOpen(false)
+            throw new Error('Logout failed!');
           }
         })
-        .catch(error => { console.error("Error during logout:", error) });
-      setModalOpen(false)
-    })
-    setModalOpen(true)
+        .then(data => {
+          if (data.clearToken) {
+            setUser(null);
+            localStorage.removeItem('token');
+            toast.success(data.message);
+            setModalOpen(false);
+            navigate('/')
+          } else {
+            throw new Error('Logout failed!');
+          }
+        })
+        .catch(error => {
+          console.error("Error during logout:", error);
+          toast.error('Logout failed!');
+          setModalOpen(false);
+        });
+    });
+    setModalOpen(true);
   };
   return (
     <>
@@ -57,7 +69,7 @@ const Nav = () => {
         onClose={() => setModalOpen(false)}
         onConfirm={confirmAction}
         message={confirmMessage}
-        />
+      />
       <nav className={styles.Nav}>
         <img className={styles.Logo} src={Logo} alt="logo of barter hub" />
         <div className={styles["search-container"]}>
@@ -66,48 +78,56 @@ const Nav = () => {
             type="text"
             placeholder="Type to search"
           ></input>
+          <button className={styles.searchButton}>
+            <i className="fa fa-search"></i>
+          </button>
         </div>
         <ul className={styles.items}>
           <li><a href="/">Home</a></li>
           <li><a href="/productListings">Listing</a></li>
-          <li>{/* Default: Render login */}
-            {user && (
-              <>
-                {user.userType === "admin" ? (
-                  <>
-                    {/* Render admin-specific components */}
-                    <div className="d-flex gap-2">
-                      <a href="/admin">
-                        <GradientButton rounded={true} text="Admin Panel" />
-                      </a>
-                      <button style={{ border: 0, background: 'white' }} onClick={handleLogout}>
-                        <i class={`fa fa-sign-out border ${styles.logout}`}></i>
-                      </button>
-                    </div>
-                  </>
-                ) : user.userType === "user" ? (
-                  <>
-                    {/* Render user-specific components */}
-                    <a href="/user">
-                      <GradientButton rounded={true} text="User Profile" />
+          {/* Default: Render login */}
+          {user && (
+            <>
+              {user.userType === "admin" ? (
+                <>
+                  {/* Render admin-specific components */}
+                  <li>
+                    <a href="/admin">
+                      Admin Panel
                     </a>
-                    <button style={{ border: 0, background: 'white' }} onClick={handleLogout}>
-                        <i class={`fa fa-sign-out border ${styles.logout}`}></i>
-                    </button>
-                  </>
-                ) : (
+                  </li>
+                  <li>
+                    <GradientButton rounded={true} text="Logout" onClick={handleLogout} />
+                  </li>
+                </>
+              ) : user.userType === "user" ? (
+                <>
+                  {/* Render user-specific components */}
+                  <li>
+                    <a href="/user">
+                      User Profile
+                    </a>
+                  </li>
+                  <li>
+                    <GradientButton rounded={true} text="Logout" onClick={handleLogout} />
+                  </li>
+                </>
+              ) : (
+                <li>
                   <a href="/login">
                     <GradientButton rounded={true} text="Login" />
                   </a>
-                )}
-              </>
-            )}
-            {!user && ( /* Render login if user is not defined */
+                </li>
+              )}
+            </>
+          )}
+          {!user && ( /* Render login if user is not defined */
+            <li>
               <a href="/login">
                 <GradientButton rounded={true} text="Login" />
               </a>
-            )}
-          </li>
+            </li>
+          )}
         </ul>
       </nav>
     </>

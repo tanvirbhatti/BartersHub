@@ -1,10 +1,10 @@
 .Nav {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1.5fr 1.7fr 1.9fr;
   align-items: center;
-  height: 10vh;
   width: 100%;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+  padding:5px;
 }
 
 .Logo {
@@ -26,42 +26,34 @@
   text-decoration: none;
 }
 
-.search {
-  width: 26vw;
-  position: relative;
-  border: 1px solid lightgray;
-  padding: 0.5rem;
-}
-
 .search-container {
   position: relative;
 }
 
-.search-container::after {
-  content: "Search";
-  display: flex;
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  align-items: center;
-  justify-content: center;
-  width: 6rem;
-  color: white;
-  background: linear-gradient(45deg, #f21616, #f28b50);
-  border-radius: 0.4rem;
-}
-
 .searchBox {
   position: relative;
-  right: 10px;
   border-radius: 0.4rem;
   padding:0.5rem;
   border: 1px solid lightgray;
-  width:400px;
+  width:26vw;
 }
 
 .logout{
   border-radius: 0.4rem;
   padding: 0.7rem 0.8rem;
+  background: linear-gradient(45deg, #f21616, #f28b50);
+  color:white
+}
+
+nav ul {
+  margin-bottom: 0;
+}
+
+.searchButton{
+  border:0;
+  background: linear-gradient(45deg, #f21616, #f28b50);
+  color: white;
+  margin-left:0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.4rem;
 }
