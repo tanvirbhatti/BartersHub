@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import GradientButton from "../GradientButton/GradientButton";
-import Logo from "./BarterHub.png";
+import Logo from "../../Assets/Images/BarterHub.png";
 import styles from "../../Assets/Stylesheets/UI/Nav.module.css";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";

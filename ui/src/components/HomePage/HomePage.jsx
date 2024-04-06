@@ -1,7 +1,7 @@
 import React from 'react'
 import "../../Assets/Stylesheets/Components/Product_Home.css"
 import Testimonials from './Testimonials';
-import Hero from "./heroImage.png";
+import Hero from "../../Assets/Images/heroImage.png";
 import FeaturedProducts from './FeaturedProducts';
 import RecentlyListedProducts from './RecentlyListedProducts';
 import Categories from './Categories';

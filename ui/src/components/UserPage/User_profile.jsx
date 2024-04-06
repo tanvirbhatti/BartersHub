@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from "axios";
 import { toast } from "react-toastify";
-import User from '../AdminPanel/User.png'
+import User from '../../Assets/Images/User.png'
 
 const UserProfile = () => {
     const [user, setUser] = useState(null);

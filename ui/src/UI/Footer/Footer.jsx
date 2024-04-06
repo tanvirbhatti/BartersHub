@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from '../../Assets/Stylesheets/UI/Footer.module.css';
-import Logo from '../Nav/BarterHub.png';
+import Logo from '../../Assets/Images/BarterHub.png';
 const Footer = () => {
     return (
         <footer>

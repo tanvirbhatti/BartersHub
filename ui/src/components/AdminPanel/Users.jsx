@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ToggleButton from "../../UI/ToggleButton/ToggleButton";
 import {toast} from 'react-toastify';
 import ConfirmationModal from "../../UI/BootstrapModal/ConfirmationModal"; // Import the new modal component
-import UserImage from './User.png'
+import UserImage from '../../Assets/Images/User.png'
 
 export const Users = () => {
     const [users,setUsers] = useState([]);

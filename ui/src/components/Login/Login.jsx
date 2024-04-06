@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CustomFormField from "../../UI/CustomFormField/CustomFormField";
-import Hero from "./LogIn.png";
+import Hero from "../../Assets/Images/LogIn.png";
 import styles from "../../Assets/Stylesheets/Components/Login.module.css";
 import GradientButton from "../../UI/GradientButton/GradientButton";
 import { z } from "zod";

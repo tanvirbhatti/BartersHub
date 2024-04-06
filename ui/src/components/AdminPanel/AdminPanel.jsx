@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from 'react-router';
 import { jwtDecode } from "jwt-decode";
 import ConfirmationModal from '../../UI/BootstrapModal/ConfirmationModal';
-import User from './User.png';
+import User from '../../Assets/Images/User.png'
 
 export const AdminPanel = () =>{
     const [user, setUser] = useState(null);
