@@ -1,10 +1,11 @@
-import express, { Router } from 'express';
+import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import session from 'express-session';
 import multer from 'multer';
 import registerUser from './Controllers/Authentication/register.js';
-import { login, logout } from './Controllers/Authentication/login.js';
+import { login} from './Controllers/Authentication/login.js';
+import {logout} from './Controllers/Authentication/logout.js';
 import { addProduct } from './Controllers/Products/add.js';
 import { getProducts, getProductById } from './Controllers/Products/get.js';
 import { getTestimonials } from './Controllers/Testimonials/get.js';
@@ -35,7 +36,7 @@ app.use(session({
 //Authentication endpionts
 app.post('/register', registerUser);
 app.post('/login', login);
-app.post('/logout', logout);
+app.post('/logout',checkUser, logout);
 
 //product endpoints
 app.post('/add-product', checkUser, firebaseUploadMiddleware, addProduct);
