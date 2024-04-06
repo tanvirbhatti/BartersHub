@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode"
-import './UserProfile.css';
-import GradientButton from '../../UI/GradientButton/GradientButton';
+import '../../Assets/Stylesheets/Components/UserProfile.css';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Button, Form } from 'react-bootstrap';
 import axios from "axios";
 import { toast } from "react-toastify";
-
+import User from '../../Assets/Images/User.png'
 
 const UserProfile = () => {
     const [user, setUser] = useState(null);
@@ -219,55 +218,44 @@ const UserProfile = () => {
     };
 
     return (
-        <div className="container mt-4">
-            <div className="row">
-                <div className="col-lg-3">
-                    <div className="">
-                        <div className=" text-center">
-                            {user && (
-                                <>
-                                    <img className="avatar img-fluid rounded-circle mb-3" src="https://media.istockphoto.com/id/1130884625/vector/user-member-vector-icon-for-ui-user-interface-or-profile-face-avatar-app-in-circle-design.jpg?s=1024x1024&w=is&k=20&c=K2vyMGGU4E4iSfkfTwOGNgG-x-WBadv2anHPFvONnOc=" alt="User Avatar" />
-                                    <div className='border h-100 w-100'>
-                                        <h5>{user.firstName} {user.lastName} </h5>
-                                        <p>{user.email}</p>
-                                        <p className="location">{user.city} {user.province} {user.areaCode}</p>
-                                        {/* <p className="location">Edit Profile</p>
-
-                                        <p className="user-rating">User Rating: {user.rating}</p> */}
-
-                                        <a onClick={handleLogout}>
-                                            <GradientButton rounded={false} text="Logout" />
-                                        </a>
-                                    </div>
-                                </>
-                            )}
-                        </div>
+        <div className="container pt-5 pb-5">
+            <div className="d-flex">
+                <div className="rounded shadow CardMargin" style={{width:"20%"}}>
+                    <div className=" text-center">
+                        {user && (
+                            <>
+                                <img className="avatar img-fluid border rounded mb-3 mt-4" src={User} alt="User Avatar" />
+                                <div className='pb-3 h-100 w-100'>
+                                    <h5>{user.firstName} {user.lastName} </h5>
+                                    <p>{user.email}</p>
+                                    <p className="location">Edit Profile</p>
+                                    <a onClick={handleLogout}>
+                                        <button className="rounded-2 Btn active" >Logout</button>
+                                    </a>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
+                <div className="shadow rounded" style={{width:"85%"}}>
+                    <h3 className="row py-3 pb-2 px-5 fw-bold">Listings</h3>
+                    <div className="row px-5 pb-2 gap-4">
+                        {listings.map((product, index) => (
+                            <div className="card border mb-3" key={product.id} style={{width:"300px"}}>
+                                <img src={product.image} alt={product.title} className="card-img-top product-img" />
+                                <div className="card-body">
+                                    <h5 className="card-title">{product.title}</h5>
+                                    <p className="card-text">${product.price}</p>
+                                    <div className="d-flex justify-content-between ">
+                                        <button className='btn btn-secondary btn-sm' onClick={() => handleShowModal(product)}>Update</button>
 
-                <div className="col-lg-9">
-                    <div className=" p-4">
-                        <h3 className="mb-4"><b>Listings</b></h3>
-                        <div className="row">
-                            {listings.map((product, index) => (
-                                <div key={product.id} className="col-md-4 mb-4">
-                                    <div className="card">
-                                        <img src={product.image} alt={product.title} className="card-img-top product-img" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">{product.title}</h5>
-                                            <p className="card-text">${product.price}</p>
-                                            <div className="d-flex justify-content-between ">
-                                                <button className='btn btn-sm btn-primary view_button' onClick={() => handleShowModal(product)}>Update listing</button>
-
-                                                <a onClick={() => handleDelete(product._id)}>
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </a>
-                                            </div>
-                                        </div>
+                                        <a onClick={() => handleDelete(product._id)}>
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

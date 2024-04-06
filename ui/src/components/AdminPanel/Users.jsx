@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ToggleButton from "../../UI/ToggleButton/ToggleButton";
 import {toast} from 'react-toastify';
 import ConfirmationModal from "../../UI/BootstrapModal/ConfirmationModal"; // Import the new modal component
+import UserImage from '../../Assets/Images/User.png'
 
 export const Users = () => {
     const [users,setUsers] = useState([]);
@@ -103,8 +104,8 @@ export const Users = () => {
             <table className="w-100 p-3"> 
                 <thead className="bg-dark text-white align-items-center text-center">
                     <tr className="row p-2 align-items-center text-center">
-                        <th className="col-md-2">Image</th>
-                        <th className="col-md-2">Name</th>
+                        <th className="col-md-1">Image</th>
+                        <th className="col-md-3">Name</th>
                         <th className="col-md-2">Location</th>
                         <th className="col-md-2">Area Code</th>
                         <th className="col-md-2">Deactivate User</th>
@@ -115,11 +116,15 @@ export const Users = () => {
                 <tbody>
                     {users && users.map((user,index)=>{
                         return(
-                            <tr className="row p-2 align-items-center text-center border-bottom" key={index}>
-                                <td className="col-md-2 p-0">
-                                    <img src={user.image} alt={user.firstName} style={{width : '100%', height:'70px'}} />
+                            <tr className="d-flex py-2 align-items-center text-center border-bottom" key={index}>
+                            <td className="col-md-1 p-0">
+                                {   user.image ?
+                                    (<img src={user.image} alt={user.firstName} style={{width : '100%'}} />) :
+                                    (<img src={UserImage} alt={user.firstName} className="border rounded" style={{width:'100%'}}/>)
+                                } 
+                                
                                 </td>
-                                <td className="col-md-2">{user.firstName}</td>
+                                <td className="col-md-3">{user.firstName} {user.lastName}</td>
                                 <td className="col-md-2">{user.city}</td>
                                 <td className="col-md-2">{user.areaCode}</td>
                                 <td className="col-md-2 justify-content-center d-flex">

@@ -102,7 +102,7 @@ export const Products = () => {
             />
             <table className="w-100 p-3">
                 <thead className="bg-dark text-white align-items-center text-center">
-                    <tr className="row p-2 align-items-center text-center">
+                <tr className="row p-2 align-items-center text-center">
                         <th className="col-md-1">Image</th>
                         <th className="col-md-3">Title</th>
                         <th className="col-md-2">Featured Product</th>
@@ -114,9 +114,9 @@ export const Products = () => {
                 </thead>
                 <tbody>
                     {products && products.map((product, index) => (
-                        <tr className="row p-2 align-items-center text-center border-bottom" key={index}>
+                        <tr className="d-flex py-2 align-items-center text-center border-bottom" key={index}>
                             <td className="col-md-1 p-0">
-                                <img src={product.image} alt={product.title} style={{ width: '100%', height: '70px' }} />
+                                <img src={product.image} alt={product.title} style={{ width: '100%'}} />
                             </td>
                             <td className="col-md-3">{product.title}</td>
                             <td className="col-md-2">

@@ -1,4 +1,4 @@
-import styles from "./CustomFormField.module.css";
+import styles from "../../Assets/Stylesheets/UI/CustomFormField.module.css";
 
 const CustomFormField = ({
   name,

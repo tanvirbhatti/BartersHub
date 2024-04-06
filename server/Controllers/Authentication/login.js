@@ -69,30 +69,4 @@ export async function login(req, res) {
   }
 }
 
-//logout function
-export async function logout(req, res) {
-  try {
-    // Check if the token exists in the session
-    if (req.session.token) {
-      // Invalidate the session token
-      delete req.session.token;
 
-      // Optionally, you can destroy the entire session
-      req.session.destroy((err) => {
-        if (err) {
-          return res.json({ error: "Error during logout." });
-        }
-
-        // Clear the client-side cookie
-        res.clearCookie("connect.sid"); // Adjust the cookie name based on your configuration
-
-        return res.json({ message: "Successfully logged out" });
-      });
-    } else {
-      return res.json({ error: "No active session found." });
-    }
-  } catch (error) {
-    console.error("Error during logout:", error);
-    return res.json({ error: "Internal server error." });
-  }
-}

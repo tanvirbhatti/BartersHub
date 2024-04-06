@@ -14,8 +14,8 @@ import ProductDetails from '../ProductDetails/ProductDeatails.jsx';
 const Home = () => {
     return (
         <React.Fragment>
-            <Nav />
             <BrowserRouter>
+            <Nav />
                 <Routes>
                     <Route path='signup' element={<Signup />} />
                     <Route path='login' element={<Login />} />
