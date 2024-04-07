@@ -29,8 +29,7 @@ export async function getUserListings(req, res) {
             return res.status(403).json({ error: 'No user ID found. Authentication may have failed.' });
         }
 
-        const listings = await db.collection('products').find({ userId }).toArray();
-
+        const listings = await db.collection('products').find({  'user._id': new ObjectId(userId) }).toArray();
         if (!listings.length) {
             return res.status(404).json({ error: 'No listings found for this user' });
         }
@@ -57,8 +56,7 @@ export async function deleteListing(req, res) {
       if (!listing) {
           return res.status(404).json({ error: 'Listing not found.' });
       }
-
-      if (listing.userId !== userId) {
+      if (listing.user._id.toString()===new ObjectId(userId).toString()) {
           return res.status(403).json({ error: 'You are not authorized to delete this listing.' });
       }
 
@@ -87,8 +85,7 @@ export async function updateListing(req, res) {
       if (!existingListing) {
           return res.status(404).json({ error: 'Listing not found.' });
       }
-
-      if (existingListing.userId.toString() !== userId) {
+      if (existingListing.user._id.toString() !== new ObjectId(userId)) {
           return res.status(403).json({ error: 'You are not authorized to update this listing.' });
       }
 
