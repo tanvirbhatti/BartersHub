@@ -21,20 +21,17 @@ const ProductListing = () => {
 
     return (
         <div className="marketplace">
-            <header className="Posting_section">
-                <div className="Posting_section_div">
-                    <h1>List your product and get it sold Today! with Barters Hub</h1>
-                    <p>Your one-stop marketplace for seamless transactions</p>
-                    <button type="button" className="upload-btn">
-                        <Link to="/ListingsUpload" className="Listinglink">Post Your Listing here</Link>
-                    </button>
-                </div>
+            <header className='d-flex w-100 my-4 justify-content-center align-content-center gap-4 text-white py-3'>
+                <h4 className='d-flex align-items-center mb-0'>List your product and get it sold Today!</h4>
+                <button type="button" className="upload-btn">
+                    <Link to="/ListingsUpload" className="Listinglink">Post Your Ad</Link>
+                </button>
             </header>
 
             <div className="container">
                 <section className="marketplace-header">
-                    <button className="menu-button">Filters</button>
-                    <select className="location-filter">
+                    <button className="menu-button rounded">Filters</button>
+                    <select className="location-filter rounded">
                         <option value="kitchener">Kitchener</option>
                     </select>
                 </section>

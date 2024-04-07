@@ -42,7 +42,7 @@ const ProductDetails = () => {
                             <p>{product.description}</p>
                             
                             <div class="contact_button">
-                                <GradientButton rounded={false} text="Contact seller"/>
+                                <GradientButton rounded={true} text="Contact seller"/>
                             </div>
                         </div>
                     </div>
