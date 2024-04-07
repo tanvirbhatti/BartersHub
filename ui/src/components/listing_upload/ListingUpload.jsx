@@ -3,7 +3,7 @@ import '../../Assets/Stylesheets/Components/ListingUpload.css';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom'; 
 import { toast } from 'react-toastify';
-
+import GradientButton from '../../UI/GradientButton/GradientButton';
 const ListingUpload = () => {
     const [formData, setFormData] = useState({
         title: '',
@@ -136,7 +136,7 @@ const ListingUpload = () => {
 
 
     return (
-        <div className="form-container">
+        <div className="form-container my-4">
             {isUploading && (
                 <div className="uploading-indicator">
                     <div className="spinner-border text-primary" role="status">
@@ -145,31 +145,29 @@ const ListingUpload = () => {
                 </div>
             )}
 
-            <form className="product-ad-form" onSubmit={handleSubmit}>
-                <h2>Post Product Ad</h2>
+            <h3 className='text-center p-2 mb-3'>Post Product Ad</h3>
+            <form className="product-ad-form rounded px-4 pt-2 pb-4 shadow " onSubmit={handleSubmit}>
 
                 <label htmlFor="title">Product Title</label>
-                <input className="input_text" type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} />
+                <input className="form-control rounded border-dark" type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} />
 
                 {errors.title && <div className="error-message">{errors.title}</div>}
 
                 <label htmlFor="description">Product Description</label>
-                <textarea className="input_text" id="description" name="description" value={formData.description} onChange={handleInputChange}></textarea>
+                <textarea className="form-control rounded border-dark" id="description" name="description" value={formData.description} onChange={handleInputChange}></textarea>
                 {errors.description && <div className="error-message">{errors.description}</div>}
 
                 <label htmlFor="category">Select a Category</label>
-                <select id="category" name="category" value={formData.category} onChange={handleInputChange}>
+                <select id="category" name="category" value={formData.category} onChange={handleInputChange} className='rounded form-select border-dark'>
                     <option value="category1">Category 1</option>
                     <option value="category2">Category 2</option>
                 </select>
 
-                <div className="image-upload-container">
+                <div className="form-group rounded border border-dark p-3">
                     <label>Add photos of your product <span className="required-indicator">*</span></label>
                     <hr />
-                    <br />
-                    <input type="file" accept="image/jpeg, image/png" onChange={handleImageSelect} />
+                    <input className='form-control-file' type="file" accept="image/jpeg, image/png" onChange={handleImageSelect} />
                     {errors.image && <div className="error-message" style={{marginTop:"10px"}}>{errors.image}</div>}
-                    
                     {imagePreview && (
                         <div className="image-preview-container">
                             <img src={imagePreview} alt="Preview" />
@@ -179,25 +177,24 @@ const ListingUpload = () => {
 
 
                 <label htmlFor="price">Price</label>
-                <input className="input_text" type="number" id="price" name="price" value={formData.price} onChange={handleInputChange} />
+                <input className="form-control rounded border-dark" type="number" id="price" name="price" value={formData.price} onChange={handleInputChange} />
                 {errors.price && <span className="error">{errors.price}</span>}
 
-                <fieldset className="contact-information">
+                <fieldset className="border border-dark rounded p-3 mb-3">
                     <p>Contact Information</p>
                     <hr />
                     <div className='contact-info-input'>
                         <label htmlFor="phoneNumber">Phone Number:</label>
-                        <input type="tel" id="phoneNumber" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} />
+                        <input type="tel" id="phoneNumber" className='form-control rounded' name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} />
                         {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>}
                     </div>
-
                     <div className='contact-info-input'>
                         <label htmlFor="email">Email:</label>
-                        <input type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} />
+                        <input type="email" className='form-control rounded' id="email" name="email" value={formData.email} onChange={handleInputChange} />
                         {errors.email && <span className="error">{errors.email}</span>}
                     </div>
                 </fieldset>
-                <button type="submit" className="submit-btn" disabled={Object.keys(errors).length > 0 || isUploading}>Add Product</button>
+                <GradientButton className="form-control rounded" rounded={true} type="submit" disabled={Object.keys(errors).length > 0 || isUploading} text={"Add Product"} />
             </form>
         </div>
     );

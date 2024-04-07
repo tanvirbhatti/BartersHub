@@ -241,7 +241,7 @@ const UserProfile = () => {
                     <h3 className="row py-3 pb-2 px-5 fw-bold">Listings</h3>
                     <div className="row px-5 pb-2 gap-4">
                         {listings.map((product, index) => (
-                            <div className="card border mb-3" key={product.id} style={{width:"300px"}}>
+                            <div className="card border mb-3 px-0" key={product.id} style={{width:"300px"}}>
                                 <img src={product.image} alt={product.title} className="card-img-top product-img" />
                                 <div className="card-body">
                                     <h5 className="card-title">{product.title}</h5>
