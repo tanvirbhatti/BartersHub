@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate} from "react-router-dom";
 import "../../Assets/Stylesheets/Components/ProductDetails.css"
 import GradientButton from "../../UI/GradientButton/GradientButton.jsx";
 
 const ProductDetails = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -23,6 +24,10 @@ const ProductDetails = () => {
 
         fetchProduct();
     }, [id]);
+
+    const handleSellerContact = () =>{
+        navigate('/chat')
+    }
 
     return (
         <div className="container mt-5 mb-5">
@@ -42,7 +47,7 @@ const ProductDetails = () => {
                             <p>{product.description}</p>
                             
                             <div class="contact_button">
-                                <GradientButton rounded={true} text="Contact seller"/>
+                                <GradientButton rounded={true} text="Contact seller" onClick={handleSellerContact}/>
                             </div>
                         </div>
                     </div>

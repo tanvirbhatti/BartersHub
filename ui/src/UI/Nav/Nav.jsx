@@ -105,11 +105,18 @@ const Nav = () => {
                   {/* Render user-specific components */}
                   <li>
                     <a href="/user">
-                      User Profile
+                      <i className="fa fa-user"></i>
                     </a>
                   </li>
                   <li>
-                    <GradientButton rounded={true} text="Logout" onClick={handleLogout} />
+                    <a href="/chat">
+                      <i className="fa fa-comment-alt"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <button onClick={handleLogout} className={styles.logout}>
+                      <i className="fa fa-sign-out"></i>
+                    </button>
                   </li>
                 </>
               ) : (

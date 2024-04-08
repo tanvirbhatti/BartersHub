@@ -38,13 +38,6 @@
   width:26vw;
 }
 
-.logout{
-  border-radius: 0.4rem;
-  padding: 0.7rem 0.8rem;
-  background: linear-gradient(45deg, #f21616, #f28b50);
-  color:white
-}
-
 nav ul {
   margin-bottom: 0;
 }
@@ -56,4 +49,11 @@ nav ul {
   margin-left:0.5rem;
   padding: 0.5rem 1rem;
   border-radius: 0.4rem;
+}
+
+.logout{
+  border:0;
+  background: white;
+  color:black;
+  padding:0
 }
