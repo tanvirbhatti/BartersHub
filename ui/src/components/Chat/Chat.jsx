@@ -50,7 +50,7 @@ export const Chat = () => {
         <>
             <div className='container pt-5 pb-5'>
                 <div className="d-flex gap-2">
-                    <div className="col shadow rounded col-md-3 p-3">
+                    <div className="shadow rounded col-md-3 p-3">
                         <h4 className="fw-bold">Chats</h4>
                         <div className="d-flex align-items-center mb-3 gap-1">
                             <div className="col-md-10">
@@ -94,12 +94,12 @@ export const Chat = () => {
                                     </div>
                                     <p className="col-md-10 fw-bold m-0">{activeReciver.firstName}</p>
                                     <div className="col-md-1 d-flex text-end gap-4">
-                                            <a href="">
-                                                <i className="fa fa-search"></i>
-                                            </a>
-                                            <a href="">
-                                                <i className="fa fa-circle-info"></i>
-                                            </a>
+                                            <button className="rounded border-0 bg-white">
+                                                <i className="fa fa-search text-danger"></i>
+                                            </button>
+                                            <button className="rounded border-0 bg-white">
+                                                <i className="fa fa-circle-info text-danger"></i>
+                                            </button>
                                     </div>
                                 </div> :
                                 <div>
