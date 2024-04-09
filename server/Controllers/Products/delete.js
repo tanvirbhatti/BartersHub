@@ -19,11 +19,17 @@ export async function deleteProduct(req, res) {
                 }
                 else{
                     const foundProduct = await db.collection('products').findOne({_id:ObjectIdProjectId})
+                    const foundFeaturedProduct = await db.collection('featuredProducts').findOne({'productId':ObjectIdProjectId})
+                    console.log(foundFeaturedProduct)
                     if(!foundProduct){
                         res.json({error:"couldn't find a product"});
                     }
                     else{
                         await db.collection('products').deleteOne({_id:ObjectIdProjectId});
+                        if(foundFeaturedProduct){
+                            await db.collection('featuredProducts').deleteOne({'productId':ObjectIdProjectId})
+                            console.log("deleted")
+                        }
                         return res.json({ message: 'Product deleted successfully',foundProduct});    
                     }
                 }
