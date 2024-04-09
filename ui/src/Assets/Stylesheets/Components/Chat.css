@@ -1,0 +1,30 @@
+.chatImage{
+    height: 50px;
+    width: auto;
+}
+
+.chatHeader{
+    height: 80px;
+}
+
+.chatBody{
+    height: 500px;
+}
+
+.chatFooter{
+    height: 50px;
+}
+
+.sendButton{
+    background: linear-gradient(45deg, #f21616, #f28b50);
+    border: none;
+    padding: 0.5rem 2.4rem;
+}
+
+.bg-orange{
+    background: linear-gradient(45deg, #f21616, #f28b50);
+}
+
+.selectUserButton:hover{
+
+}

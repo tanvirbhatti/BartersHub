@@ -102,7 +102,7 @@ export const Users = () => {
                 message={confirmMessage}
             />
             <table className="w-100 p-3"> 
-                <thead className="bg-dark text-white align-items-center text-center">
+                <thead className="bg-secondary text-white align-items-center text-center">
                     <tr className="row p-2 align-items-center text-center">
                         <th className="col-md-1">Image</th>
                         <th className="col-md-3">Name</th>

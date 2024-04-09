@@ -57,7 +57,7 @@ export async function login(req, res) {
             });
           }
         } else {
-          return res.status(401).json({ error: "Incorrect password." });
+          return res.json({ error: "Incorrect password." });
         }
       }
     } else {

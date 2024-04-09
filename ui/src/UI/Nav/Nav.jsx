@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import GradientButton from "../GradientButton/GradientButton";
 import Logo from "../../Assets/Images/BarterHub.png";
 import styles from "../../Assets/Stylesheets/UI/Nav.module.css";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import ConfirmationModal from '../../UI/BootstrapModal/ConfirmationModal';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Nav = () => {
+  const location = useLocation();
   const navigate = useNavigate()
   const [user, setUser] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -62,6 +62,11 @@ const Nav = () => {
     });
     setModalOpen(true);
   };
+
+  const isCurrentPage= (url) =>{
+    return location.pathname === url
+  }
+  
   return (
     <>
       <ConfirmationModal
@@ -83,8 +88,8 @@ const Nav = () => {
           </button>
         </div>
         <ul className={styles.items}>
-          <li><a href="/">Home</a></li>
-          <li><a href="/productListings">Listing</a></li>
+          <li><a href="/" className={isCurrentPage("/") ? styles.active : ""}>Home</a></li>
+          <li><a href="/productListings" className={isCurrentPage("/productListings") ? styles.active : ""}>Listing</a></li>
           {/* Default: Render login */}
           {user && (
             <>
@@ -92,30 +97,39 @@ const Nav = () => {
                 <>
                   {/* Render admin-specific components */}
                   <li>
-                    <a href="/admin">
-                      Admin Panel
+                    <a href="/admin" className={isCurrentPage("/admin") ? styles.active : ""}>
+                      <i className="fa fa-user"></i>
                     </a>
                   </li>
                   <li>
-                    <GradientButton rounded={true} text="Logout" onClick={handleLogout} />
+                    <button onClick={handleLogout} className={styles.logout}>
+                      <i className="fa fa-sign-out"></i>
+                    </button>
                   </li>
                 </>
               ) : user.userType === "user" ? (
                 <>
                   {/* Render user-specific components */}
                   <li>
-                    <a href="/user">
-                      User Profile
+                    <a href="/user" className={isCurrentPage("/user") ? styles.active : ""}>
+                      <i className="fa fa-user"></i>
                     </a>
                   </li>
                   <li>
-                    <GradientButton rounded={true} text="Logout" onClick={handleLogout} />
+                    <a href="/chat" className={isCurrentPage("/chat") ? styles.active : ""}>
+                      <i className="fa fa-comment-alt"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <button onClick={handleLogout} className={styles.logout}>
+                      <i className="fa fa-sign-out"></i>
+                    </button>
                   </li>
                 </>
               ) : (
                 <li>
-                  <a href="/login">
-                    <GradientButton rounded={true} text="Login" />
+                  <a href="/login" className={isCurrentPage("/login") ? styles.active : ""}>
+                    <button > login </button>
                   </a>
                 </li>
               )}
@@ -123,8 +137,8 @@ const Nav = () => {
           )}
           {!user && ( /* Render login if user is not defined */
             <li>
-              <a href="/login">
-                <GradientButton rounded={true} text="Login" />
+              <a href="/login" className={isCurrentPage("/login") ? styles.active : ""}>
+                <span>login</span>
               </a>
             </li>
           )}

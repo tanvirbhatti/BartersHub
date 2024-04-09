@@ -101,7 +101,7 @@ export const Products = () => {
                 message={confirmMessage}
             />
             <table className="w-100 p-3">
-                <thead className="bg-dark text-white align-items-center text-center">
+                <thead className="align-items-center text-center bg-secondary text-white">
                 <tr className="row p-2 align-items-center text-center">
                         <th className="col-md-1">Image</th>
                         <th className="col-md-3">Title</th>
@@ -116,7 +116,7 @@ export const Products = () => {
                     {products && products.map((product, index) => (
                         <tr className="d-flex py-2 align-items-center text-center border-bottom" key={index}>
                             <td className="col-md-1 p-0">
-                                <img src={product.image} alt={product.title} style={{ width: '100%'}} />
+                                <img className="border rounded" src={product.image} alt={product.title} style={{ width: '100%', height:'5.25rem'}} />
                             </td>
                             <td className="col-md-3">{product.title}</td>
                             <td className="col-md-2">
@@ -127,7 +127,7 @@ export const Products = () => {
                                 />
                             </td>
                             <td className="col-md-3">{product.email}</td>
-                            <td className="col-md-1">city</td>
+                            <td className="col-md-1">{product.user.city}</td>
                             <td className="col-md-1">
                                 <button className="btn btn-primary" onClick={()=>deleteProduct(product._id, product.title)}>
                                     <i className="fa-solid fa-trash"></i>

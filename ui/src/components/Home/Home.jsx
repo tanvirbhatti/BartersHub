@@ -10,6 +10,7 @@ import ProductListing from '../ProductListing/ProductListing.jsx';
 import HomePage from '../HomePage/HomePage.jsx';
 import {AdminPanel} from '../AdminPanel/AdminPanel.jsx'
 import ProductDetails from '../ProductDetails/ProductDeatails.jsx';
+import {Chat} from '../Chat/Chat.jsx'
 
 const Home = () => {
     return (
@@ -25,6 +26,7 @@ const Home = () => {
                     <Route path='user' element={<UserProfile/>} />
                     <Route path='/' element={<HomePage/>} />
                     <Route path='admin' element={<AdminPanel/>} />
+                    <Route path='chat' element={<Chat/>}/>
                 </Routes>
             </BrowserRouter>
             <Footer />
