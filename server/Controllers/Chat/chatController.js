@@ -71,26 +71,60 @@ const chatController = {
         }
     },
 
+    // getOrCreateChatSession: async (req, res) => {
+    //     try {
+    //         const db = await connectToDb();
+    //         const { listingId, userId } = req.params; 
+    
+    //         const product = await db.collection('products').findOne({ _id: new ObjectId(listingId) });
+    //         if (!product) {
+    //             return res.status(404).json({ error: 'Product not found' });
+    //         }
+    
+    //         const toUserId = product.userId; 
+    //         console.log(product,"dssssss") 
+    //         const chatId = [userId, product.user._id, listingId].sort().join('-'); 
+    //         let chatSession = await db.collection('chatMessages').findOne({ _id: chatId });
+    //         if (!chatSession) {
+    //             chatSession = {
+    //                 _id: chatId,
+    //                 Title: product.title,  
+    //                 fromUserId: userId,    
+    //                 toUserId: product.user._id.toString(),    
+    //                 listingId,
+    //                 messages: [],
+    //                 createdAt: new Date()
+    //             };
+    //             await db.collection('chatMessages').insertOne(chatSession);
+    //         }
+    
+    //         res.status(200).json(chatSession);
+    //     } catch (error) {
+    //         console.error('Error fetching or creating chat session:', error);
+    //         res.status(500).json({ error: 'Internal server error' });
+    //     }
+    // },
+    
     getOrCreateChatSession: async (req, res) => {
         try {
             const db = await connectToDb();
-            const { listingId, userId } = req.params; 
+            const { listingId, userId } = req.params;
     
             const product = await db.collection('products').findOne({ _id: new ObjectId(listingId) });
             if (!product) {
                 return res.status(404).json({ error: 'Product not found' });
             }
     
-            const toUserId = product.userId; 
-            console.log(product,"dssssss") 
-            const chatId = [userId, toUserId, listingId].sort().join('-'); 
+            const toUserId = product.userId;  
+            const chatId = [userId, product.user._id, listingId].sort().join('-'); 
+    
             let chatSession = await db.collection('chatMessages').findOne({ _id: chatId });
             if (!chatSession) {
                 chatSession = {
                     _id: chatId,
-                    Title: product.title,  
-                    fromUserId: userId,    
-                    toUserId: product.user._id,    
+                    Title: product.title, 
+                    fromUserId: userId,
+                    toUserId: product.user._id.toString(),
                     listingId,
                     messages: [],
                     createdAt: new Date()
@@ -104,7 +138,6 @@ const chatController = {
             res.status(500).json({ error: 'Internal server error' });
         }
     },
-    
     
 
     getAllChatsForUser: async (req, res) => {

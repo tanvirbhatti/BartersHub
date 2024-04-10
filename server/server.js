@@ -89,15 +89,27 @@ app.get('/chat/listing/:listingId/user/:userId', checkUser, chatController.getOr
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-  socket.on('sendMessage', (data) => {
+  socket.on('joinChat', (chatId) => {
+      socket.join(chatId);
+      console.log(`User joined chat: ${chatId}`);
+  });
+
+  socket.on('leaveChat', (chatId) => {
+      socket.leave(chatId);
+      console.log(`User left chat: ${chatId}`);
+  });
+
+  socket.on('sendMessage', async (data) => {
       console.log('Message received:', data);
-      chatController.saveMessage(data.fromUserId, data.toUserId,data.message, data.listingId);
+      const message = await chatController.saveMessage(data.fromUserId, data.toUserId, data.message, data.listingId);
+      io.to(data.listingId).emit('newMessage', message); 
   });
 
   socket.on('disconnect', () => {
       console.log('User disconnected');
   });
 });
+
 
 
 // Start the server

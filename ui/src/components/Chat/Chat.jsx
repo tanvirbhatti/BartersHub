@@ -49,18 +49,20 @@ export const Chat = () => {
     
             fetchProduct();
         } else {
-            // setReciver(activeChat.toUserId)
             fetchChatSessions(decoded.userId, token);
         }
-
         socket.on('newMessage', (message) => {
-            if (activeChat && (message.listingId === activeChat.listingId)) {
-                setMessages((prevMessages) => [...prevMessages, message]);
+            if (activeChat && message.listingId === activeChat.listingId) {
+                setMessages(prevMessages => [...prevMessages, message]);
             }
         });
+        return () => {
+            socket.off('newMessage');
+        };
 
-        return () => socket.off('newMessage');
-    }, [navigate, listingId]);
+    }, [navigate, listingId,activeChat]);
+
+
 
     const initiateOrFetchChat = async (listingId, userId, token) => {
         try {
@@ -94,31 +96,35 @@ export const Chat = () => {
 
     const handleSendMessage = () => {
         if (!messageInput.trim() || !activeChat) return;
-        let messageData = {}
-        if(listingId){
-             messageData = {
-                fromUserId: user.userId,
-                toUserId: Reciver._id, 
-                message: messageInput,
-                listingId: activeChat.listingId
-            };
-        }else{
-             messageData = {
-                fromUserId: user.userId,
-                toUserId: activeChat.toUserId, 
-                message: messageInput,
-                listingId: activeChat.listingId
-            };
-        }
-
-        
-        
+    
+        // Default to the current user as the sender
+        const fromUserId = user.userId;
+    
+        // Determine the recipient of the message:
+        // If in a chat initiated by the current user, the receiver is the other person in the chat
+        // If replying in an existing chat, it depends on the chat context
+        const toUserId = listingId ? 
+            (Reciver ? Reciver._id : activeChat.toUserId) : // If there's a listingId, we're initiating a chat, so use Reciver._id or fall back to activeChat.toUserId
+            (activeChat.fromUserId === user.userId ? activeChat.toUserId : activeChat.fromUserId); // In an existing chat, if the current user is the sender, the receiver is toUserId, otherwise, it's fromUserId
+    
+        let messageData = {
+            fromUserId: fromUserId,
+            toUserId: toUserId,
+            message: messageInput,
+            listingId: activeChat.listingId
+        };
+    
+        // Optimistically update the local messages state before sending the message to the server
+        setMessages([...messages, { ...messageData, createdAt: new Date() }]); 
         socket.emit('sendMessage', messageData);
         setMessageInput('');
     };
+    
+    
     const handleChatSelect = (chat) => {
         setActiveChat(chat);
         setMessages(chat.messages);
+        socket.emit('joinChat', chat._id);  
     };
 
 
