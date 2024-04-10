@@ -1,126 +1,170 @@
-import React, { useEffect, useState } from "react";
-import UserImage from '../../Assets/Images/User.png'
-import {useNavigate} from 'react-router-dom';
-import {toast} from 'react-toastify';
-import '../../Assets/Stylesheets/Components/Chat.css'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import io from 'socket.io-client';
+import { jwtDecode } from "jwt-decode";
+
+import UserImage from '../../Assets/Images/User.png';
+import '../../Assets/Stylesheets/Components/Chat.css';
+
+const socket = io('http://localhost:8000');
 
 export const Chat = () => {
-    const [users,setUsers] = useState([]);
-    const [activeReciver, setActiveReciever] = useState()
+    const [chatSessions, setChatSessions] = useState([]);
+    const [activeChat, setActiveChat] = useState(null);
+    const [messages, setMessages] = useState([]);
+    const [messageInput, setMessageInput] = useState('');
+    const [user, setUser] = useState(null);
+    const [Reciver, setReciver] = useState(null)
 
-    const navigate = useNavigate()
-    const usersArray = [
-        {
-            _id : 1,
-            firstName:'Rahul',
-        },
-        {
-            _id : 2,
-            firstName:'Ashok',
-        },
-        {
-            _id : 3,
-            firstName:'Ajay',
-        } 
-    ]
-
-    
-    const handleUserClick = (_id)=>{
-        (users.map(u=>
-            {
-                if(u._id===_id){
-                    setActiveReciever(u)
-                }
-            }))
-    }
-
-    useEffect(()=>{
-        setUsers(usersArray);
-    },[])
+    const navigate = useNavigate();
+    const { listingId } = useParams();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
-            toast.error("Login required to directly contact the seller");
-            navigate('/login'); // Redirect to login
+            toast.error("You need to log in to access chats.");
+            navigate('/login');
+            return;
         }
-    }, [navigate]);
 
-    return(
-        <>
-            <div className='container pt-5 pb-5'>
-                <div className="d-flex gap-2">
-                    <div className="shadow rounded col-md-3 p-3">
-                        <h4 className="fw-bold">Chats</h4>
-                        <div className="d-flex align-items-center mb-3 gap-1">
-                            <div className="col-md-10">
-                                <input type="text" className="border p-2 rounded form-control" placeholder="search all users"/>
-                            </div>
-                            <a href="" className="col-md-2 text-white border-0 text-center border sendButton p-2 rounded">
-                                <i className="fa fa-search"></i>
-                            </a>
-                        </div>
-                        {users.map(user=>
-                            <div className="selectUserButton">
-                                <button 
-                                    className=
-                                    {
-                                        `row border-0 p-0 py-2 align-items-center 
-                                            ${activeReciver && activeReciver._id === user._id ? 
-                                                'fw-bold bg-dark text-white' : 
-                                                'bg-white'
-                                            }`
-                                    }                                
-                                    onClick={handleUserClick.bind(null,user._id)} key={user._id}>
-                                    <div className="col-md-3">
-                                    {   user.image ?
-                                            (<img src={user.image} alt={user.firstName} className="border rounded" style={{width:'100%'}}/>) :
-                                            (<img src={UserImage} alt={user.firstName} className="border rounded" style={{width:'100%'}}/>)
-                                        } 
-                                    </div>
-                                    <p className="col-md-9 m-0">{user.firstName}</p>
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                    <div className="shadow rounded col-md-9">
-                        <div className="chatHeader">
-                            {activeReciver ? 
-                                <div className="d-flex p-2 px-3 align-items-center rounded-top border-bottom">
-                                    <div className="col-md-1">
-                                        {activeReciver.image ?
-                                        (<img src={activeReciver.image} alt={activeReciver.firstName} className="chatImage" />) :
-                                        (<img src={UserImage} alt={activeReciver.firstName} className="border rounded chatImage"/>)}
-                                    </div>
-                                    <p className="col-md-10 fw-bold m-0">{activeReciver.firstName}</p>
-                                    <div className="col-md-1 d-flex text-end gap-4">
-                                            <button className="rounded border-0 bg-white">
-                                                <i className="fa fa-search text-danger"></i>
-                                            </button>
-                                            <button className="rounded border-0 bg-white">
-                                                <i className="fa fa-circle-info text-danger"></i>
-                                            </button>
-                                    </div>
-                                </div> :
-                                <div>
+        const decoded = jwtDecode(token);
+        setUser(decoded);
 
+        if (listingId) {
+            initiateOrFetchChat(listingId, decoded.userId, token);
+            const fetchProduct = async () => {
+                try {
+                    const response = await fetch(`http://localhost:8000/get-product/${listingId}`);
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch product");
+                    }
+                    const productData = await response.json();
+                    setReciver(productData.user);
+                } catch (error) {
+                    console.error("Error fetching product:", error);
+                }
+            };
+    
+            fetchProduct();
+        } else {
+            // setReciver(activeChat.toUserId)
+            fetchChatSessions(decoded.userId, token);
+        }
+
+        socket.on('newMessage', (message) => {
+            if (activeChat && (message.listingId === activeChat.listingId)) {
+                setMessages((prevMessages) => [...prevMessages, message]);
+            }
+        });
+
+        return () => socket.off('newMessage');
+    }, [navigate, listingId]);
+
+    const initiateOrFetchChat = async (listingId, userId, token) => {
+        try {
+            const response = await axios.get(`http://localhost:8000/chat/listing/${listingId}/user/${userId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (response.status === 200 && response.data) {
+                setChatSessions([response.data]);
+                setActiveChat(response.data);
+                setMessages(response.data.messages || []);
+            }
+        } catch (error) {
+            console.error('Error fetching or initiating chat:', error);
+            toast.error('Error fetching or initiating chat');
+        }
+    };
+
+    const fetchChatSessions = async (userId, token) => {
+        try {
+            const response = await axios.get(`http://localhost:8000/chat/user/${userId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (response.status === 200) {
+                setChatSessions(response.data.chats || []);
+            }
+        } catch (error) {
+            console.error('Error fetching chat sessions:', error);
+            toast.error('Failed to load chat sessions');
+        }
+    };
+
+    const handleSendMessage = () => {
+        if (!messageInput.trim() || !activeChat) return;
+        let messageData = {}
+        if(listingId){
+             messageData = {
+                fromUserId: user.userId,
+                toUserId: Reciver._id, 
+                message: messageInput,
+                listingId: activeChat.listingId
+            };
+        }else{
+             messageData = {
+                fromUserId: user.userId,
+                toUserId: activeChat.toUserId, 
+                message: messageInput,
+                listingId: activeChat.listingId
+            };
+        }
+
+        
+        
+        socket.emit('sendMessage', messageData);
+        setMessageInput('');
+    };
+    const handleChatSelect = (chat) => {
+        setActiveChat(chat);
+        setMessages(chat.messages);
+    };
+
+
+    return (
+        <div className='container pt-5 pb-5'>
+            <div className="d-flex gap-2">
+                <div className="shadow rounded col-md-3 p-3">
+                    <h4 className="fw-bold">Chats</h4>
+                    {chatSessions.map((chat, index) => (
+                        <div key={index} className="selectUserButton" onClick={() => handleChatSelect(chat)}>
+                            <div className={`row border-0 p-0 py-2 align-items-center ${activeChat && activeChat._id === chat._id ? 'fw-bold bg-dark text-white' : 'bg-white'}`}>
+                                <div className="col-md-3">
+                                    <img src={UserImage} alt="User" className="border rounded" style={{width: '100%'}} />
                                 </div>
-                            }
-                        </div>
-                        <div className="chatBody px-4">
-
-                        </div>
-                        <div className="chatFooter d-flex px-4 align-items-center mb-3 gap-3">
-                            <div className="col-md-11">
-                                <input type="text" className="rounded border p-2 form-control" placeholder="Write your message here... " />
+                                <div className="col-md-9">
+                                    <p className="m-0">{chat.Title|| 'Listing Name'}</p>
+                                </div>
                             </div>
-                            <button className="rounded border-0 sendButton text-white px-3 py-2">
-                                <i className="fa fa-paper-plane"></i>
-                            </button>
                         </div>
+                    ))}
+                </div>
+                <div className="shadow rounded col-md-9">
+                    <div className="chatBody px-4">
+                        {messages.map((msg, index) => (
+                            <div key={index} className="message">
+                                <div>{msg.fromUserId === user.userId ? 'You' : msg.fromUserId}: {msg.message}</div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="chatFooter d-flex px-4 align-items-center mb-3 gap-3">
+                        <input 
+                            type="text" 
+                            className="rounded border p-2 form-control" 
+                            placeholder="Write your message here..." 
+                            value={messageInput}
+                            onChange={e => setMessageInput(e.target.value)}
+                            onKeyPress={e => e.key === 'Enter' && handleSendMessage()}
+                        />
+                        <button className="rounded border-0 sendButton text-white px-3 py-2" onClick={handleSendMessage}>
+                            <i className="fa fa-paper-plane"></i>
+                        </button>
                     </div>
                 </div>
             </div>
-        </>
-    )
-}
+        </div>
+    );
+};
+
+export default Chat;

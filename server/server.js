@@ -3,6 +3,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import session from 'express-session';
 import multer from 'multer';
+import { Server as SocketIOServer } from 'socket.io';
+
 import registerUser from './Controllers/Authentication/register.js';
 import { login} from './Controllers/Authentication/login.js';
 import {logout} from './Controllers/Authentication/logout.js';
@@ -18,10 +20,20 @@ import { getFeaturedProducts } from './Controllers/FeaturedProducts/get.js';
 import { getRecentlyListedProducts } from './Controllers/RecentlyAddedProducts/get.js';
 import { deleteFeaturedProduct } from './Controllers/FeaturedProducts/delete.js';
 import { deleteProduct } from './Controllers/Products/delete.js';
+import chatController from './Controllers/Chat/chatController.js';
+import http from 'http';
+
 
 
 const app = express();
 const upload = multer();
+const server = http.createServer(app); 
+const io = new SocketIOServer(server, {
+  cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST", "PUT", "DELETE"]
+  }
+});
 
 app.use(cors({ origin: 'http://localhost:3000', credentials: true, methods: ["GET", 'POST', 'PUT', 'DELETE'], },))
 app.use(bodyParser.json());
@@ -65,9 +77,31 @@ app.put('/admin/enable-user/:userId', checkUser, enableUser);
 app.delete('/admin/delete-user/:userId', checkUser, deleteUser);
 app.get('/admin/users', fetchAllUsers);
 
+// Chat history or chat session management endpoints
+app.post('/chat/message/:senderid', checkUser, chatController.saveMessage);
+app.get('/chat/history/:userId', checkUser, chatController.getChatHistory);
+app.post('/chat/session', checkUser, chatController.createChatSession);
+app.get('/chat/user/:userId',checkUser, chatController.getAllChatsForUser); 
+app.get('/chat/listing/:listingId',checkUser, chatController.getAllChatsForListing);
+app.get('/chat/listing/:listingId/user/:userId', checkUser, chatController.getOrCreateChatSession);
+
+
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  socket.on('sendMessage', (data) => {
+      console.log('Message received:', data);
+      chatController.saveMessage(data.fromUserId, data.toUserId,data.message, data.listingId);
+  });
+
+  socket.on('disconnect', () => {
+      console.log('User disconnected');
+  });
+});
+
 
 // Start the server
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
