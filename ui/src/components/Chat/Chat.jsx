@@ -51,25 +51,18 @@ export const Chat = () => {
         } else {
             fetchChatSessions(decoded.userId, token);
         }
-
-        
-
-        return () => socket.off('newMessage');
-    }, [navigate, listingId]);
-
-    useEffect(() => {
         socket.on('newMessage', (message) => {
-            if (activeChat && (message.listingId === activeChat.listingId)) {
-                setMessages((prevMessages) => [...prevMessages, message]);
+            if (activeChat && message.listingId === activeChat.listingId) {
+                setMessages(prevMessages => [...prevMessages, message]);
             }
         });
-    
         return () => {
-            if (activeChat) {
-                socket.emit('leaveChat', activeChat._id);  
-            }
+            socket.off('newMessage');
         };
-    }, [activeChat]);
+
+    }, [navigate, listingId,activeChat]);
+
+
 
     const initiateOrFetchChat = async (listingId, userId, token) => {
         try {
