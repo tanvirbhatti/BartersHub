@@ -26,7 +26,9 @@ const ProductDetails = () => {
     }, [id]);
 
     const handleSellerContact = () =>{
+
         navigate(`/chat/${product._id}`)
+
     }
 
     return (
