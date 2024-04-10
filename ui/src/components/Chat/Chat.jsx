@@ -49,18 +49,27 @@ export const Chat = () => {
     
             fetchProduct();
         } else {
-            // setReciver(activeChat.toUserId)
             fetchChatSessions(decoded.userId, token);
         }
 
+        
+
+        return () => socket.off('newMessage');
+    }, [navigate, listingId]);
+
+    useEffect(() => {
         socket.on('newMessage', (message) => {
             if (activeChat && (message.listingId === activeChat.listingId)) {
                 setMessages((prevMessages) => [...prevMessages, message]);
             }
         });
-
-        return () => socket.off('newMessage');
-    }, [navigate, listingId]);
+    
+        return () => {
+            if (activeChat) {
+                socket.emit('leaveChat', activeChat._id);  
+            }
+        };
+    }, [activeChat]);
 
     const initiateOrFetchChat = async (listingId, userId, token) => {
         try {
@@ -94,31 +103,25 @@ export const Chat = () => {
 
     const handleSendMessage = () => {
         if (!messageInput.trim() || !activeChat) return;
-        let messageData = {}
-        if(listingId){
-             messageData = {
-                fromUserId: user.userId,
-                toUserId: Reciver._id, 
-                message: messageInput,
-                listingId: activeChat.listingId
-            };
-        }else{
-             messageData = {
-                fromUserId: user.userId,
-                toUserId: activeChat.toUserId, 
-                message: messageInput,
-                listingId: activeChat.listingId
-            };
-        }
 
         
-        
+
+        let messageData = {
+            fromUserId: user.userId,
+            toUserId: listingId ? Reciver._id : activeChat.toUserId,
+            message: messageInput,
+            listingId: activeChat.listingId
+        };
+    
+        setMessages([...messages, messageData]); 
         socket.emit('sendMessage', messageData);
         setMessageInput('');
     };
+    
     const handleChatSelect = (chat) => {
         setActiveChat(chat);
         setMessages(chat.messages);
+        socket.emit('joinChat', chat._id);  
     };
 
 
