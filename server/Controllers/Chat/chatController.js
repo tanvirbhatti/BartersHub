@@ -4,15 +4,11 @@ import { ObjectId } from 'mongodb';
 
 const chatController = {
     
-    saveMessage: async (req, res) => {
+    saveMessage: async (fromUserId, toUserId, message, listingId) => {
         try {
             const db = await connectToDb();
-            const fromUserId = req.user.userId;
-            console.log(fromUserId)
-
-            const { toUserId, message, listingId } = req.body;
     
-            const chatId = `${fromUserId}-${toUserId}-${listingId}`;
+            const chatId = [fromUserId, toUserId, listingId].sort().join('-');  // Create a consistent ID
             const chatMessage = {
                 fromUserId,
                 toUserId,
@@ -21,30 +17,19 @@ const chatController = {
                 createdAt: new Date()
             };
     
-            let chatSession = await db.collection('chatMessages').findOne({ _id: chatId });
-            if (!chatSession) {
-                chatSession = {
-                    _id: chatId,
-                    fromUserId,
-                    toUserId,
-                    listingId,
-                    messages: [],
-                    createdAt: new Date()
-                };
-                await db.collection('chatMessages').insertOne(chatSession);
-            }
-    
+            // Add message to existing session
             await db.collection('chatMessages').updateOne(
                 { _id: chatId },
                 { $push: { messages: chatMessage } }
             );
     
-            res.status(201).json({ message: 'Message saved successfully', chatMessage });
+            return chatMessage;  // Return the saved message for further processing
         } catch (error) {
             console.error('Error saving message:', error);
-            res.status(500).json({ error: 'Internal server error' });
+            throw new Error('Failed to save message');
         }
     },
+    
     
     getChatHistory: async (req, res) => {
         try {
@@ -85,6 +70,42 @@ const chatController = {
             res.status(500).json({ error: 'Internal server error' });
         }
     },
+
+    getOrCreateChatSession: async (req, res) => {
+        try {
+            const db = await connectToDb();
+            const { listingId, userId } = req.params; 
+    
+            const product = await db.collection('products').findOne({ _id: new ObjectId(listingId) });
+            if (!product) {
+                return res.status(404).json({ error: 'Product not found' });
+            }
+    
+            const toUserId = product.userId; 
+            console.log(product,"dssssss") 
+            const chatId = [userId, toUserId, listingId].sort().join('-'); 
+            let chatSession = await db.collection('chatMessages').findOne({ _id: chatId });
+            if (!chatSession) {
+                chatSession = {
+                    _id: chatId,
+                    Title: product.title,  
+                    fromUserId: userId,    
+                    toUserId: product.user._id,    
+                    listingId,
+                    messages: [],
+                    createdAt: new Date()
+                };
+                await db.collection('chatMessages').insertOne(chatSession);
+            }
+    
+            res.status(200).json(chatSession);
+        } catch (error) {
+            console.error('Error fetching or creating chat session:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+    
+    
 
     getAllChatsForUser: async (req, res) => {
         try {

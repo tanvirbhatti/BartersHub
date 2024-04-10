@@ -83,15 +83,15 @@ app.get('/chat/history/:userId', checkUser, chatController.getChatHistory);
 app.post('/chat/session', checkUser, chatController.createChatSession);
 app.get('/chat/user/:userId',checkUser, chatController.getAllChatsForUser); 
 app.get('/chat/listing/:listingId',checkUser, chatController.getAllChatsForListing);
+app.get('/chat/listing/:listingId/user/:userId', checkUser, chatController.getOrCreateChatSession);
 
 
 io.on('connection', (socket) => {
   console.log('A user connected');
 
   socket.on('sendMessage', (data) => {
-      // Your handling code
       console.log('Message received:', data);
-      io.emit('newMessage', data);  // For testing, emit the message back to all clients
+      chatController.saveMessage(data.fromUserId, data.toUserId,data.message, data.listingId);
   });
 
   socket.on('disconnect', () => {

@@ -27,6 +27,7 @@ const Home = () => {
                     <Route path='/' element={<HomePage/>} />
                     <Route path='admin' element={<AdminPanel/>} />
                     <Route path='chat/:listingId' element={<Chat/>}/>
+                    <Route path='chat' element={<Chat/>}/>
                 </Routes>
             </BrowserRouter>
             <Footer />
