@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router';
 import { jwtDecode } from "jwt-decode";
 import ConfirmationModal from '../../UI/BootstrapModal/ConfirmationModal';
 import User from '../../Assets/Images/User.png'
+import logout from '../../utills/logoutUtil'
 
 export const AdminPanel = () =>{
     const [user, setUser] = useState(null);
@@ -37,31 +38,12 @@ export const AdminPanel = () =>{
 
     const handleLogout = async () => {
         setConfirmMessage("Are you sure you want to logout?");
-        setConfirmAction(()=> ()=>{
-                fetch('http://localhost:8000/logout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.token}`
-                },
-            })
-            .then(response => {
-                if (response) {
-                    setUser(null);
-                    localStorage.removeItem('token');
-                    navigate('/'); // Redirect to home page
-                    toast.success(response.message);
-                    setModalOpen(false)
-                } else {
-                    toast.error('Logout failed!');
-                    setModalOpen(false)
-                }
-            })
-            .catch(error => {console.error("Error during logout:", error)});
-            setModalOpen(false)
-        })
-        setModalOpen(true)
-    };
+        setConfirmAction(() => () => {
+            logout(user,setUser,setModalOpen, toast, navigate)
+        });
+        setModalOpen(true);
+      };
+    
     
     const renderComponent = () => {
         switch (activeComponent) {

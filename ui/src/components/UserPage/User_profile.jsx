@@ -6,6 +6,8 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import axios from "axios";
 import { toast } from "react-toastify";
 import User from '../../Assets/Images/User.png'
+import ConfirmationModal from "../../UI/BootstrapModal/ConfirmationModal";
+import logout from '../../utills/logoutUtil'
 
 const UserProfile = () => {
     const [user, setUser] = useState(null);
@@ -13,6 +15,10 @@ const UserProfile = () => {
     const [showModal, setShowModal] = useState(false);
     const [currentListing, setCurrentListing] = useState(null);
     const [updatedListing, setUpdatedListing] = useState({});
+    const [modalOpen, setModalOpen] = useState(false);
+    const [confirmAction, setConfirmAction] = useState(null);
+    const [confirmMessage, setConfirmMessage] = useState("");
+
     const [errors, setErrors] = useState({
         title: '',
         description: '',
@@ -21,9 +27,6 @@ const UserProfile = () => {
         email: '',
         category: ''
     });
-
-
-
 
     const navigate = useNavigate(); // Create navigate function
 
@@ -70,28 +73,14 @@ const UserProfile = () => {
     };
 
     const handleLogout = async () => {
-        try {
-            const response = await fetch('http://localhost:8000/logout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.token}`
-                },
-            });
-
-            if (response.ok) {
-                setUser(null);
-                localStorage.removeItem('token');
-                toast.success("Logout successful");
-                window.location.href = '/'; // Redirect to home page
-            } else {
-                toast.error('Logout failed!');
-            }
-        } catch (error) {
-            console.error("Error during logout:", error);
-        }
-    };
-
+        setConfirmMessage("Are you sure you want to logout?");
+        setConfirmAction(() => () => {
+            logout(user,setUser,setModalOpen, toast, navigate)
+        });
+        setModalOpen(true);
+      };
+        
+    
     const handleDelete = async (productId) => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -99,25 +88,25 @@ const UserProfile = () => {
             return;
         }
 
-        
-            try {
-                const response = await fetch(`http://localhost:8000/delete-product/${productId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${user.token}`
-                    }
-                });
 
-                if (response.ok) {
-                    toast.success('Listing deleted successfully.');
-                    fetchListings(token); // Refresh listings after deletion
-                } else {
-                    toast.error('Failed to delete listing.');
+        try {
+            const response = await fetch(`http://localhost:8000/delete-product/${productId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
                 }
-            } catch (error) {
-                console.error("Error during delete:", error);
+            });
+
+            if (response.ok) {
+                toast.success('Listing deleted successfully.');
+                fetchListings(token); // Refresh listings after deletion
+            } else {
+                toast.error('Failed to delete listing.');
             }
-        
+        } catch (error) {
+            console.error("Error during delete:", error);
+        }
+
     };
 
     const handleShowModal = (listing) => {
@@ -218,9 +207,16 @@ const UserProfile = () => {
     };
 
     return (
+        <>
+        <ConfirmationModal
+            isOpen={modalOpen}
+            onClose={() => setModalOpen(false)}
+            onConfirm={confirmAction}
+            message={confirmMessage}
+        />
         <div className="container pt-5 pb-5">
             <div className="d-flex">
-                <div className="rounded shadow CardMargin" style={{width:"20%"}}>
+                <div className="rounded shadow CardMargin" style={{ width: "20%" }}>
                     <div className=" text-center">
                         {user && (
                             <>
@@ -237,11 +233,11 @@ const UserProfile = () => {
                         )}
                     </div>
                 </div>
-                <div className="shadow rounded" style={{width:"85%"}}>
+                <div className="shadow rounded" style={{ width: "85%" }}>
                     <h3 className="row py-3 pb-2 px-5 fw-bold">Listings</h3>
                     <div className="row px-5 pb-2 gap-4">
                         {listings.map((product, index) => (
-                            <div className="card border mb-3 px-0" key={product.id} style={{width:"300px"}}>
+                            <div className="card border mb-3 px-0" key={product.id} style={{ width: "300px" }}>
                                 <img src={product.image} alt={product.title} className="card-img-top product-img" />
                                 <div className="card-body">
                                     <h5 className="card-title">{product.title}</h5>
@@ -305,7 +301,7 @@ const UserProfile = () => {
                                 name="phoneNumber"
                                 defaultValue={currentListing?.phoneNumber}
                                 onChange={handleFormChange}
-                            />
+                                />
                             {errors.phoneNumber && <div className="text-danger">{errors.phoneNumber}</div>}
                         </Form.Group>
 
@@ -316,7 +312,7 @@ const UserProfile = () => {
                                 name="email"
                                 defaultValue={currentListing?.email}
                                 onChange={handleFormChange}
-                            />
+                                />
                             {errors.email && <div className="text-danger">{errors.email}</div>}
                         </Form.Group>
 
@@ -348,6 +344,7 @@ const UserProfile = () => {
                 </Modal.Footer>
             </Modal>
         </div>
+    </>
     );
 };
 

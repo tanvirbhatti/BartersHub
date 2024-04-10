@@ -11,10 +11,11 @@ import HomePage from '../HomePage/HomePage.jsx';
 import {AdminPanel} from '../AdminPanel/AdminPanel.jsx'
 import ProductDetails from '../ProductDetails/ProductDeatails.jsx';
 import {Chat} from '../Chat/Chat.jsx'
-
+import {AuthProvider} from '../../contexts/AuthContext.jsx'
 const Home = () => {
     return (
         <React.Fragment>
+            <AuthProvider>
             <BrowserRouter>
             <Nav />
                 <Routes>
@@ -29,6 +30,7 @@ const Home = () => {
                     <Route path='chat' element={<Chat/>}/>
                 </Routes>
             </BrowserRouter>
+            </AuthProvider>
             <Footer />
         </React.Fragment>
     )

@@ -5,6 +5,8 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 import ConfirmationModal from '../../UI/BootstrapModal/ConfirmationModal';
 import { useLocation, useNavigate } from 'react-router-dom';
+import logout from '../../utills/logoutUtil'
+import { useAuth } from "../../contexts/AuthContext";
 
 const Nav = () => {
   const location = useLocation();
@@ -13,7 +15,7 @@ const Nav = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [confirmMessage, setConfirmMessage] = useState("");
-
+  const {isLoggedIn,setIsLoggedIn} = useAuth()
   const token = localStorage.getItem('token');
   useEffect(() => {
     if (token) {
@@ -25,41 +27,14 @@ const Nav = () => {
       });
     }
   }, []);
-
+  if(isLoggedIn){
+    console.log(isLoggedIn)
+  }
   const handleLogout = async () => {
     setConfirmMessage("Are you sure you want to logout?");
     setConfirmAction(() => () => {
-      fetch('http://localhost:8000/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`
-        },
-      })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error('Logout failed!');
-          }
-        })
-        .then(data => {
-          if (data.clearToken) {
-            setUser(null);
-            localStorage.removeItem('token');
-            toast.success(data.message);
-            setModalOpen(false);
-            navigate('/')
-          } else {
-            throw new Error('Logout failed!');
-          }
-        })
-        .catch(error => {
-          console.error("Error during logout:", error);
-          toast.error('Logout failed!');
-          setModalOpen(false);
-        });
-    });
+      logout(user,setUser,setModalOpen, toast, navigate)
+  });
     setModalOpen(true);
   };
 
@@ -90,8 +65,9 @@ const Nav = () => {
         <ul className={styles.items}>
           <li><a href="/" className={isCurrentPage("/") ? styles.active : ""}>Home</a></li>
           <li><a href="/productListings" className={isCurrentPage("/productListings") ? styles.active : ""}>Listing</a></li>
-          {/* Default: Render login */}
-          {user && (
+          
+          {isLoggedIn ? 
+          (user && (
             <>
               {user.userType === "admin" ? (
                 <>
@@ -134,14 +110,14 @@ const Nav = () => {
                 </li>
               )}
             </>
-          )}
-          {!user && ( /* Render login if user is not defined */
+          ))
+          :
             <li>
               <a href="/login" className={isCurrentPage("/login") ? styles.active : ""}>
                 <span>login</span>
               </a>
             </li>
-          )}
+          }
         </ul>
       </nav>
     </>
