@@ -7,6 +7,7 @@ import { z } from "zod";
 import axios from 'axios';
 import {toast} from 'react-toastify';
 import {useNavigate} from 'react-router-dom';
+import { useAuth } from "../../contexts/AuthContext";
 
 const schema = z.object({
   email: z.string({ required_error: "email is required" })
@@ -16,25 +17,13 @@ const schema = z.object({
   password: z.string({ required_error: "password is required" })
     .min(1, { message: "password is required" }),
 })
+console.log();
 
 const Login = () => {
   const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-
-  useEffect(() => {
-    const rememberMeValue = localStorage.getItem('rememberMe');
-    if (rememberMeValue === 'true') {
-      const storedEmail = localStorage.getItem('email');
-      const storedPassword = localStorage.getItem('password');
-      if (storedEmail && storedPassword) {
-        setEmail(storedEmail);
-        setPassword(storedPassword);
-      }
-    }
-  }, []);
-  
+  const {isLoggedIn,setIsLoggedIn} = useAuth();
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -51,7 +40,7 @@ const Login = () => {
       const response = await
         axios({
           method: 'post',
-          url: "http://localhost:8000/login",
+          url: `${process.env.REACT_APP_API_SERVER}/login`,
           withCredentials: false,
           data: {
             "email": email,
@@ -60,16 +49,8 @@ const Login = () => {
         })
         if(response.data.message){
           toast.success(response.data.message);
-          if (rememberMe) {
-            localStorage.setItem('rememberMe', 'true');
-            localStorage.setItem('email', email);
-            localStorage.setItem('password', password);
-          } else {
-            localStorage.removeItem('rememberMe');
-            localStorage.removeItem('email');
-            localStorage.removeItem('password');
-          }
           localStorage.setItem('token', response.data.token);
+          setIsLoggedIn(true)
           if (response.data.isAdmin) {
             navigate('/admin');
           } else {
@@ -103,9 +84,6 @@ const Login = () => {
     }
   };
 
-  const handleRememberMeChange = () => {
-    setRememberMe(!rememberMe);
-  };
 
   return (
     <React.Fragment>
@@ -136,7 +114,7 @@ const Login = () => {
             />
 
             <div className={styles.remember}>
-              <input type="checkbox" name="remember" id="remeber" checked={rememberMe} onChange={handleRememberMeChange} />
+              <input type="checkbox" name="remember" id="remeber" />
               <label> &nbsp; Remember Me</label>
             </div>
             <GradientButton className={styles.button} text="Login" rounded={true} />
