@@ -1,126 +1,157 @@
-import React, { useEffect, useState } from "react";
-import UserImage from '../../Assets/Images/User.png'
-import {useNavigate} from 'react-router-dom';
-import {toast} from 'react-toastify';
-import '../../Assets/Stylesheets/Components/Chat.css'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import io from 'socket.io-client';
+import { jwtDecode } from "jwt-decode"
 
+
+import UserImage from '../../Assets/Images/User.png';
+import '../../Assets/Stylesheets/Components/Chat.css';
+
+
+const socket = io('http://localhost:8000');
 export const Chat = () => {
-    const [users,setUsers] = useState([]);
-    const [activeReciver, setActiveReciever] = useState()
+    const [users, setUsers] = useState([]);
+    const [activeReceiver, setActiveReceiver] = useState(null);
+    const [messages, setMessages] = useState([]);
+    const [messageInput, setMessageInput] = useState('');
+    const [product, setProduct] = useState(null);
+    const [user, setUser] = useState(null);
 
-    const navigate = useNavigate()
-    const usersArray = [
-        {
-            _id : 1,
-            firstName:'Rahul',
-        },
-        {
-            _id : 2,
-            firstName:'Ashok',
-        },
-        {
-            _id : 3,
-            firstName:'Ajay',
-        } 
-    ]
+
+
+    const navigate = useNavigate();
+    const { listingId } = useParams();  // Assume listingId is in the URL
 
     
-    const handleUserClick = (_id)=>{
-        (users.map(u=>
-            {
-                if(u._id===_id){
-                    setActiveReciever(u)
+    useEffect(() => {
+        // Here you should replace with actual API call to fetch users
+        setUsers([
+            { _id: 1, firstName: 'Rahul' },
+            { _id: 2, firstName: 'Ashok' },
+            { _id: 3, firstName: 'Ajay' }
+        ]);
+        const fetchProduct = async () => {
+            try {
+                const response = await fetch(`http://localhost:8000/get-product/${listingId}`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch product");
                 }
-            }))
-    }
+                const productData = await response.json();
+                setActiveReceiver(productData.user);
+            } catch (error) {
+                console.error("Error fetching product:", error);
+            }
+        };
+        fetchProduct();
 
-    useEffect(()=>{
-        setUsers(usersArray);
-    },[])
+        socket.on('newMessage', (message) => {
+            setMessages((prevMessages) => [...prevMessages, message]);
+        });
+
+        return () => {
+            socket.off('newMessage');
+        };
+    }, []);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
-            toast.error("Login required to directly contact the seller");
-            navigate('/login'); // Redirect to login
+            toast.error("You need to log in to access chats.");
+            navigate('/login');
+        }
+        else{
+            const decoded = jwtDecode(token);
+            setUser({
+                ...decoded,
+                token 
+            }); 
         }
     }, [navigate]);
 
-    return(
-        <>
-            <div className='container pt-5 pb-5'>
-                <div className="d-flex gap-2">
-                    <div className="shadow rounded col-md-3 p-3">
-                        <h4 className="fw-bold">Chats</h4>
-                        <div className="d-flex align-items-center mb-3 gap-1">
-                            <div className="col-md-10">
-                                <input type="text" className="border p-2 rounded form-control" placeholder="search all users"/>
-                            </div>
-                            <a href="" className="col-md-2 text-white border-0 text-center border sendButton p-2 rounded">
-                                <i className="fa fa-search"></i>
-                            </a>
-                        </div>
-                        {users.map(user=>
-                            <div className="selectUserButton">
-                                <button 
-                                    className=
-                                    {
-                                        `row border-0 p-0 py-2 align-items-center 
-                                            ${activeReciver && activeReciver._id === user._id ? 
-                                                'fw-bold bg-dark text-white' : 
-                                                'bg-white'
-                                            }`
-                                    }                                
-                                    onClick={handleUserClick.bind(null,user._id)} key={user._id}>
-                                    <div className="col-md-3">
-                                    {   user.image ?
-                                            (<img src={user.image} alt={user.firstName} className="border rounded" style={{width:'100%'}}/>) :
-                                            (<img src={UserImage} alt={user.firstName} className="border rounded" style={{width:'100%'}}/>)
-                                        } 
-                                    </div>
-                                    <p className="col-md-9 m-0">{user.firstName}</p>
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                    <div className="shadow rounded col-md-9">
-                        <div className="chatHeader">
-                            {activeReciver ? 
-                                <div className="d-flex p-2 px-3 align-items-center rounded-top border-bottom">
-                                    <div className="col-md-1">
-                                        {activeReciver.image ?
-                                        (<img src={activeReciver.image} alt={activeReciver.firstName} className="chatImage" />) :
-                                        (<img src={UserImage} alt={activeReciver.firstName} className="border rounded chatImage"/>)}
-                                    </div>
-                                    <p className="col-md-10 fw-bold m-0">{activeReciver.firstName}</p>
-                                    <div className="col-md-1 d-flex text-end gap-4">
-                                            <button className="rounded border-0 bg-white">
-                                                <i className="fa fa-search text-danger"></i>
-                                            </button>
-                                            <button className="rounded border-0 bg-white">
-                                                <i className="fa fa-circle-info text-danger"></i>
-                                            </button>
-                                    </div>
-                                </div> :
-                                <div>
+    const handleUserClick = userId => {
+        const user = users.find(user => user._id === userId);
+        setActiveReceiver(user);
+        fetchChatHistory(userId);
+    };
 
+    const fetchChatHistory = async (userId) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`http://localhost:8000/chat/history/${userId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.status === 200) {
+                setMessages(response.data.chatHistory || []);
+            }
+        } catch (error) {
+            console.error('Error fetching chat history:', error);
+            toast.error('Failed to load chat history');
+        }
+    };
+
+
+    const handleSendMessage = () => {
+        console.log(messageInput)
+        if (!messageInput.trim() || !activeReceiver) return;
+        const toUserId = activeReceiver._id;
+        const messageData = {
+            fromUserId:user._id , 
+            toUserId: toUserId,
+            message: messageInput,
+            listingId
+        };
+        console.log(messageData)
+
+        socket.emit('sendMessage', messageData);
+        setMessageInput('');
+    };
+
+    return (
+        <div className='container pt-5 pb-5'>
+            <div className="d-flex gap-2">
+                <div className="shadow rounded col-md-3 p-3">
+                    <h4 className="fw-bold">Chats</h4>
+                    {/* User list */}
+                    {users.map(user => (
+                        <div className="selectUserButton" key={user._id} onClick={() => handleUserClick(user._id)}>
+                            <div className={`row border-0 p-0 py-2 align-items-center ${activeReceiver && activeReceiver._id === user._id ? 'fw-bold bg-dark text-white' : 'bg-white'}`}>
+                                <div className="col-md-3">
+                                    <img src={UserImage} alt={user.firstName} className="border rounded" style={{width: '100%'}} />
                                 </div>
-                            }
-                        </div>
-                        <div className="chatBody px-4">
-
-                        </div>
-                        <div className="chatFooter d-flex px-4 align-items-center mb-3 gap-3">
-                            <div className="col-md-11">
-                                <input type="text" className="rounded border p-2 form-control" placeholder="Write your message here... " />
+                                <p className="col-md-9 m-0">{user.firstName}</p>
                             </div>
-                            <button className="rounded border-0 sendButton text-white px-3 py-2">
-                                <i className="fa fa-paper-plane"></i>
-                            </button>
                         </div>
+                    ))}
+                </div>
+                <div className="shadow rounded col-md-9">
+                    {/* Chat display */}
+                    <div className="chatBody px-4">
+                        {messages.map((msg, index) => (
+                            <div key={index} className="message">
+                                <div>{msg.fromUserId === 'yourUserId' ? 'You' : activeReceiver.firstName}: {msg.message}</div>
+                            </div>
+                        ))}
+                    </div>
+                    {/* Message input */}
+                    <div className="chatFooter d-flex px-4 align-items-center mb-3 gap-3">
+                        <input 
+                            type="text" 
+                            className="rounded border p-2 form-control" 
+                            placeholder="Write your message here..." 
+                            value={messageInput}
+                            onChange={e => setMessageInput(e.target.value)}
+                            onKeyPress={e => e.key === 'Enter' && handleSendMessage()}
+                        />
+                        <button className="rounded border-0 sendButton text-white px-3 py-2" onClick={handleSendMessage}>
+                            <i className="fa fa-paper-plane"></i>
+                        </button>
                     </div>
                 </div>
             </div>
-        </>
-    )
-}
+        </div>
+    );
+};
+
+export default Chat;

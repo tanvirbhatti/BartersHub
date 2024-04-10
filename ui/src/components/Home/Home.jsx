@@ -26,7 +26,7 @@ const Home = () => {
                     <Route path='user' element={<UserProfile/>} />
                     <Route path='/' element={<HomePage/>} />
                     <Route path='admin' element={<AdminPanel/>} />
-                    <Route path='chat' element={<Chat/>}/>
+                    <Route path='chat/:listingId' element={<Chat/>}/>
                 </Routes>
             </BrowserRouter>
             <Footer />

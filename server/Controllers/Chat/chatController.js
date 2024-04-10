@@ -3,10 +3,14 @@ import { ObjectId } from 'mongodb';
 
 
 const chatController = {
+    
     saveMessage: async (req, res) => {
         try {
             const db = await connectToDb();
-            const { fromUserId, toUserId, message, listingId } = req.body;
+            const fromUserId = req.user.userId;
+            console.log(fromUserId)
+
+            const { toUserId, message, listingId } = req.body;
     
             const chatId = `${fromUserId}-${toUserId}-${listingId}`;
             const chatMessage = {
