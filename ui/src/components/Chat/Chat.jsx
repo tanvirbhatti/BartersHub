@@ -8,7 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import UserImage from '../../Assets/Images/User.png';
 import '../../Assets/Stylesheets/Components/Chat.css';
 
-const socket = io('http://localhost:8000');
+const socket = io(process.env.REACT_APP_API_SERVER);
 
 export const Chat = () => {
     const [chatSessions, setChatSessions] = useState([]);

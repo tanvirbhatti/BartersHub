@@ -10,7 +10,7 @@ export const Products = () => {
     const [confirmMessage, setConfirmMessage] = useState("");
 
     useEffect(() => {
-        fetch("http://localhost:8000/get-products")
+        fetch(`${process.env.REACT_APP_API_SERVER}/get-products`)
             .then(res => res.json())
             .then(data => setProducts(data["list of products"]))
             .catch(err => console.error("error fetching data", err));
@@ -26,7 +26,7 @@ export const Products = () => {
         }
 
         setConfirmAction(() => () => {
-            fetch(`http://localhost:8000/admin/delete-product/${productId}`,{
+            fetch(`${process.env.REACT_APP_API_SERVER}/admin/delete-product/${productId}`,{
                 method:"DELETE",
                 headers:{
                     "Authorization":`Bearer ${authToken}`
@@ -61,7 +61,7 @@ export const Products = () => {
     }
 
     const addToFeatured = (productId) => {
-        fetch("http://localhost:8000/admin/add-featured-product", {
+        fetch(`${process.env.REACT_APP_API_SERVER}/admin/add-featured-product`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -77,7 +77,7 @@ export const Products = () => {
     }
 
     const removeFromFeatured = (productId) => {
-        fetch("http://localhost:8000/admin/delete-featured-product", {
+        fetch(`${process.env.REACT_APP_API_SERVER}/admin/delete-featured-product`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
@@ -129,12 +129,12 @@ export const Products = () => {
                             <td className="col-md-3">{product.email}</td>
                             <td className="col-md-1">{product.user.city}</td>
                             <td className="col-md-1">
-                                <button className="btn btn-primary" onClick={()=>deleteProduct(product._id, product.title)}>
+                                <button className="btn btn-secondary" onClick={()=>deleteProduct(product._id, product.title)}>
                                     <i className="fa-solid fa-trash"></i>
                                 </button>
                             </td>
                             <td className="col-md-1">
-                                <a>
+                                <a href={`/productDetails/${product._id}`} className="btn btn-secondary">
                                     <i className="fa-solid fa-eye"></i>
                                 </a>
                             </td>

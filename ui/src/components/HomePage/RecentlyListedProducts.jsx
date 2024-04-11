@@ -11,7 +11,7 @@ export default function RecentlyListedProducts(){
 
     useEffect(() => {
         // Fetch data from the API
-        fetch("http://localhost:8000/get-recently-products")
+        fetch(`${process.env.REACT_APP_API_SERVER}/get-recently-products`)
             .then(response => response.json())
             .then(data => {
                 setRecentlyListedProducts(data);
@@ -34,8 +34,10 @@ export default function RecentlyListedProducts(){
                                 <p className="card-text">{truncatedDescription}</p>
                                 <p className="card-text">{product.price}</p>
                                 <div className="col-md-8">
-                                    <GradientButton text="View Product" rounded={true} />
-                                </div>                            
+                                    <a href={`/productDetails/${product._id}`}>
+                                        <GradientButton text="View Product" rounded={true} />
+                                    </a>
+                                </div>                         
                             </div>
                         </div>
                     )
@@ -57,7 +59,9 @@ export default function RecentlyListedProducts(){
                                 <p className="card-text">{truncatedDescription}</p>
                                 <p className="card-text">{product.price}</p>
                                 <div className="col-md-8">
-                                    <GradientButton text="View Product" rounded={true} />
+                                    <a href={`/productDetails/${product._id}`}>
+                                        <GradientButton text="View Product" rounded={true} />
+                                    </a>
                                 </div>  
                             </div>
                         </div>

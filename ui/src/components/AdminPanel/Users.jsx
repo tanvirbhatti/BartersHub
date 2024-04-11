@@ -11,7 +11,7 @@ export const Users = () => {
     const [confirmMessage, setConfirmMessage] = useState("");
 
     useEffect(()=>{
-        fetch('http://localhost:8000/admin/users')
+        fetch(`${process.env.REACT_APP_API_SERVER}/admin/users`)
         .then(res => res.json())
         .then(data=>{
             setUsers(data.users)
@@ -43,7 +43,7 @@ export const Users = () => {
         }
 
         setConfirmAction(()=> ()=> {
-            fetch(`http://localhost:8000/admin/delete-user/${userId}`,{
+            fetch(`${process.env.REACT_APP_API_SERVER}/admin/delete-user/${userId}`,{
                 method:"DELETE",
                 headers:{
                     "Authorization":`Bearer ${token}`
@@ -62,7 +62,7 @@ export const Users = () => {
     }
 
     const disableUser = (userId,token)=>{
-        fetch(`http://localhost:8000/admin/disable-user/${userId}`, {
+        fetch(`${process.env.REACT_APP_API_SERVER}/admin/disable-user/${userId}`, {
             method: "PUT",
             headers: {
                 'Authorization': `Bearer ${token}`, // Pass the token in the Authorization header
@@ -78,7 +78,7 @@ export const Users = () => {
     }
 
     const enableUser = (userId, token)=>{
-        fetch(`http://localhost:8000/admin/enable-user/${userId}`, {
+        fetch(`${process.env.REACT_APP_API_SERVER}/admin/enable-user/${userId}`, {
             method: "PUT",
             headers: {
                 'Authorization': `Bearer ${token}`, // Pass the token in the Authorization header
@@ -135,14 +135,14 @@ export const Users = () => {
                                         />
                                 </td>
                                 <td className="col-md-1">
-                                    <button className="btn btn-primary" onClick={()=>deleteUser(user._id, user.firstName)}>
+                                    <button className="btn btn-secondary" onClick={()=>deleteUser(user._id, user.firstName)}>
                                         <i className="fa-solid fa-trash"></i>
                                     </button>
                                 </td>
                                 <td className="col-md-1">
-                                    <a>
+                                    <button className="btn btn-secondary">
                                         <i className="fa-solid fa-eye"></i>
-                                    </a>
+                                    </button>
                                 </td>
                             </tr>
                         )

@@ -9,7 +9,7 @@ const ProductListing = () => {
     useEffect(() => {
         // Fetch data from the API
         
-        fetch("http://localhost:8000/get-products")
+        fetch(`${process.env.REACT_APP_API_SERVER}/get-products`)
             .then(response => response.json())
             .then(data => {
                 console.log(data)

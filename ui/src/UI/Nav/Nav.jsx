@@ -15,8 +15,9 @@ const Nav = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [confirmMessage, setConfirmMessage] = useState("");
-  const {isLoggedIn,setIsLoggedIn} = useAuth()
+  const { isLoggedIn, setIsLoggedIn } = useAuth()
   const token = localStorage.getItem('token');
+  
   useEffect(() => {
     if (token) {
       // Decode token and set user data
@@ -26,22 +27,20 @@ const Nav = () => {
         token // Store the token if needed for further requests
       });
     }
-  }, []);
-  if(isLoggedIn){
-    console.log(isLoggedIn)
-  }
+  }, [token]);
+
   const handleLogout = async () => {
     setConfirmMessage("Are you sure you want to logout?");
     setConfirmAction(() => () => {
-      logout(user,setUser,setModalOpen, toast, navigate)
-  });
+      logout(user, setUser, setModalOpen, toast, navigate, setIsLoggedIn)
+    });
     setModalOpen(true);
   };
 
-  const isCurrentPage= (url) =>{
+  const isCurrentPage = (url) => {
     return location.pathname === url
   }
-  
+
   return (
     <>
       <ConfirmationModal
@@ -65,56 +64,65 @@ const Nav = () => {
         <ul className={styles.items}>
           <li><a href="/" className={isCurrentPage("/") ? styles.active : ""}>Home</a></li>
           <li><a href="/productListings" className={isCurrentPage("/productListings") ? styles.active : ""}>Listing</a></li>
-          
-          {isLoggedIn ? 
-          (user && (
-            <>
-              {user.userType === "admin" ? (
+
+          {
+            isLoggedIn ?
+              (user && (
                 <>
-                  {/* Render admin-specific components */}
-                  <li>
-                    <a href="/admin" className={isCurrentPage("/admin") ? styles.active : ""}>
-                      <i className="fa fa-user"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <button onClick={handleLogout} className={styles.logout}>
-                      <i className="fa fa-sign-out"></i>
-                    </button>
-                  </li>
+                  {
+                    user.userType === "admin" ?
+                      (
+                        <>
+                          {/* Render admin-specific components */}
+                          <li>
+                            <a href="/admin" className={isCurrentPage("/admin") ? styles.active : ""}>
+                              <i className="fa fa-user"></i>
+                            </a>
+                          </li>
+                          <li>
+                            <button onClick={handleLogout} className={styles.logout}>
+                              <i className="fa fa-sign-out"></i>
+                            </button>
+                          </li>
+                        </>
+                      ) 
+                      : 
+                      user.userType === "user" ?
+                      (
+                        <>
+                          {/* Render user-specific components */}
+                          <li>
+                            <a href="/user" className={isCurrentPage("/user") ? styles.active : ""}>
+                              <i className="fa fa-user"></i>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="/chat" className={isCurrentPage("/chat") ? styles.active : ""}>
+                              <i className="fa fa-comment-alt"></i>
+                            </a>
+                          </li>
+                          <li>
+                            <button onClick={handleLogout} className={styles.logout}>
+                              <i className="fa fa-sign-out"></i>
+                            </button>
+                          </li>
+                        </>
+                      ) 
+                      : 
+                      (
+                        <li>
+                          <a href="/login" className={isCurrentPage("/login") ? styles.active : ""}>
+                            <button > login </button>
+                          </a>
+                        </li>
+                      )
+                  }
                 </>
-              ) : user.userType === "user" ? (
-                <>
-                  {/* Render user-specific components */}
-                  <li>
-                    <a href="/user" className={isCurrentPage("/user") ? styles.active : ""}>
-                      <i className="fa fa-user"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/chat" className={isCurrentPage("/chat") ? styles.active : ""}>
-                      <i className="fa fa-comment-alt"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <button onClick={handleLogout} className={styles.logout}>
-                      <i className="fa fa-sign-out"></i>
-                    </button>
-                  </li>
-                </>
-              ) : (
-                <li>
-                  <a href="/login" className={isCurrentPage("/login") ? styles.active : ""}>
-                    <button > login </button>
-                  </a>
-                </li>
-              )}
-            </>
-          ))
-          :
+              ))
+            :
             <li>
               <a href="/login" className={isCurrentPage("/login") ? styles.active : ""}>
-                <span>login</span>
+                login
               </a>
             </li>
           }
