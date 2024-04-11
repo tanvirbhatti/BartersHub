@@ -11,7 +11,7 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/get-product/${id}`);
+                const response = await fetch(`${process.env.REACT_APP_API_SERVER}/get-product/${id}`);
                 if (!response.ok) {
                     throw new Error("Failed to fetch product");
                 }
@@ -35,20 +35,20 @@ const ProductDetails = () => {
         <div className="container mt-5 mb-5">
             {product ? (
                 <div>
-                     <div class="row">
-                    <div class="col-md-6  image-div">
-                        <img className="product_img" alt="Product image" src={product.image} />
+                     <div className="row">
+                    <div className="col-md-6  image-div">
+                        <img className="product_img" alt="Product" src={product.image} />
                     </div>
-                    <div class="col-md-6">
-                        <div class="product-dtl">
-                            <div class="product-info p-0 pt-2">
-                                <div class="product-name">{product.title}</div>
+                    <div className="col-md-6">
+                        <div className="product-dtl">
+                            <div className="product-info p-0 pt-2">
+                                <div className="product-name">{product.title}</div>
                                 
-                                <div class="product-price-discount"><span>${product.price}</span></div>
+                                <div className="product-price-discount"><span>${product.price}</span></div>
                             </div>
                             <p>{product.description}</p>
                             
-                            <div class="contact_button">
+                            <div className="contact_button">
                                 <GradientButton rounded={true} text="Contact seller" onClick={handleSellerContact}/>
                             </div>
                         </div>

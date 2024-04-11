@@ -18,7 +18,7 @@ export default function FeaturedProducts(){
     const [products,setProducts] = useState([]);
 
     useEffect(()=>{
-        fetch("http://localhost:8000/get-featured-products")
+        fetch(`${process.env.REACT_APP_API_SERVER}/get-featured-products`)
             .then(response => response.json())
             .then(data => {
                 setProducts(data);
@@ -41,7 +41,9 @@ export default function FeaturedProducts(){
                                         <p className="card-text">{truncatedDescription}</p>
                                         <p className="card-text">{product.product.price}</p>
                                         <div className="col-md-8">
-                                            <GradientButton text="View Product" rounded={true} />
+                                            <a href={`/productDetails/${product.product._id}`}>
+                                                <GradientButton text="View Product" rounded={true} />
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

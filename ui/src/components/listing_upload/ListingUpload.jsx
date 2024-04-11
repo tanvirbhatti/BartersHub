@@ -105,7 +105,7 @@ const ListingUpload = () => {
                 const token = localStorage.getItem('token');
 
                 // Add an Authorization header with the token to your axios request
-                const response = await axios.post("http://localhost:8000/add-product", formDataToSend, {
+                const response = await axios.post(`${process.env.REACT_APP_API_SERVER}/add-product`, formDataToSend, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${token}` 

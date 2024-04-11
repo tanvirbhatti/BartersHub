@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import GradientButton from '../../UI/GradientButton/GradientButton'
 
 export default function Testimonials() {
     const responsive = {
@@ -16,7 +15,7 @@ export default function Testimonials() {
     useEffect(() => {
         // Fetch data from the API
         
-        fetch("http://localhost:8000/get-testimonials")
+        fetch(`${process.env.REACT_APP_API_SERVER}/get-testimonials`)
             .then(response => response.json())
             .then(data => {
                 // Assuming your response data structure is { "list of products": [...] }

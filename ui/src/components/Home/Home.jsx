@@ -16,23 +16,21 @@ const Home = () => {
     return (
         <React.Fragment>
             <AuthProvider>
-            <BrowserRouter>
-            <Nav />
-                <Routes>
-                    <Route path='signup' element={<Signup />} />
-                    <Route path='login' element={<Login />} />
-                    <Route path='productListings' element={<ProductListing/>} />
-                    <Route path='productdetails/:id' element = {<ProductDetails/>}></Route>
-                    <Route path='ListingsUpload' element={<ListingUpload/>} />
-                    <Route path='user' element={<UserProfile/>} />
-                    <Route path='/' element={<HomePage/>} />
-                    <Route path='admin' element={<AdminPanel/>} />
-
-                    <Route path='chat/:listingId' element={<Chat/>}/>
-
-                    <Route path='chat' element={<Chat/>}/>
-                </Routes>
-            </BrowserRouter>
+                <BrowserRouter>
+                <Nav />
+                    <Routes>
+                        <Route path='signup' element={<Signup />} />
+                        <Route path='login' element={<Login />} />
+                        <Route path='productListings' element={<ProductListing/>} />
+                        <Route path='productdetails/:id' element = {<ProductDetails/>}></Route>
+                        <Route path='ListingsUpload' element={<ListingUpload/>} />
+                        <Route path='user' element={<UserProfile/>} />
+                        <Route path='/' element={<HomePage/>} />
+                        <Route path='admin' element={<AdminPanel/>} />
+                        <Route path='chat/:listingId' element={<Chat/>}/>
+                        <Route path='chat' element={<Chat/>}/>
+                    </Routes>
+                </BrowserRouter>
             </AuthProvider>
             <Footer />
         </React.Fragment>

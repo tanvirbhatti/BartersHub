@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import User from '../../Assets/Images/User.png'
 import ConfirmationModal from "../../UI/BootstrapModal/ConfirmationModal";
 import logout from '../../utills/logoutUtil'
+import { useAuth } from "../../contexts/AuthContext";
 
 const UserProfile = () => {
     const [user, setUser] = useState(null);
@@ -18,6 +19,7 @@ const UserProfile = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
     const [confirmMessage, setConfirmMessage] = useState("");
+    const { setIsLoggedIn } = useAuth()
 
     const [errors, setErrors] = useState({
         title: '',
@@ -54,7 +56,7 @@ const UserProfile = () => {
 
     const fetchListings = async (token) => {
         try {
-            const response = await fetch('http://localhost:8000/user-listings', {
+            const response = await fetch(`${process.env.REACT_APP_API_SERVER}/user-listings`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -75,7 +77,7 @@ const UserProfile = () => {
     const handleLogout = async () => {
         setConfirmMessage("Are you sure you want to logout?");
         setConfirmAction(() => () => {
-            logout(user,setUser,setModalOpen, toast, navigate)
+            logout(user,setUser,setModalOpen, toast, navigate, setIsLoggedIn)
         });
         setModalOpen(true);
       };
@@ -90,7 +92,7 @@ const UserProfile = () => {
 
 
         try {
-            const response = await fetch(`http://localhost:8000/delete-product/${productId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_SERVER}/delete-product/${productId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${user.token}`
@@ -113,10 +115,6 @@ const UserProfile = () => {
         setCurrentListing(listing);
         setUpdatedListing(listing);
         setShowModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setShowModal(false);
     };
 
     const validateFields = () => {
@@ -181,7 +179,7 @@ const UserProfile = () => {
                 formData.append(key, updatedListing[key]);
             });
             // console.log(updatedListing)
-            const response = await axios.post('http://localhost:8000/edit-product', formData, {
+            const response = await axios.post(`${process.env.REACT_APP_API_SERVER}/edit-product`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`
@@ -225,9 +223,7 @@ const UserProfile = () => {
                                     <h5>{user.firstName} {user.lastName} </h5>
                                     <p>{user.email}</p>
                                     <p className="location">Edit Profile</p>
-                                    <a onClick={handleLogout}>
-                                        <button className="rounded-2 Btn active" >Logout</button>
-                                    </a>
+                                    <button className="rounded-2 Btn active" onClick={handleLogout} >Logout</button>
                                 </div>
                             </>
                         )}
@@ -245,9 +241,9 @@ const UserProfile = () => {
                                     <div className="d-flex justify-content-between ">
                                         <button className='btn btn-secondary btn-sm' onClick={() => handleShowModal(product)}>Update</button>
 
-                                        <a onClick={() => handleDelete(product._id)}>
-                                            <i class="fa-solid fa-trash"></i>
-                                        </a>
+                                        <button className="btn btn-secondary btn-sm" onClick={() => handleDelete(product._id)}>
+                                            <i className="fa-solid fa-trash"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

@@ -61,7 +61,6 @@ nav ul {
 .active{
   border:0;
   background: linear-gradient(45deg, #f21616, #f28b50);
-  margin-left:0.5rem;
   padding: 0.5rem 1rem;
   border-radius: 0.4rem;
   color: white !important;

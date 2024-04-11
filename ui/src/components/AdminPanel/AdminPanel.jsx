@@ -8,6 +8,8 @@ import { jwtDecode } from "jwt-decode";
 import ConfirmationModal from '../../UI/BootstrapModal/ConfirmationModal';
 import User from '../../Assets/Images/User.png'
 import logout from '../../utills/logoutUtil'
+import { useAuth } from "../../contexts/AuthContext";
+
 
 export const AdminPanel = () =>{
     const [user, setUser] = useState(null);
@@ -16,6 +18,7 @@ export const AdminPanel = () =>{
     const [modalOpen, setModalOpen] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
     const [confirmMessage, setConfirmMessage] = useState("");
+    const { setIsLoggedIn } = useAuth()
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -39,7 +42,7 @@ export const AdminPanel = () =>{
     const handleLogout = async () => {
         setConfirmMessage("Are you sure you want to logout?");
         setConfirmAction(() => () => {
-            logout(user,setUser,setModalOpen, toast, navigate)
+            logout(user,setUser,setModalOpen, toast, navigate, setIsLoggedIn)
         });
         setModalOpen(true);
       };
@@ -74,9 +77,9 @@ export const AdminPanel = () =>{
                                     <div  className='pb-3 h-100 w-100'>
                                         <h5>{user && user.firstName} {user && user.lastName}</h5>
                                         <p>Edit Profile</p>
-                                        <button className={`border mb-2 rounded-2 Btn ${(activeComponent=='Products')?'active':'' }`} name='products' onClick={() => setActiveComponent('Products')}>Products</button>
+                                        <button className={`border mb-2 rounded-2 Btn ${(activeComponent==='Products')?'active':'' }`} name='products' onClick={() => setActiveComponent('Products')}>Products</button>
                                         <br/>
-                                        <button className={`border mb-2 rounded-2 Btn ${(activeComponent=='Users')?'active':'' }`} name='users' onClick={() => setActiveComponent('Users')}>Users</button>
+                                        <button className={`border mb-2 rounded-2 Btn ${(activeComponent==='Users')?'active':'' }`} name='users' onClick={() => setActiveComponent('Users')}>Users</button>
                                         <button className={`border mb-2 rounded-2 Btn `} name='users' onClick={handleLogout}>Logout</button>
                                     </div>
                                 </>)

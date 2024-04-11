@@ -1,6 +1,6 @@
 
 
-const handleLogout = async (user,setUser,setModalOpen, toast, navigate) => {
+const handleLogout = async (user,setUser,setModalOpen, toast, navigate, setIsLoggedIn) => {
       fetch(`${process.env.REACT_APP_API_SERVER}/logout`, {
         method: 'POST',
         headers: {
@@ -13,7 +13,8 @@ const handleLogout = async (user,setUser,setModalOpen, toast, navigate) => {
           if (data.clearToken) {
             setUser(null);
             localStorage.removeItem('token');
-            localStorage.removeItem('isLoggedIn')
+            localStorage.removeItem('isLoggedIn');
+            setIsLoggedIn(false)
             toast.success(data.message);
             setModalOpen(false);
             navigate('/')
