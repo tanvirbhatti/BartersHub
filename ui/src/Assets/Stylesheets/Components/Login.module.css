@@ -3,13 +3,16 @@
   margin: 3rem auto;
   background-color: white;
   width: 70vw;
-  height: 68vh;
+  height: 57vh;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.hero {
-  width: 20%;
-  margin: auto;
+.loginHero{
+  width:40%;
+  background-image: url('../../Images/Barter\'sHubSpriteSheet.png');
+  background-position: 12.9% -0%;
+  background-size: 620vh auto;
+  background-repeat: no-repeat;
 }
 
 .Form h1 {
@@ -17,10 +20,9 @@ text-align: center;
 }
 
 .Form {
-  width: 50%;
+  width: 60%;
   display: flex;
   flex-direction: column;
-  
 }
 
 .hero {

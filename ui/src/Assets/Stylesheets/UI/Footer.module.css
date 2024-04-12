@@ -1,11 +1,12 @@
 footer {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 0.4fr 0.3fr 0.3fr;
     align-items: center;
     height: 20vh;
     width: 100%;
     background-color: white;
     box-shadow: -5px -5px 5px rgba(0, 0, 0, 0.1);
+    gap:15rem;
 }
 
 .links p {
@@ -14,13 +15,20 @@ footer {
 .links ul li{
     list-style: none;
 }
-.Logo {
-    margin: 0 4rem;
-    width: 200px;
+.links ul li a{
+    text-decoration: none;
+    color:inherit;
 }
+.Logo {
+    margin: 0 3rem;
+    width: 14.8vw;
+    height: 6.28vh;
+    background-image: url('../../Images/Barter\'sHubSpriteSheet.png');
+    background-size: 2500px auto;
+  }
 
 .text {
-    margin: 0 4rem;
+    margin: 0 3rem;
     padding: 0;
     color: grey;
     font-weight: 700;
