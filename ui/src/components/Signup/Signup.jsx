@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import CustomFormField from "../../UI/CustomFormField/CustomFormField";
-import Hero from "../../Assets/Images/SignUp.png";
 import styles from "../../Assets/Stylesheets/Components/Signup.module.css";
 import GradientButton from "../../UI/GradientButton/GradientButton";
 import { z } from "zod";
@@ -135,11 +134,12 @@ const Signup = () => {
 
   return (
     <React.Fragment>
-      <div className={styles.container}>
-        <img className={styles.hero} src={Hero} alt="" />
+      <div className={`${styles.container} rounded p-3 gap-3`}>
+        {/* <img className={styles.hero} src={Hero} alt="" /> */}
+        <div className={styles.registerHero}></div>
         <div className={styles.Form}>
           <h1>Sign Up</h1>
-          <form className={styles.Form} onSubmit={handleSubmit}>
+          <form className={`${styles.Form} px-3`} onSubmit={handleSubmit}>
             <div className={styles.formField}>
               <CustomFormField
                 className={styles.field}

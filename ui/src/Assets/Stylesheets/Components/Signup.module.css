@@ -3,11 +3,12 @@
   margin: 3rem auto;
   background-color: white;
   width: 70vw;
+  height: 57vh;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .Form {
-  width: 50%;
+  width: 60%;
   flex-direction: column;
   align-items: center;
 }
@@ -25,11 +26,9 @@
 
 .field {
   justify-self: center;
-  width: 90%;
 }
 
 .formField {
-  width: 90%;
   display: flex;
   gap: 1rem;
 }
@@ -38,14 +37,13 @@
   text-align: center;
 }
 .button {
-  width: 90%;
   display: block;
-  margin: 3rem 0rem 0rem;
+  margin: 1rem 0rem 0rem;
 }
 
 .register {
   margin: auto;
-  padding: 2rem 8rem;
+  padding: 1.5rem 8rem;
   align-self: baseline;
 }
 
@@ -55,7 +53,7 @@
 
 .Input {
   display: flex;
-  gap: 10px;
+  gap: 3px !important;
   width: 100%;
   flex-direction: column;
 }
@@ -68,4 +66,12 @@
   border: 2px solid #f28b50;
   border-radius: 0.4rem;
   height: 2rem;
+}
+
+.registerHero{
+  width: 40%;
+  background-image: url('../../Images/Barter\'sHubSpriteSheet.png');
+  background-position: 23% -1%;
+  background-size: 470vh auto;
+  background-repeat: no-repeat;
 }

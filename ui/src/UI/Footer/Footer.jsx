@@ -1,24 +1,24 @@
 import React from 'react'
 import styles from '../../Assets/Stylesheets/UI/Footer.module.css';
-import Logo from '../../Assets/Images/BarterHub.png';
 const Footer = () => {
     return (
-        <footer>
+        <footer className='pt-3'>
             <div className={styles.container}>
-                <img className={styles.Logo} src={Logo} alt="logo of barter hub" />
+                {/* <img className={styles.Logo} src={Logo} alt="logo of barter hub" /> */}
+                <div className={styles.Logo}></div>
                 <p className={styles.text}>Your one-stop Marketplace for seamless Transactions</p>
             </div>
-            <div className={styles.links}>
-                <p>Quick Links</p>
+            <div className={`${styles.links} text-start`}>
+                <h5>Quick Links</h5>
                 <ul>
-                    <li>Home</li>
-                    <li>Listings</li>
-                    <li>Login</li>
-                    <li>Signup</li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href='/productListings'>Listings</a></li>
+                    <li><a href='/login'>Login</a></li>
+                    <li><a href='/signup'>Signup</a></li>
                 </ul>
             </div>
-            <div className={styles.links}>
-                <p>Social Media</p>
+            <div className={`${styles.links} text-start`}>
+                <h5>Social Media</h5>
                 <ul>
                     <li>Facebook</li>
                     <li>Instagram</li>

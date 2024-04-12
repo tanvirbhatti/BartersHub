@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Logo from "../../Assets/Images/BarterHub.png";
 import styles from "../../Assets/Stylesheets/UI/Nav.module.css";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
@@ -50,7 +49,7 @@ const Nav = () => {
         message={confirmMessage}
       />
       <nav className={styles.Nav}>
-        <img className={styles.Logo} src={Logo} alt="logo of barter hub" />
+        <div className={styles.Logo}></div>
         <div className={styles["search-container"]}>
           <input
             className={styles.searchBox}
@@ -67,64 +66,83 @@ const Nav = () => {
 
           {
             isLoggedIn ?
-              (user && (
+              (
+                user && 
+                (
+                  <>
+                    {
+                      user.userType === "admin" ?
+                        (
+                          <>
+                            {/* Render admin-specific components */}
+                            <li>
+                              <a href="/admin" className={isCurrentPage("/admin") ? styles.active : ""}>
+                                <i className="fa fa-user"></i>
+                              </a>
+                            </li>
+                            <li>
+                              <button onClick={handleLogout} className={styles.logout}>
+                                <i className="fa fa-sign-out"></i>
+                              </button>
+                            </li>
+                          </>
+                        ) 
+                        : 
+                        user.userType === "user" ?
+                        (
+                          <>
+                            {/* Render user-specific components */}
+                            <li>
+                              <a href="/user" className={isCurrentPage("/user") ? styles.active : ""}>
+                                <i className="fa fa-user"></i>
+                              </a>
+                            </li>
+                            <li>
+                              <a href="/chat" className={isCurrentPage("/chat") ? styles.active : ""}>
+                                <i className="fa fa-comment-alt"></i>
+                              </a>
+                            </li>
+                            <li>
+                              <button onClick={handleLogout} className={styles.logout}>
+                                <i className="fa fa-sign-out"></i>
+                              </button>
+                            </li>
+                          </>
+                        ) 
+                        : 
+                        (
+                          <>
+                            <li>
+                              <a href="/login" className={isCurrentPage("/login") ? styles.active : ""}>
+                                login
+                              </a>
+                            </li>
+                            <li>
+                              <a href="/signup" className={isCurrentPage("/signup") ? styles.active : ""}>
+                                Sign up
+                              </a>
+                            </li>
+                          </>
+                        )
+                    }
+                  </>
+                )
+              )
+              :
+              (
                 <>
-                  {
-                    user.userType === "admin" ?
-                      (
-                        <>
-                          {/* Render admin-specific components */}
-                          <li>
-                            <a href="/admin" className={isCurrentPage("/admin") ? styles.active : ""}>
-                              <i className="fa fa-user"></i>
-                            </a>
-                          </li>
-                          <li>
-                            <button onClick={handleLogout} className={styles.logout}>
-                              <i className="fa fa-sign-out"></i>
-                            </button>
-                          </li>
-                        </>
-                      ) 
-                      : 
-                      user.userType === "user" ?
-                      (
-                        <>
-                          {/* Render user-specific components */}
-                          <li>
-                            <a href="/user" className={isCurrentPage("/user") ? styles.active : ""}>
-                              <i className="fa fa-user"></i>
-                            </a>
-                          </li>
-                          <li>
-                            <a href="/chat" className={isCurrentPage("/chat") ? styles.active : ""}>
-                              <i className="fa fa-comment-alt"></i>
-                            </a>
-                          </li>
-                          <li>
-                            <button onClick={handleLogout} className={styles.logout}>
-                              <i className="fa fa-sign-out"></i>
-                            </button>
-                          </li>
-                        </>
-                      ) 
-                      : 
-                      (
-                        <li>
-                          <a href="/login" className={isCurrentPage("/login") ? styles.active : ""}>
-                            <button > login </button>
-                          </a>
-                        </li>
-                      )
-                  }
+              <li>
+                <a href="/login" className={isCurrentPage("/login") ? styles.active : ""}>
+                  login
+                </a>
+              </li>
+              <li>
+                <a href="/signup" className={isCurrentPage("/signup") ? styles.active : ""}>
+                  Sign up
+                </a>
+              </li>
                 </>
-              ))
-            :
-            <li>
-              <a href="/login" className={isCurrentPage("/login") ? styles.active : ""}>
-                login
-              </a>
-            </li>
+              )
           }
         </ul>
       </nav>

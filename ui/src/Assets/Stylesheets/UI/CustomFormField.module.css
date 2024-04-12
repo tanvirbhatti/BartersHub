@@ -1,6 +1,6 @@
 .Input {
   display: flex;
-  gap: 10px;
+  gap: 3px;
   width: 100%;
   flex-direction: column;
 }

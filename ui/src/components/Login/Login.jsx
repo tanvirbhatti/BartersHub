@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import CustomFormField from "../../UI/CustomFormField/CustomFormField";
-import Hero from "../../Assets/Images/LogIn.png";
 import styles from "../../Assets/Stylesheets/Components/Login.module.css";
 import GradientButton from "../../UI/GradientButton/GradientButton";
 import { z } from "zod";
@@ -23,7 +22,7 @@ const Login = () => {
   const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {isLoggedIn,setIsLoggedIn} = useAuth();
+  const {setIsLoggedIn} = useAuth();
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -87,13 +86,12 @@ const Login = () => {
 
   return (
     <React.Fragment>
-      <div className={styles.container}>
-        <img className={styles.hero} src={Hero} alt="" srcSet="" />
-        <div className={styles.Form}>
+      <div className={`${styles.container} p-4 gap-4 rounded`}>
+        <div className={`${styles.loginHero} col-md-3`}></div>
+        <div className={`${styles.Form} col-md-9`}>
           <h1>Login</h1>
 
-          <form className={styles.Form} action="" onSubmit={handleSubmit}>
-
+          <form className={`${styles.Form}`} action="" onSubmit={handleSubmit}>
             <CustomFormField
               name="email"
               value={email}
