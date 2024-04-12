@@ -83,7 +83,7 @@ app.get('/chat/history/:userId', checkUser, chatController.getChatHistory);
 app.post('/chat/session', checkUser, chatController.createChatSession);
 app.get('/chat/user/:userId',checkUser, chatController.getAllChatsForUser); 
 app.get('/chat/listing/:listingId',checkUser, chatController.getAllChatsForListing);
-app.get('/chat/listing/:listingId/user/:userId', checkUser, chatController.getOrCreateChatSession);
+app.get('/chat/listing/:listingId/user/:userId/name/:username', checkUser, chatController.getOrCreateChatSession);
 
 
 io.on('connection', (socket) => {
@@ -101,8 +101,10 @@ io.on('connection', (socket) => {
 
   socket.on('sendMessage', async (data) => {
       console.log('Message received:', data);
-      const message = await chatController.saveMessage(data.fromUserId, data.toUserId, data.message, data.listingId);
-      io.to(data.listingId).emit('newMessage', message); 
+      const message = await chatController.saveMessage(data.fromUserId, data.fromUserName, data.toUserId, data.toUserName, data.message, data.listingId);
+      socket.broadcast.emit('newMessage', message, (response) => {
+        console.log("Acknowledgment received:", response);
+    });
   });
 
   socket.on('disconnect', () => {
