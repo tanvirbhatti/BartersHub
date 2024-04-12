@@ -1,30 +1,85 @@
-.chatImage{
+.chatImage {
     height: 50px;
     width: auto;
 }
 
-.chatHeader{
+.chatHeader {
     height: 80px;
 }
 
-.chatBody{
-    height: 500px;
+.chatBody {
+    padding-top: 20px;
+    overflow-y: auto; /* Enables vertical scrolling */
+    height: 500px; /* Adjust height as needed */
+    margin-bottom: 20px; /* Space for the chat input box */
+    scroll-behavior: smooth;
 }
 
-.chatFooter{
+.chatFooter {
     height: 50px;
 }
 
-.sendButton{
+.sendButton {
     background: linear-gradient(45deg, #f21616, #f28b50);
     border: none;
     padding: 0.5rem 2.4rem;
 }
 
-.bg-orange{
+.bg-orange {
     background: linear-gradient(45deg, #f21616, #f28b50);
 }
 
-.selectUserButton:hover{
+.message {
+    display: flex;
+    margin-bottom: 10px;
+}
 
+.message-sender {
+    justify-content: flex-end;
+}
+
+.message-receiver {
+    justify-content: flex-start;
+}
+
+.message-content {
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: white;
+    max-width: 60%;
+    position: relative; 
+}
+
+.message-sender .message-content {
+    background: linear-gradient(45deg, #f21616, #f28b50);
+}
+
+.message-receiver .message-content {
+    background-color: #6c757d; 
+}
+
+.message-sender .message-content::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -10px; 
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent #f28b50; 
+    transform: translateY(-50%);
+}
+
+.message-receiver .message-content::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -10px; 
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 10px 10px 0; 
+    border-color: transparent #6c757d transparent transparent; 
+    transform: translateY(-50%);
 }
