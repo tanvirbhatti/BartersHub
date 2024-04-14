@@ -26,7 +26,7 @@ export default function Testimonials() {
 
     return (
         <div>
-            <div className="product-list-container pt-0">
+            <div className="product-list-container p-0">
                 <h3 className='p-5 pt-0 pb-0'><b>Testimonials:</b></h3>
                 <Carousel
                     swipeable={false}
@@ -68,8 +68,13 @@ export default function Testimonials() {
                                 </div>
                         </div>
                     ))}
-                    
                 </Carousel>
+                <div className="d-flex bg-dark p-3 mb-5 text-white text-center align-items-center justify-content-center">
+                    <h4 className="m-0">Rate your experince with us!</h4>
+                    <button type="button" className="upload-btn rounded mx-3">
+                        <a href="/ListingsUpload" className="Listinglink">Post Your Ad</a>
+                    </button>
+                </div>
             </div>
         </div>
     );

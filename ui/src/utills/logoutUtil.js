@@ -20,7 +20,9 @@ const handleLogout = async (user,setUser,setModalOpen, toast, navigate, setIsLog
             navigate('/')
           } else {
             toast.error(data.error)
-            setModalOpen(false)
+            setModalOpen(false)            
+            localStorage.removeItem('token');
+            localStorage.removeItem('isLoggedIn');
             navigate('/login')
           }
         })
