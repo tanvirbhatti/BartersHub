@@ -23,19 +23,20 @@ import { deleteProduct } from './Controllers/Products/delete.js';
 import chatController from './Controllers/Chat/chatController.js';
 import http from 'http';
 import './database.js'
+import {config} from 'dotenv'
 
-
+config();
 const app = express();
 const upload = multer();
 const server = http.createServer(app); 
 const io = new SocketIOServer(server, {
   cors: {
-      origin: "http://localhost:3000",
+      origin: process.env.CLIENT_URI,
       methods: ["GET", "POST", "PUT", "DELETE"]
   }
 });
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true, methods: ["GET", 'POST', 'PUT', 'DELETE'], },))
+app.use(cors({ origin: process.env.CLIENT_URI, credentials: true, methods: ["GET", 'POST', 'PUT', 'DELETE'], },))
 app.use(bodyParser.json());
 app.use(session({
   secret: "It's top secret",
@@ -115,7 +116,7 @@ io.on('connection', (socket) => {
 
 
 // Start the server
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8001;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

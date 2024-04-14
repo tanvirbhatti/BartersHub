@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
+import { config } from 'dotenv';
 
+config();
 const mongoURI = process.env.CONNECTION_STRING || 'mongodb+srv://admin:admin@cluster0.g4lqotk.mongodb.net/BartersHub';
 
 mongoose.connect(mongoURI)

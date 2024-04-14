@@ -1,14 +1,12 @@
-import { connectToDb } from '../../db.js';
+import User from '../../models/useSchema.js';
+import Product from '../../models/productSchema.js'
 import { ObjectId } from 'mongodb';
-import jwt from 'jsonwebtoken';
-
-const secretKey = "abcd";
+import FeaturedProduct from '../../models/featuredProductSchema.js';
 
 export async function userProfile(req, res) {
     try {
-      const db = await connectToDb();
       const id = req.params.id; 
-      const user = await db.collection('users').findOne({ email: id });
+      const user = await User.findOne({ email: id });
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
@@ -21,7 +19,6 @@ export async function userProfile(req, res) {
 
 export async function getUserListings(req, res) {
     try {
-        const db = await connectToDb();
         
         const userId = req.user.userId;
 
@@ -29,7 +26,8 @@ export async function getUserListings(req, res) {
             return res.status(403).json({ error: 'No user ID found. Authentication may have failed.' });
         }
 
-        const listings = await db.collection('products').find({  'user._id': new ObjectId(userId) }).toArray();
+        const listings = await Product.find({  'user': new ObjectId(userId) }).exec();
+        
         if (!listings.length) {
             return res.status(404).json({ error: 'No listings found for this user' });
         }
@@ -43,7 +41,6 @@ export async function getUserListings(req, res) {
 
 export async function deleteListing(req, res) {
   try {
-      const db = await connectToDb();
       const listingId = req.params.id;  
       const listingObjectId = new ObjectId(listingId);
       const userId = req.user.userId;
@@ -52,17 +49,18 @@ export async function deleteListing(req, res) {
           return res.status(400).json({ error: 'Listing ID is required.' });
       }
 
-      const listing = await db.collection('products').findOne({ _id: listingObjectId });
+      const listing = await Product.findOne({ _id: listingObjectId });
       if (!listing) {
           return res.status(404).json({ error: 'Listing not found.' });
       }
-      if (listing.user._id.toString()===new ObjectId(userId).toString()) {
-          return res.status(403).json({ error: 'You are not authorized to delete this listing.' });
+      if (listing.user.toString()===new ObjectId(userId).toString()) {
+        await Product.deleteOne({ _id: listingObjectId });
+        await FeaturedProduct.deleteOne({productId:listingObjectId})
+        return res.status(200).json({ message: 'Listing deleted successfully.' });
       }
-
-      await db.collection('products').deleteOne({ _id: listingObjectId });
-      await db.collection('featuredProducts').deleteOne({productId:listingObjectId})
-      res.status(200).json({ message: 'Listing deleted successfully.' });
+      else{
+        return res.status(403).json({ error: 'You are not authorized to delete this listing.' });
+      }
   } catch (error) {
       console.error('Error deleting the listing:', error);
       res.status(500).json({ error: 'Internal server error' });
@@ -71,7 +69,6 @@ export async function deleteListing(req, res) {
 
 export async function updateListing(req, res) {
   try {
-      const db = await connectToDb();
       const listingId = req.body._id;
       const userId = req.user.userId;
       const listingUpdates = req.body;
@@ -81,7 +78,7 @@ export async function updateListing(req, res) {
       const listingObjectId = new ObjectId(listingId);
       // console.log(listingObjectId)
 
-      const existingListing = await db.collection('products').findOne({ _id: listingObjectId });
+      const existingListing = await Product.findOne({ _id: listingObjectId });
       if (!existingListing) {
           return res.status(404).json({ error: 'Listing not found.' });
       }
@@ -89,9 +86,9 @@ export async function updateListing(req, res) {
           return res.status(403).json({ error: 'You are not authorized to update this listing.' });
       }
 
-      await db.collection('products').updateOne(
+      await Product.updateOne(
           { _id: listingObjectId },
-          { $set: { ...listingUpdates, _id: listingObjectId, userId: existingListing.userId } }
+          { $set: { ...listingUpdates, _id: listingObjectId, userId: existingListing.user } }
       );
 
       res.status(200).json({ message: 'Listing updated successfully.' });
@@ -105,7 +102,6 @@ export async function updateListing(req, res) {
 // Disable a user by updating their status
 export async function disableUser(req, res) {
   try {
-    const db = await connectToDb();
     const userId = req.user.userId;
 
       if (!userId) {
@@ -115,7 +111,7 @@ export async function disableUser(req, res) {
         if (!userToUpdateId) {
           return res.status(400).json({ error: 'User ID is required' });
         } else {
-          const result = await db.collection('users').updateOne(
+          const result = await User.updateOne(
             { _id: new ObjectId(userToUpdateId) },
             { $set: { disabled: true } }
           );
@@ -135,18 +131,16 @@ export async function disableUser(req, res) {
 // Enable a user by updating their status
 export async function enableUser(req, res) {
   try {
-    const db = await connectToDb();
     const userId = req.user.userId;
     // Verify and decode the token
       if (!userId) {
         return res.status(401).json({ error: 'Token is not trusted. Please try logging in again.' });
       } else {
         const userToUpdateId = req.params.userId;
-        console.log(userToUpdateId)
         if (!userToUpdateId) {
           return res.status(400).json({ error: 'User ID is required' });
         } else {
-          const result = await db.collection('users').updateOne(
+          const result = await User.updateOne(
             { _id: new ObjectId(userToUpdateId) },
             { $set: { disabled: false } }
           );
@@ -168,7 +162,6 @@ export async function enableUser(req, res) {
 // Permanently delete a user
 export async function deleteUser(req, res) {
   try {
-    const db = await connectToDb();
     const userId = req.user.userId;
 
       if (!userId) {
@@ -178,7 +171,7 @@ export async function deleteUser(req, res) {
         if (!userToDeleteId) {
           return res.status(400).json({ error: 'User ID is required' });
         } else {
-          const result = await db.collection('users').deleteOne({ _id: new ObjectId(userToDeleteId) });
+          const result = await User.deleteOne({ _id: new ObjectId(userToDeleteId) });
           if (result.deletedCount === 1) {
             res.status(200).json({ message: 'User deleted successfully' });
           } else {
@@ -194,8 +187,7 @@ export async function deleteUser(req, res) {
 
 export async function fetchAllUsers(req, res) {
   try {
-      const db = await connectToDb();
-      const users = await db.collection('users').find().toArray();
+      const users = await User.find().exec();
       res.status(200).json({ message: 'All users fetched successfully', users });
   } catch (error) {
       console.error('Error fetching users:', error);
