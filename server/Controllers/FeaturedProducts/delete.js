@@ -1,14 +1,14 @@
 import { ObjectId } from 'mongodb';
-import { connectToDb } from '../../db.js';
+import FeaturedProduct from '../../models/featuredProductSchema.js';
+import Product from '../../models/productSchema.js';
 
 export async function deleteFeaturedProduct(req,res){
-    const db = await connectToDb();
     const productId = req.body.productId;
     if(productId){
         try {        
-            const deletedFeaturedProduct = await db.collection('featuredProducts').deleteOne({"productId": new ObjectId(productId)})
+            const deletedFeaturedProduct = await FeaturedProduct.deleteOne({"product": new ObjectId(productId)})
             
-            const updatedProduct = await db.collection('products').findOneAndUpdate(
+            const updatedProduct = await Product.findOneAndUpdate(
                 {"_id":new ObjectId(productId)},
                 {$set:{"featuredProduct":false}},
                 {returnOriginal:false}

@@ -1,19 +1,17 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { connectToDb } from "../../db.js";
-
+import User from '../../models/useSchema.js'
 const secretKey = "abcd";
 
 //login function
 export async function login(req, res) {
   try {
-    const db = await connectToDb();
 
     const { email, password } = req.body || "";
 
     if (email && password) {
       // Find user by email
-      const foundUser = await db.collection("users").findOne({ email });
+      const foundUser = await User.findOne({ email });
 
       if (!foundUser) {
         return res.json({ error: "User not found." });
@@ -51,7 +49,7 @@ export async function login(req, res) {
               return res.status(500).json({ error: "Unauthorized access" });
             }
           } catch (err) {
-            console.log("error during token generation", err);
+            console.error("error during token generation", err);
             return res.status(500).json({
               error: `Error during token generation -> ${err}`,
             });

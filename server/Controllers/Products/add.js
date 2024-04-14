@@ -1,22 +1,21 @@
-import { connectToDb } from "../../db.js";
-import {ObjectId} from 'mongodb';
+import User from "../../models/useSchema.js";
+import Product from "../../models/productSchema.js";
+import { ObjectId } from "mongodb";
 
 export async function addProduct(req, res) {
-  const db = await connectToDb();
-
   const userId = req.user.userId;
   if (!userId) {
     return res.status(401).json({ error: "Invalid token, user ID not found." });
   }
   let user;
   try {
-    user = await db.collection('users').findOne(
-      {_id:new ObjectId(userId)},
-      {projection: {password:0, userType: 0, disabled:0}}
-    )
+    user = await User.findOne(
+      { _id: new ObjectId(userId) },
+      { projection: { _id:1} }
+    );
   } catch (error) {
-      console.log({error})
-      res.status(400).json({"Error occured in database":error})    
+    console.log({ error });
+    res.status(400).json({ "Error occured in database": error });
   }
   const { title, description, category, price, phoneNumber, email } = req.body;
   const image = req.file?.firebaseUrl;
@@ -37,7 +36,7 @@ export async function addProduct(req, res) {
   }
 
   // Insert the new product into the database
-  const newProduct = await db.collection("products").insertOne({
+  const newProduct = await Product.create({
     user,
     title,
     description,
@@ -46,7 +45,7 @@ export async function addProduct(req, res) {
     price,
     phoneNumber,
     email,
-    featuredProduct:false
+    featuredProduct: false,
   });
 
   return res.json({

@@ -1,11 +1,11 @@
-import { connectToDb } from '../../db.js';
 import  jwt from 'jsonwebtoken';
+import Testimonial from '../../models/testimonialSchema.js';
+import User from '../../models/useSchema.js'
 import { ObjectId } from 'mongodb';
 
 export async function addTestimonial(req, res) {
     try {
 
-        const db = await connectToDb();
         const secretKey = 'abcd'; 
         
         let userId;
@@ -40,11 +40,10 @@ export async function addTestimonial(req, res) {
                     return res.json({ error: "Please provide all required fields" });
                 }
 
-                const user = await db.collection('users').findOne({_id: new ObjectId(userId)});
-                const timeStamp = new Date();
-                const newTestimonial = await db.collection('testimonials').insertOne(
+                const user = await User.findOne({_id: new ObjectId(userId)},{ projection: { _id:1} });
+                const newTestimonial = await Testimonial.create(
                     { 
-                        testimonialText, rating, userConsent, testimonialProduct, timeStamp, user
+                        testimonialText, rating, userConsent, testimonialProduct, user
                     });
                 return res.status(200).json({ message: 'Testimonial Added Successfully', newTestimonial });
             }

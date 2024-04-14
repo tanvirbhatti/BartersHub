@@ -1,8 +1,7 @@
 import { ObjectId } from "mongodb";
-import { connectToDb } from "../../db.js";
+import Product from '../../models/productSchema.js'
 import jwt from "jsonwebtoken";
 
-const db = await connectToDb();
 export async function editProductDetails(req, res) {
     try {
         const secretKey = "abcd";
@@ -39,7 +38,7 @@ export async function editProductDetails(req, res) {
                     if (!foundProduct) {
                         res.json({ error: "couldn't find a product" });
                     } else {
-                        await db.collection("products").updateOne({ _id: ObjectIdProjectId }, {
+                        await Product.updateOne({ _id: ObjectIdProjectId }, {
                             $set: {
                                 title, 
                                 description, 

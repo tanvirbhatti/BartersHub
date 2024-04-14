@@ -5,7 +5,7 @@ import session from 'express-session';
 import multer from 'multer';
 import { Server as SocketIOServer } from 'socket.io';
 
-import registerUser from './Controllers/Authentication/register.js';
+import {registerUser} from './Controllers/Authentication/register.js';
 import { login} from './Controllers/Authentication/login.js';
 import {logout} from './Controllers/Authentication/logout.js';
 import { addProduct } from './Controllers/Products/add.js';
@@ -22,7 +22,7 @@ import { deleteFeaturedProduct } from './Controllers/FeaturedProducts/delete.js'
 import { deleteProduct } from './Controllers/Products/delete.js';
 import chatController from './Controllers/Chat/chatController.js';
 import http from 'http';
-
+import './database.js'
 
 
 const app = express();
