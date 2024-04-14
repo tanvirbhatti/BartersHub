@@ -1,10 +1,9 @@
 import { ObjectId } from "mongodb";
-import { connectToDb } from "../../db.js";
+import Product from '../../models/productSchema.js'
+import FeaturedProduct from '../../models/featuredProductSchema.js'
 
 export async function deleteProduct(req, res) {
     try {
-        const db = await connectToDb();
-
         const userId = req.user.userId;
             
             if(!userId){
@@ -13,22 +12,19 @@ export async function deleteProduct(req, res) {
             else{
                 const {productId} = req.params;
                 const ObjectIdProjectId= new ObjectId(productId);
-                console.log(productId)
                 if(!productId){
                     return res.json({error:'Error selecting Product'})
                 }
                 else{
-                    const foundProduct = await db.collection('products').findOne({_id:ObjectIdProjectId})
-                    const foundFeaturedProduct = await db.collection('featuredProducts').findOne({'productId':ObjectIdProjectId})
-                    console.log(foundFeaturedProduct)
+                    const foundProduct = await Product.findOne({_id:ObjectIdProjectId})
+                    const foundFeaturedProduct = await FeaturedProduct.findOne({'productId':ObjectIdProjectId})
                     if(!foundProduct){
                         res.json({error:"couldn't find a product"});
                     }
                     else{
-                        await db.collection('products').deleteOne({_id:ObjectIdProjectId});
+                        await Product.deleteOne({_id:ObjectIdProjectId});
                         if(foundFeaturedProduct){
-                            await db.collection('featuredProducts').deleteOne({'productId':ObjectIdProjectId})
-                            console.log("deleted")
+                            await FeaturedProduct.deleteOne({'productId':ObjectIdProjectId})
                         }
                         return res.json({ message: 'Product deleted successfully',foundProduct});    
                     }

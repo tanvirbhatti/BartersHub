@@ -1,11 +1,12 @@
-import  {connectToDb}  from "../../db.js";
+import Testimonial from "../../models/testimonialSchema.js";
 
 export async function getTestimonials(req, res) {
-  const db = await connectToDb();
 
   try {
-    const cursor = db.collection("testimonials").find().limit(5);
-    const foundTestimonials = await cursor.toArray();
+    const foundTestimonials = await Testimonial.find().populate({
+      path:'user',
+      select:'firstName lastName'
+    }).limit(5).exec();
 
     if (foundTestimonials.length <= 0) {
       return res.json({ error: "couldn't find any testimonials" });

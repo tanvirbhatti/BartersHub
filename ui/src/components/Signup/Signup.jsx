@@ -51,17 +51,28 @@ const Signup = () => {
   });
 
   const handleInputChange = (fieldName, fieldValue) => {
+    let sanitizedValue = fieldValue
     switch (fieldName) {
       case "firstName":
-        setFirstName(fieldValue);
+      case "lastName":
+      case "city":
+          sanitizedValue = fieldValue.replace(/[^a-zA-Z\s]/g, '');
+          break;
+      default:
+          break;
+    }
+
+    switch (fieldName) {
+      case "firstName":
+        setFirstName(sanitizedValue);
         break;
 
       case "lastName":
-        setLastName(fieldValue);
+        setLastName(sanitizedValue);
         break;
 
       case "email":
-        setEmail(fieldValue);
+        setEmail(sanitizedValue);
         break;
 
       case "password":
@@ -73,7 +84,7 @@ const Signup = () => {
         break;
 
       case "city":
-        setCity(fieldValue);
+        setCity(sanitizedValue);
         break;
 
       default:

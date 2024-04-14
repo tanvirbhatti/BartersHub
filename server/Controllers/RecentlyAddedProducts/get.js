@@ -1,9 +1,12 @@
-import {connectToDb} from '../../db.js'
+import Product from '../../models/productSchema.js'
 
-export async function getRecentlyListedProducts(req,res){
-    const db = await connectToDb();
+export const getRecentlyListedProducts = async (req,res)=>{
 
-    const cursor =  db.collection('products').find().sort({_id:-1}).limit(10)
-    const result = await cursor.toArray()
-    return res.json(result)
+    try{
+        const result =  await Product.find().sort({_id:-1}).limit(10).exec()
+        return res.status(200).json(result)
+    }
+    catch(error){
+        return res.status(500).json({error:"error occured fethcing the featured products"})
+    }
 }

@@ -1,13 +1,11 @@
-import { connectToDb } from "../../db.js";
+import Product from '../../models/productSchema.js'
 import { ObjectId } from 'mongodb';
 
 
 export async function getProducts(req, res) {
-  const db = await connectToDb();
 
   try {
-    const cursor = db.collection('products').find();
-    const products = await cursor.toArray();
+    const products = await Product.find().exec();
     if (products.length <= 0) {
       // Send an empty array if no products are found
       return res.json({ 'list of products': [] });
@@ -22,10 +20,9 @@ export async function getProducts(req, res) {
 
 export async function getProductById(req, res) {
   const { id } = req.params; 
-  const db = await connectToDb();
 
   try {
-    const product = await db.collection('products').findOne({ _id: new ObjectId(id) });
+    const product = await Product.findOne({ _id: new ObjectId(id) });
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });

@@ -104,10 +104,9 @@ export const Products = () => {
                 <thead className="align-items-center text-center bg-secondary text-white">
                 <tr className="row p-2 align-items-center text-center">
                         <th className="col-md-1">Image</th>
-                        <th className="col-md-3">Title</th>
+                        <th className="col-md-4">Title</th>
                         <th className="col-md-2">Featured Product</th>
                         <th className="col-md-3">User</th>
-                        <th className="col-md-1">City</th>
                         <th className="col-md-1">Delete</th>
                         <th className="col-md-1">View</th>
                     </tr>
@@ -118,7 +117,7 @@ export const Products = () => {
                             <td className="col-md-1 p-0">
                                 <img className="border rounded" src={product.image} alt={product.title} style={{ width: '100%', height:'5.25rem'}} />
                             </td>
-                            <td className="col-md-3">{product.title}</td>
+                            <td className="col-md-4">{product.title}</td>
                             <td className="col-md-2">
                                 <ToggleButton
                                     id={product._id}
@@ -127,7 +126,6 @@ export const Products = () => {
                                 />
                             </td>
                             <td className="col-md-3">{product.email}</td>
-                            <td className="col-md-1">{product.user.city}</td>
                             <td className="col-md-1">
                                 <button className="btn btn-secondary" onClick={()=>deleteProduct(product._id, product.title)}>
                                     <i className="fa-solid fa-trash"></i>
