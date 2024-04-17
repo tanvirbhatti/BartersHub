@@ -13,7 +13,7 @@ import { getProducts, getProductById } from './Controllers/Products/get.js';
 import { getTestimonials } from './Controllers/Testimonials/get.js';
 import { addTestimonial } from './Controllers/Testimonials/add.js';
 import { firebaseUploadMiddleware } from './Middleware/storageBucket.js';
-import { userProfile, getUserListings, deleteListing, updateListing, disableUser, deleteUser, fetchAllUsers, enableUser } from './Controllers/userProfile/UserProfileController.js';
+import { userProfile,updateUserProfile, getUserListings, deleteListing, updateListing, disableUser, deleteUser, fetchAllUsers, enableUser } from './Controllers/userProfile/UserProfileController.js';
 import checkUser from './Middleware/checkUser.js';
 import { addFeaturedProduct } from './Controllers/FeaturedProducts/add.js';
 import { getFeaturedProducts } from './Controllers/FeaturedProducts/get.js';
@@ -66,6 +66,7 @@ app.get('/get-recently-products', getRecentlyListedProducts);
 //User data endpoints
 app.get('/userprofile/:id', userProfile)
 app.get('/user-listings', checkUser, getUserListings)
+app.post('/update-user', checkUser, updateUserProfile);
 app.post('/edit-product', checkUser, updateListing);
 app.delete('/delete-product/:id', checkUser, deleteListing);
 
