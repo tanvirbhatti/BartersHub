@@ -21,6 +21,19 @@ const UserProfile = () => {
     const [confirmMessage, setConfirmMessage] = useState("");
     const { setIsLoggedIn } = useAuth()
 
+    const [isEditing, setIsEditing] = useState(false);
+    const [editData, setEditData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+    });
+    const [editErrors, setEditErrors] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+    });
+
+
     const [errors, setErrors] = useState({
         title: '',
         description: '',
@@ -77,12 +90,12 @@ const UserProfile = () => {
     const handleLogout = async () => {
         setConfirmMessage("Are you sure you want to logout?");
         setConfirmAction(() => () => {
-            logout(user,setUser,setModalOpen, toast, navigate, setIsLoggedIn)
+            logout(user, setUser, setModalOpen, toast, navigate, setIsLoggedIn)
         });
         setModalOpen(true);
-      };
-        
-    
+    };
+
+
     const handleDelete = async (productId) => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -204,143 +217,241 @@ const UserProfile = () => {
         setUpdatedListing({ ...updatedListing, [name]: value });
     };
 
+    //functions for updating user profile
+
+    const handleEdit = () => {
+        setEditData({
+            firstName: user.firstName || '',
+            lastName: user.lastName || '',
+            email: user.email || '',
+        });
+        setIsEditing(true);
+    };
+
+    const handleCancel = () => {
+        setIsEditing(false);
+    };
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setEditData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const validateEditForm = () => {
+        let errors = {};
+        if (!editData.firstName.trim()) errors.firstName = "First name is required.";
+        if (!editData.lastName.trim()) errors.lastName = "Last name is required.";
+        if (!editData.email.trim()) errors.email = "Email is required.";
+        setEditErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handleSubmitEdit = async () => {
+        if (!validateEditForm()) return;
+
+        const formData = new FormData();
+        formData.append('userId', user.userId);
+        formData.append('firstName', editData.firstName);
+        formData.append('lastName', editData.lastName);
+        formData.append('email', editData.email);
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_SERVER}/update-user`, formData, {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.status === 200) {
+                toast.success('Profile updated successfully.');
+                setUser(prev => ({ ...prev, ...editData }));
+                setIsEditing(false);
+            } else {
+                toast.error('Failed to update profile.');
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            toast.error('Error updating profile.');
+        }
+    };
+
+
+
     return (
         <>
-        <ConfirmationModal
-            isOpen={modalOpen}
-            onClose={() => setModalOpen(false)}
-            onConfirm={confirmAction}
-            message={confirmMessage}
-        />
-        <div className="container pt-5 pb-5">
-            <div className="d-flex">
-                <div className="rounded shadow CardMargin" style={{ width: "20%" }}>
-                    <div className=" text-center">
-                        {user && (
-                            <>
-                                <img className="avatar img-fluid border rounded mb-3 mt-4" src={User} alt="User Avatar" />
-                                <div className='pb-3 h-100 w-100'>
-                                    <h5>{user.firstName} {user.lastName} </h5>
-                                    <p>{user.email}</p>
-                                    <p className="location">Edit Profile</p>
-                                    <button className="rounded-2 Btn active" onClick={handleLogout} >Logout</button>
-                                </div>
-                            </>
-                        )}
-                    </div>
-                </div>
-                <div className="shadow rounded" style={{ width: "85%" }}>
-                    <h3 className="row py-3 pb-2 px-5 fw-bold">Listings</h3>
-                    <div className="row px-5 pb-2 gap-4">
-                        {listings.map((product, index) => (
-                            <div className="card border mb-3 px-0" key={product.id} style={{ width: "300px" }}>
-                                <img src={product.image} alt={product.title} className="card-img-top product-img" />
-                                <div className="card-body">
-                                    <h5 className="card-title">{product.title}</h5>
-                                    <p className="card-text">${product.price}</p>
-                                    <div className="d-flex justify-content-between ">
-                                        <button className='btn btn-secondary btn-sm' onClick={() => handleShowModal(product)}>Update</button>
+            <ConfirmationModal
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                onConfirm={confirmAction}
+                message={confirmMessage}
+            />
+            <div className="container pt-5 pb-5">
+                <div className="d-flex">
+                    <div className="rounded shadow CardMargin" style={{ width: "20%" }}>
+                        <div className=" text-center">
+                            {user && (
+                                <>
+                                    <img className="avatar img-fluid border rounded mb-3 mt-4" src={User} alt="User Avatar" />
+                                    <div className='pb-3 h-100 w-100'>
+                                        {isEditing ? (
+                                            <>
+                                                <input
+                                                    type="text"
+                                                    value={editData.firstName}
+                                                    onChange={handleChange}
+                                                    name="firstName"
+                                                />
+                                                {editErrors.firstName && <div className="text-danger">{editErrors.firstName}</div>}
 
-                                        <button className="btn btn-secondary btn-sm" onClick={() => handleDelete(product._id)}>
-                                            <i className="fa-solid fa-trash"></i>
-                                        </button>
+                                                <input
+                                                    type="text"
+                                                    value={editData.lastName}
+                                                    onChange={handleChange}
+                                                    name="lastName"
+                                                    className="mt-2"
+                                                />
+                                                {editErrors.lastName && <div className="text-danger">{editErrors.lastName}</div>}
+
+                                                <input
+                                                    type="email"
+                                                    value={editData.email}
+                                                    onChange={handleChange}
+                                                    name="email"
+                                                    className="mt-2"
+                                                />
+                                                {editErrors.email && <div className="text-danger">{editErrors.email}</div>}
+                                                <div className="m-2 d-flex  justify-content-around mx-4">
+                                                    <button onClick={handleSubmitEdit} className="rounded-2 Btn active">Update</button>
+                                                    <button onClick={handleCancel} className="btn ">Cancel</button>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <h5>{user.firstName} {user.lastName}</h5>
+                                                <p>{user.email}</p>
+                                                <p className="location" onClick={handleEdit}>Edit Profile</p>
+                                            </>
+                                        )}
+                                        <button className="rounded-2 Btn active" onClick={handleLogout} >Logout</button>
+                                    </div>
+
+                                </>
+                            )}
+                        </div>
+                    </div>
+                    <div className="shadow rounded" style={{ width: "85%" }}>
+                        <h3 className="row py-3 pb-2 px-5 fw-bold">Listings</h3>
+                        <div className="row px-5 pb-2 gap-4">
+                            {listings.map((product, index) => (
+                                <div className="card border mb-3 px-0" key={product.id} style={{ width: "300px" }}>
+                                    <img src={product.image} alt={product.title} className="card-img-top product-img" />
+                                    <div className="card-body">
+                                        <h5 className="card-title">{product.title}</h5>
+                                        <p className="card-text">${product.price}</p>
+                                        <div className="d-flex justify-content-between ">
+                                            <button className='btn btn-secondary btn-sm' onClick={() => handleShowModal(product)}>Update</button>
+
+                                            <button className="btn btn-secondary btn-sm" onClick={() => handleDelete(product._id)}>
+                                                <i className="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
+                <Modal show={showModal} onHide={() => setShowModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Update Listing</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Title</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="title"
+                                    defaultValue={currentListing?.title}
+                                    onChange={handleFormChange}
+                                />
+                                {errors.title && <div className="text-danger">{errors.title}</div>}
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    name="description"
+                                    defaultValue={currentListing?.description}
+                                    onChange={handleFormChange}
+                                />
+                                {errors.description && <div className="text-danger">{errors.description}</div>}
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Price</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    name="price"
+                                    defaultValue={currentListing?.price}
+                                    onChange={handleFormChange}
+                                />
+                                {errors.price && <div className="text-danger">{errors.price}</div>}
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Phone Number</Form.Label>
+                                <Form.Control
+                                    type="tel"
+                                    name="phoneNumber"
+                                    defaultValue={currentListing?.phoneNumber}
+                                    onChange={handleFormChange}
+                                />
+                                {errors.phoneNumber && <div className="text-danger">{errors.phoneNumber}</div>}
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    name="email"
+                                    defaultValue={currentListing?.email}
+                                    onChange={handleFormChange}
+                                />
+                                {errors.email && <div className="text-danger">{errors.email}</div>}
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Category</Form.Label>
+                                <Form.Select
+                                    name="category"
+                                    defaultValue={currentListing?.category}
+                                    onChange={handleFormChange}
+                                >
+                                    {/* Options should be predefined or fetched */}
+                                    <option value="">Select a category</option>
+                                    <option value="category1">Category 1</option>
+                                    <option value="category2">Category 2</option>
+                                </Form.Select>
+                                {errors.category && <div className="text-danger">{errors.category}</div>}
+                            </Form.Group>
+
+                        </Form>
+
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => setShowModal(false)}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={handleUpdateListing}>
+                            Save Changes
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Update Listing</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Title</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="title"
-                                defaultValue={currentListing?.title}
-                                onChange={handleFormChange}
-                            />
-                            {errors.title && <div className="text-danger">{errors.title}</div>}
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                name="description"
-                                defaultValue={currentListing?.description}
-                                onChange={handleFormChange}
-                            />
-                            {errors.description && <div className="text-danger">{errors.description}</div>}
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Price</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="price"
-                                defaultValue={currentListing?.price}
-                                onChange={handleFormChange}
-                            />
-                            {errors.price && <div className="text-danger">{errors.price}</div>}
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Phone Number</Form.Label>
-                            <Form.Control
-                                type="tel"
-                                name="phoneNumber"
-                                defaultValue={currentListing?.phoneNumber}
-                                onChange={handleFormChange}
-                                />
-                            {errors.phoneNumber && <div className="text-danger">{errors.phoneNumber}</div>}
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                name="email"
-                                defaultValue={currentListing?.email}
-                                onChange={handleFormChange}
-                                />
-                            {errors.email && <div className="text-danger">{errors.email}</div>}
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Category</Form.Label>
-                            <Form.Select
-                                name="category"
-                                defaultValue={currentListing?.category}
-                                onChange={handleFormChange}
-                            >
-                                {/* Options should be predefined or fetched */}
-                                <option value="">Select a category</option>
-                                <option value="category1">Category 1</option>
-                                <option value="category2">Category 2</option>
-                            </Form.Select>
-                            {errors.category && <div className="text-danger">{errors.category}</div>}
-                        </Form.Group>
-
-                    </Form>
-
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleUpdateListing}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </div>
-    </>
+        </>
     );
 };
 
