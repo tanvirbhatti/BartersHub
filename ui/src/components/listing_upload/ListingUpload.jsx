@@ -8,7 +8,7 @@ const ListingUpload = () => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        category: 'category1', 
+        category: '', 
         price: '',
         phoneNumber: '',
         email: ''
@@ -18,6 +18,22 @@ const ListingUpload = () => {
     const [imagePreview, setImagePreview] = useState(null); // New state for image preview
     const [errors, setErrors] = useState({});
     const [isUploading, setIsUploading] = useState(false);
+    const [categories,setCategories] = useState();
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    const fetchCategories = () => {
+        axios
+            .get(`${process.env.REACT_APP_API_SERVER}/get-all-categories`)
+            .then((response) => {
+                setCategories(response.data.categories);
+            })
+            .catch((error) => {
+                console.error("Error fetching categories:", error);
+            });
+    };
 
     const navigate = useNavigate(); // Create navigate function
 
@@ -159,8 +175,11 @@ const ListingUpload = () => {
 
                 <label htmlFor="category">Select a Category</label>
                 <select id="category" name="category" value={formData.category} onChange={handleInputChange} className='rounded form-select border-dark'>
-                    <option value="category1">Category 1</option>
-                    <option value="category2">Category 2</option>
+                    {categories && categories.map(category =>
+                        <option value={category.category} key={category._id}>
+                            {category.category}
+                        </option>
+                    )}
                 </select>
 
                 <div className="form-group rounded border border-dark p-3">
