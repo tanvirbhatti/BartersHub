@@ -4,7 +4,6 @@ const Footer = () => {
     return (
         <footer className='pt-3'>
             <div className={styles.container}>
-                {/* <img className={styles.Logo} src={Logo} alt="logo of barter hub" /> */}
                 <div className={styles.Logo}></div>
                 <p className={styles.text}>Your one-stop Marketplace for seamless Transactions</p>
             </div>
