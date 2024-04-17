@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import '../../Assets/Stylesheets/Components/AdminPanel.css'
 import { Users } from './Users';
 import { Products } from './Products';
+import {Categories} from './Categories';
 import { toast } from "react-toastify";
 import { useNavigate } from 'react-router';
 import { jwtDecode } from "jwt-decode";
@@ -54,6 +55,8 @@ export const AdminPanel = () =>{
                 return <Products />;
             case 'Users':
                 return <Users />;
+            case 'Categories':
+                return <Categories/>
             default:
                 return null;
         }
@@ -80,6 +83,7 @@ export const AdminPanel = () =>{
                                         <button className={`border mb-2 rounded-2 Btn ${(activeComponent==='Products')?'active':'' }`} name='products' onClick={() => setActiveComponent('Products')}>Products</button>
                                         <br/>
                                         <button className={`border mb-2 rounded-2 Btn ${(activeComponent==='Users')?'active':'' }`} name='users' onClick={() => setActiveComponent('Users')}>Users</button>
+                                        <button className={`border mb-2 rounded-2 Btn ${(activeComponent==='Categories')?'active':'' }`} name='categories' onClick={() => setActiveComponent('Categories')}>Categories</button>
                                         <button className={`border mb-2 rounded-2 Btn `} name='users' onClick={handleLogout}>Logout</button>
                                     </div>
                                 </>)
@@ -87,9 +91,6 @@ export const AdminPanel = () =>{
                         </div>
                     </div>
                     <div className='shadow rounded p-3' style={{width:"85%"}}>
-                        <h3 className='pb-0 fw-bold text-UpperCase col-lg-2'>
-                            {activeComponent}
-                        </h3>
                         {renderComponent()}
                     </div>
                 </div>

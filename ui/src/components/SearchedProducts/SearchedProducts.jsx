@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import Productcard from "../../UI/Cards/Productcard.jsx";
 import "../../Assets/Stylesheets/Components/Productlisting.css"
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useSearchContext } from '../../contexts/SearchContext.jsx';
 
-const ProductListing = () => {
+const SearchedProducts = () => {
     const [products, setProducts] = useState([]);
     const {searchResults} = useSearchContext()
-
+    const path = useLocation().pathname.split('/');
+    const searchTerm = path[path.length - 1];
     useEffect(() => {
 
         fetch(`${process.env.REACT_APP_API_SERVER}/get-products`)
@@ -27,17 +28,7 @@ const ProductListing = () => {
                     <Link to="/ListingsUpload" className="Listinglink">Post Your Ad</Link>
                 </button>
             </header>
-
             <div className="container">
-                <section className="marketplace-header">
-                    <button className="menu-button rounded">Filters</button>
-                    <div className="col-md-1">
-                        <select className="location-filter rounded form-select">
-                            <option value="kitchener">Kitchener</option>
-                        </select>
-                    </div>
-                </section>
-
                 <section className="products d-flex row">
                     {
                         (
@@ -62,4 +53,4 @@ const ProductListing = () => {
     );
 }
 
-export default ProductListing;
+export default SearchedProducts;

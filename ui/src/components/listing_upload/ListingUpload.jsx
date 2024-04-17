@@ -9,7 +9,7 @@ const ListingUpload = () => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        category: 'category1', 
+        category: '', 
         price: '',
         phoneNumber: '',
         email: ''
@@ -19,6 +19,22 @@ const ListingUpload = () => {
     const [imagePreview, setImagePreview] = useState(null); // New state for image preview
     const [errors, setErrors] = useState({});
     const [isUploading, setIsUploading] = useState(false);
+    const [categories,setCategories] = useState();
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    const fetchCategories = () => {
+        axios
+            .get(`${process.env.REACT_APP_API_SERVER}/get-all-categories`)
+            .then((response) => {
+                setCategories(response.data.categories);
+            })
+            .catch((error) => {
+                console.error("Error fetching categories:", error);
+            });
+    };
 
     const navigate = useNavigate(); // Create navigate function
 
@@ -161,16 +177,11 @@ const ListingUpload = () => {
 
                 <label htmlFor="category">Select a Category</label>
                 <select id="category" name="category" value={formData.category} onChange={handleInputChange} className='rounded form-select border-dark'>
-                    <option value="category1">Electronics</option>
-                    <option value="category2">Furniture</option>
-                    <option value="category3">Fashion</option>
-                    <option value="category4">Toys & Games</option>
-                    <option value="category5">Property Rentals</option>
-                    <option value="category6">Home</option>
-                    <option value="category7">Pet Supplies</option>
-                    <option value="category8">Others</option>
-
-
+                    {categories && categories.map(category =>
+                        <option value={category.category} key={category._id}>
+                            {category.category}
+                        </option>
+                    )}
                 </select>
 
                 <div className="form-group rounded border border-dark p-3">

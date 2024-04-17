@@ -22,9 +22,13 @@ import { deleteFeaturedProduct } from './Controllers/FeaturedProducts/delete.js'
 import { deleteProduct } from './Controllers/Products/delete.js';
 import {getSearchResults} from './Controllers/Search/search.js'
 import chatController from './Controllers/Chat/chatController.js';
+import addCategory from './Controllers/Categories/add.js';
+import getAllCategories from './Controllers/Categories/getAll.js'
 import http from 'http';
 import './database.js'
 import {config} from 'dotenv'
+import getCategories from './Controllers/Categories/get.js';
+import deleteCategory from './Controllers/Categories/delete.js';
 
 config();
 const app = express();
@@ -64,6 +68,7 @@ app.post('/add-testimonial', addTestimonial)
 app.get('/get-featured-products', getFeaturedProducts)
 app.get('/get-recently-products', getRecentlyListedProducts);
 app.get('/search',getSearchResults)
+app.get('/get-all-categories',getAllCategories)
 
 //User data endpoints
 app.get('/userprofile/:id', userProfile)
@@ -80,6 +85,9 @@ app.put('/admin/disable-user/:userId', checkUser, disableUser);
 app.put('/admin/enable-user/:userId', checkUser, enableUser);
 app.delete('/admin/delete-user/:userId', checkUser, deleteUser);
 app.get('/admin/users', fetchAllUsers);
+app.post('/admin/add-category',checkUser,addCategory)
+app.get('/admin/get-all-categories',checkUser, getCategories)
+app.delete('/admin/delete-category',checkUser, deleteCategory)
 
 // Chat history or chat session management endpoints
 app.post('/chat/message/:senderid', checkUser, chatController.saveMessage);

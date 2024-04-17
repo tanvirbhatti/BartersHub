@@ -12,7 +12,7 @@ const Productcard = ({ product }) => {
       </div>
       <div className="product-info">
         <h2>{title}</h2>
-        <p>${price}</p>
+        <p className="text-danger fw-bold">${price}</p>
         <span>{location}</span>
       </div>
     </Link>

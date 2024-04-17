@@ -44,7 +44,7 @@ const ProductDetails = () => {
                             <div className="product-info p-0 pt-2">
                                 <div className="product-name">{product.title}</div>
                                 
-                                <div className="product-price-discount"><span>${product.price}</span></div>
+                                <div className="fw-bold product-price-discount"><span>${product.price}</span></div>
                             </div>
                             <p>{product.description}</p>
                             

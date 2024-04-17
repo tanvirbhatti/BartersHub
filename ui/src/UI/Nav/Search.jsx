@@ -15,7 +15,7 @@ const SearchBar = ({}) => {
         `${process.env.REACT_APP_API_SERVER}/search?searchQuery=${searchQuery}`
       );
       setSearchResults(response.data);
-      navigation(`/productListings?searchQuery=${searchQuery}`);
+      navigation(`/productListings/searchQuery/${searchQuery}`);
     } catch (error) {
       console.error("Error fetching search results:", error);
     }
