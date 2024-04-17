@@ -46,20 +46,18 @@ export default function Testimonials() {
                                             <div className="col-lg-12 p-3 pt-0 pb-0">
                                                 <div className="row">
                                                     <div className="col-lg-12">
-                                                        <div className="text-center">
-                                                            <img
-                                                                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20%2810%29.webp"
-                                                                className="rounded-circle shadow w-25"
+                                                        <div className="d-flex justify-content-center pb-3">
+                                                            <div
+                                                                className="userImage rounded"
                                                                 alt="avatar"
                                                             />
                                                         </div>
-                                                        <p className="text-capitalize text-center text-light fw-bold mb-0 pt-2">{testimonial.user.firstName}</p>
+                                                        <p className="text-capitalize text-center text-light fw-bold mb-0 pb-3">{testimonial.user.firstName}</p>
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-lg-12">
-                                                        <p className="text-center fw-light text-light mb-0 pt-1 pb-2">"{testimonial.testimonialText}"</p>
-                                                        <p className="text-center text-capitalize text-light"><b>&nbsp;{testimonial.testimonialProduct}</b></p>
+                                                        <p className="text-center fw-light text-light mb-0 pb-3 px-3">"{testimonial.testimonialText}"</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -69,12 +67,12 @@ export default function Testimonials() {
                         </div>
                     ))}
                 </Carousel>
-                <div className="d-flex bg-dark p-3 mb-5 text-white text-center align-items-center justify-content-center">
+                {/* <div className="d-flex bg-dark p-3 mb-5 text-white text-center align-items-center justify-content-center">
                     <h4 className="m-0">Rate your experince with us!</h4>
                     <button type="button" className="upload-btn rounded mx-3">
                         <a href="/ListingsUpload" className="Listinglink">Post Your Ad</a>
                     </button>
-                </div>
+                </div> */}
             </div>
         </div>
     );

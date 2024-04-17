@@ -38,8 +38,8 @@ export default function FeaturedProducts(){
                                     <img src={product.product.image} alt={product.product.title} style={{ width: '100%', height: '200px' }} />
                                     <div className="card-body">
                                         <h5 className="card-title">{product.product.title}</h5>
-                                        <p className="card-text">{truncatedDescription}</p>
-                                        <p className="card-text">{product.product.price}</p>
+                                        <p className="card-text product-description">{truncatedDescription}</p>
+                                        <p className="card-text fw-bold pt-2 text-danger">${product.product.price}</p>
                                         <div className="col-md-8">
                                             <a href={`/productDetails/${product.product._id}`}>
                                                 <GradientButton text="View Product" rounded={true} />

@@ -39,7 +39,8 @@ const Nav = () => {
   };
 
   const isCurrentPage = (url) => {
-    return location.pathname === url
+    const path = location.pathname.split('/')
+    return '/'+path[1] === url;  
   }
 
   return (

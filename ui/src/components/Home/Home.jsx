@@ -14,6 +14,8 @@ import {Chat} from '../Chat/Chat.jsx'
 import {AuthProvider} from '../../contexts/AuthContext.jsx'
 import { SearchProvider } from '../../contexts/SearchContext.jsx';
 import {NotFound} from '../../components/NotFound/NotFound.jsx'
+import {CategorizedProducts} from '../../components/CategorizedProducts/CategorizedProducts.jsx'
+import SearchedProducts from '../SearchedProducts/SearchedProducts.jsx';
 const Home = () => {
     return (
         <React.Fragment>
@@ -32,6 +34,8 @@ const Home = () => {
                             <Route path='admin' element={<AdminPanel/>} />
                             <Route path='chat/:listingId' element={<Chat/>}/>
                             <Route path='chat' element={<Chat/>}/>
+                            <Route path='productListings/category/:categoryName' element={<CategorizedProducts/>}></Route>
+                            <Route path="/productListings/searchQuery/:searchQuery" element={<SearchedProducts/>}></Route>
                             <Route path='*' element={<NotFound/>}></Route>
                         </Routes>
                     </BrowserRouter>

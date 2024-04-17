@@ -56,8 +56,8 @@ export default function RecentlyListedProducts(){
                             <img src={product.image} alt={product.title} style={{ width: '100%', height: '200px' }} />
                             <div className="card-body">
                                 <h5 className="card-title">{product.title}</h5>
-                                <p className="card-text">{truncatedDescription}</p>
-                                <p className="card-text">{product.price}</p>
+                                <p className="card-text product-description">{truncatedDescription}</p>
+                                <p className="card-text fw-bold pt-2 text-danger">${product.price}</p>
                                 <div className="col-md-8">
                                     <a href={`/productDetails/${product._id}`}>
                                         <GradientButton text="View Product" rounded={true} />

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react"; 
 import axios from "axios";
+import { Link } from "react-router-dom";
 
-export default function Categories() {
+export default function Categories({}) {
 
     const [categories,setCategories] = useState();
 
@@ -20,14 +21,18 @@ export default function Categories() {
             });
     };
 
+    
 
     return (<div className="row p-5 pt-0 align-items-center no_gutter">
         <h3><b>Categories: </b></h3>
         <div>
+            <Link className="btn border mr-10px mb-2 bg-orange text-white" to={`productListings/category/All`} >
+                All
+            </Link>
             {categories && categories.map(category=>
-                <button type="button" className="btn btn-secondary mr-10px mb-2" key={category._id}>
+                <Link type="button" className="btn border mr-10px mb-2" key={category._id} to={`productListings/category/${category.category}`}>
                     {category.category}
-                </button>
+                </Link>
             )}
         </div>
     </div>)
