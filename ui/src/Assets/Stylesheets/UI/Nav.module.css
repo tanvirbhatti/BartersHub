@@ -1,19 +1,15 @@
 .Nav {
-  display: flex;
-  grid-template-columns: 1.5fr 1.7fr 1.9fr;
   align-items: center;
-  width: 100%;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
   padding:5px;  
-  gap: 15%;
+  gap: 10%;
 }
 
 .Logo {
-  margin: 1rem 0 1rem 2.5rem;
-  width: 14.8vw;
-  height: 5.3vh;
-  background-image: url('../../Images/Barter\'sHubSpriteSheet.png');
-  background-size: 2500px auto;
+  background-image: url('../../Images/BarterHub.png');
+  height: 2.8rem;
+  margin: 0.5rem 0 0.5rem 2.6rem;
+  background-size: cover;
 }
 
 .items {
@@ -69,28 +65,4 @@ nav ul {
   padding: 0.5rem 1rem;
   border-radius: 0.4rem;
   color: white !important;
-}
-
-@media (max-width: 1494px) {
-  .Nav {
-    display: flex;
-    grid-template-columns: 1.5fr 1.7fr 1.9fr;
-    align-items: center;
-    width: 100%;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
-    padding:5px;  
-    gap: 12%;
-  }
-}
-
-@media (min-width:1495px){
-  .Nav {
-    display: flex;
-    grid-template-columns: 1.5fr 1.7fr 1.9fr;
-    align-items: center;
-    width: 100%;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
-    padding:5px;  
-    gap: 18.7%;
-  }
 }

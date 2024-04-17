@@ -6,6 +6,7 @@ import ConfirmationModal from '../../UI/BootstrapModal/ConfirmationModal';
 import { useLocation, useNavigate } from 'react-router-dom';
 import logout from '../../utills/logoutUtil'
 import { useAuth } from "../../contexts/AuthContext";
+import SearchBar from "./Search";
 
 const Nav = () => {
   const location = useLocation();
@@ -14,9 +15,9 @@ const Nav = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [confirmMessage, setConfirmMessage] = useState("");
-  const { isLoggedIn, setIsLoggedIn } = useAuth()
+  const { isLoggedIn, setIsLoggedIn } = useAuth()  
   const token = localStorage.getItem('token');
-  
+
   useEffect(() => {
     if (token) {
       // Decode token and set user data
@@ -27,6 +28,7 @@ const Nav = () => {
       });
     }
   }, [token]);
+
 
   const handleLogout = async () => {
     setConfirmMessage("Are you sure you want to logout?");
@@ -48,19 +50,12 @@ const Nav = () => {
         onConfirm={confirmAction}
         message={confirmMessage}
       />
-      <nav className={styles.Nav}>
-        <div className={styles.Logo}></div>
-        <div className={styles["search-container"]}>
-          <input
-            className={styles.searchBox}
-            type="text"
-            placeholder="Type to search"
-          ></input>
-          <button className={styles.searchButton}>
-            <i className="fa fa-search"></i>
-          </button>
+      <nav className={`${styles.Nav} d-flex gap-8 text-center justify-content-space-between`}>
+        <div className={`${styles.Logo} col-md-2`}></div>
+        <div className={`${styles["search-container"]} col-md-4 text-center`}>
+          <SearchBar />
         </div>
-        <ul className={styles.items}>
+        <ul className={`${styles.items} col-md-3`}>
           <li><a href="/" className={isCurrentPage("/") ? styles.active : ""}>Home</a></li>
           <li><a href="/productListings" className={isCurrentPage("/productListings") ? styles.active : ""}>Listing</a></li>
 

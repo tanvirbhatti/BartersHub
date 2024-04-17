@@ -69,9 +69,7 @@
 }
 
 .registerHero{
-  width: 40%;
-  background-image: url('../../Images/Barter\'sHubSpriteSheet.png');
-  background-position: 23% -1%;
-  background-size: 470vh auto;
-  background-repeat: no-repeat;
+  width: 44%;
+  background-image: url('../../Images/SignUp.png');
+  background-size: cover;
 }

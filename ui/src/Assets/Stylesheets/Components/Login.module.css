@@ -8,11 +8,9 @@
 }
 
 .loginHero{
-  width:40%;
-  background-image: url('../../Images/Barter\'sHubSpriteSheet.png');
-  background-position: 12.9% -0%;
-  background-size: 620vh auto;
-  background-repeat: no-repeat;
+  width:37.5%;
+  background-image: url('../../Images/LogIn.png');
+  background-size: cover;
 }
 
 .Form h1 {

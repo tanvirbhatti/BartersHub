@@ -26,8 +26,8 @@ const ProductHome = () => {
                     </div>  
                 </div>
                 <div className="col-md-5 col-lg-4 text-center">
-                    {/* <img src={Hero} className="img-fluid w-100" alt="" /> */}
-                    <div className='HeroImage img-fluid'></div>
+                    <div className='HeroImage'>
+                    </div>
                 </div>
             </div>
 
