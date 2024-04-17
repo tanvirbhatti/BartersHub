@@ -20,6 +20,7 @@ import { getFeaturedProducts } from './Controllers/FeaturedProducts/get.js';
 import { getRecentlyListedProducts } from './Controllers/RecentlyAddedProducts/get.js';
 import { deleteFeaturedProduct } from './Controllers/FeaturedProducts/delete.js';
 import { deleteProduct } from './Controllers/Products/delete.js';
+import {getSearchResults} from './Controllers/Search/search.js'
 import chatController from './Controllers/Chat/chatController.js';
 import http from 'http';
 import './database.js'
@@ -62,6 +63,7 @@ app.get('/get-testimonials', getTestimonials)
 app.post('/add-testimonial', addTestimonial)
 app.get('/get-featured-products', getFeaturedProducts)
 app.get('/get-recently-products', getRecentlyListedProducts);
+app.get('/search',getSearchResults)
 
 //User data endpoints
 app.get('/userprofile/:id', userProfile)
