@@ -17,6 +17,37 @@ export async function userProfile(req, res) {
     }
   }
 
+// Update user profile
+export async function updateUserProfile(req, res) {
+  const {  firstName, lastName, email } = req.body;
+  const userId = req.user.userId
+  console.log(lastName,"sdfea")
+  console.log(req.body)
+
+  if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+  }
+
+  try {
+      const updateData = {};
+      if (firstName) updateData.firstName = firstName;
+      if (lastName) updateData.lastName = lastName;
+      if (email) updateData.email = email;
+
+      const result = await User.updateOne({ _id: new ObjectId(userId) }, { $set: updateData });
+      
+      if (result.modifiedCount === 0) {
+          return res.status(404).json({ error: 'User not found or no new data to update' });
+      }
+
+      res.status(200).json({ message: 'User profile updated successfully' });
+  } catch (error) {
+      console.error('Error updating user profile:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+
 export async function getUserListings(req, res) {
     try {
         
