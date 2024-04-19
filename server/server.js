@@ -73,8 +73,8 @@ app.get('/get-all-categories',getAllCategories)
 //User data endpoints
 app.get('/userprofile/:id', userProfile)
 app.get('/user-listings', checkUser, getUserListings)
-app.post('/update-user', checkUser, updateUserProfile);
-app.post('/edit-product', checkUser, updateListing);
+app.post('/update-user', checkUser,upload.none(), updateUserProfile);
+app.post('/edit-product', checkUser,upload.none(), updateListing);
 app.delete('/delete-product/:id', checkUser, deleteListing);
 
 //Admin Panel endpoints

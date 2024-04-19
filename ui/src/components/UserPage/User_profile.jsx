@@ -57,15 +57,38 @@ const UserProfile = () => {
         if (token) {
             // Decode token and set user data
             const decoded = jwtDecode(token);
-            setUser({
-                ...decoded,
-                token // Store the token if needed for further requests
-            });
-
+            // setUser({
+            //     ...decoded,
+            //     token // Store the token if needed for further requests
+            // });
+            console.log(decoded,'decoded')
+            
+            fectchuser(decoded.userId, token)
             // Fetch user listings from the server
             fetchListings(token);
         }
     }, []);
+    const fectchuser = async (userId, token)=>{
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_SERVER}/userprofile/${userId}`, {
+                method: 'GET'
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const user = data.user
+                setUser({
+                        ...user,
+                        token
+                    });
+                console.log(user)
+            } else {
+                console.error('Failed to fetch listings');
+            }
+        } catch (error) {
+            console.error('Error fetching listings:', error);
+        }
+    }
 
     const fetchListings = async (token) => {
         try {
