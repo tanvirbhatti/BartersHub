@@ -1,7 +1,8 @@
-import User from "../../models/useSchema.js";
-import Product from "../../models/productSchema.js";
-import { ObjectId } from "mongodb";
-import FeaturedProduct from "../../models/featuredProductSchema.js";
+import User from '../../models/useSchema.js';
+import Product from '../../models/productSchema.js'
+import { ObjectId } from 'mongodb';
+import FeaturedProduct from '../../models/featuredProductSchema.js';
+import Testimonial from '../../models/testimonialSchema.js';
 
 export async function userProfile(req, res) {
   try {
@@ -238,7 +239,33 @@ export async function deleteUser(req, res) {
         if (result.deletedCount === 1) {
           res.status(200).json({ message: "User deleted successfully" });
         } else {
-          res.status(404).json({ error: "User not found" });
+          
+          const foundUser = await User.findById({_id:new ObjectId(userToDeleteId)})
+          if(foundUser){
+            const result = await User.deleteOne({ _id: new ObjectId(userToDeleteId) });
+            const foundProducts = await Product.find({user:new ObjectId(userToDeleteId)}).exec();
+            const foundTestimonials = await Testimonial.find({user: new ObjectId(userToDeleteId)}).exec();
+            if(foundTestimonials.length>0){
+              const foundTestimonials = await Testimonial.deleteMany({user:new ObjectId(userToDeleteId)})
+            }
+            else{
+              return res.json({error:`can not find any testimonials with the listed ${userToDeleteId}`})
+            }
+            if(foundProducts.length>0){
+              const deletedProduct = await Product.deleteMany({user:new ObjectId(userToDeleteId)})
+            }
+            else{
+              return res.json({error:`can not find any products with the listed ${userToDeleteId}`})
+            }
+            if (result.deletedCount === 1) {
+              res.status(200).json({ message: 'User deleted successfully' });
+            } else {
+              res.status(404).json({ error: 'issue in deleting user' });
+            }
+          }
+          else{
+            res.status(400).json
+          }
         }
       }
     }
