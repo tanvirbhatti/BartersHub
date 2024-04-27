@@ -17,14 +17,14 @@ export async function deleteProduct(req, res) {
                 }
                 else{
                     const foundProduct = await Product.findOne({_id:ObjectIdProjectId})
-                    const foundFeaturedProduct = await FeaturedProduct.findOne({'productId':ObjectIdProjectId})
+                    const foundFeaturedProduct = await FeaturedProduct.findOne({'product':ObjectIdProjectId})
                     if(!foundProduct){
                         res.json({error:"couldn't find a product"});
                     }
                     else{
                         await Product.deleteOne({_id:ObjectIdProjectId});
                         if(foundFeaturedProduct){
-                            await FeaturedProduct.deleteOne({'productId':ObjectIdProjectId})
+                           await FeaturedProduct.deleteOne({'product':ObjectIdProjectId})
                         }
                         return res.json({ message: 'Product deleted successfully',foundProduct});    
                     }
