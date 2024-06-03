@@ -51,8 +51,8 @@ Ensure you have the following environment variables set:
 - `JWT_SECRET`: Secret key for JWT authentication
 
 ## Team Members
-- **Rahul Odedara (Team Lead)**
-- Tanvir Bhatti
+-Tanvir Bhatti
+- Rahul Odedara
 - Parth Patel
 - Vikas Ghelani
 - Shivedeep Singh
